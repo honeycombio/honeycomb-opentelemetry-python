@@ -26,3 +26,19 @@ Now you can `curl` the app:
 $ curl localhost:5000
 Hello World
 ```
+
+## Instrumentation
+
+To set OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to console:
+
+```bash
+$ poetry run opentelemetry-instrument --traces_exporter console --metrics_exporter console flask run
+```
+
+To send to Honeycomb: 
+
+```bash
+OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=your-api-key" OTEL_SERVICE_NAME="your-service-name" OTEL_EXPORTER_OTLP_ENDPOINT="api.honeycomb.io:443" poetry run opentelemetry-instrument flask run
+```
+
+Note: a Metrics-enabled Team API key is required for Honeycomb to receive metrics, if not available try including the `--metrics_exporter console` flag for opentelemetry-instrument above to see them locally instead
