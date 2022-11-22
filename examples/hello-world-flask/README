@@ -1,0 +1,28 @@
+# hello-world-flask
+
+This simple Flask app that returns "Hello World".
+
+## Prerequisites
+
+You'll also need [Poetry](https://python-poetry.org/) installed to run the example. Poetry automatically creates a virtual environment to run the example in so you don't need to manage one yourself.
+
+## Running the example
+
+Install the dependencies:
+
+```bash
+poetry install
+```
+
+Run the application:
+
+```bash
+poetry run flask run
+```
+
+Now you can `curl` the app:
+
+```bash
+$ curl localhost:5000
+Hello World
+```
