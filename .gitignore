@@ -1,0 +1,15 @@
+__pycache__
+*.pyc
+*egg-info
+dist
+build
+env
+venv
+pyvenv.cfg
+.eggs
+lib
+bin
+
+.vscode
+.coverage
+htmlcov
