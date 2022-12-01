@@ -29,7 +29,7 @@ Hello World
 
 ## Upstream Distro Instrumentation Example (Replace with HNY Distro as we build it out, this is just to sandbox with the baseDistro for now!)
 
-To set OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to console:
+To send traces to local console:
 
 ```bash
 $ poetry run opentelemetry-instrument --traces_exporter console --metrics_exporter console flask run
