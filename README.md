@@ -18,6 +18,6 @@ poetry run coverage run -m pytest tests
 
 ### Linting & Code Style
 ```bash
- poetry run pylint src tests
- poetry run pycodestyle src tests  
+ poetry run pylint examples src tests
+ poetry run pycodestyle examples src tests  
  ```

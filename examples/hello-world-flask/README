@@ -27,7 +27,7 @@ $ curl localhost:5000
 Hello World
 ```
 
-## Instrumentation
+## Upstream Distro Instrumentation Example (Replace with HNY Distro as we build it out, this is just to sandbox with the baseDistro for now!)
 
 To set OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to console:
 
@@ -42,3 +42,8 @@ OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=your-api-key" OTEL_SERVICE_NAME="yo
 ```
 
 Note: a Metrics-enabled Team API key is required for Honeycomb to receive metrics, if not available try including the `--metrics_exporter console` flag for opentelemetry-instrument above to see them locally instead
+
+## Local Development - HelloWorld Import Example
+If you make changes in the package's pyproject.toml you may need to run `poetry build` for the changes to take effect
+
+If you make changes in python files in src/honeycomb/opentelemetry, with this setup the changes should propagate to this example app upon save.
