@@ -15,3 +15,8 @@ or
 ```bash
 poetry run coverage run -m pytest tests
 ```
+
+### Linting
+```bash
+ poetry run pylint honeycomb-opentelemetry-python tests
+ ```
