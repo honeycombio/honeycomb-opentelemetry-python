@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "hello-world-flask"
+version = "0.1.0"
+description = ""
+authors = ["Honeycomb <support@honeycomb.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.2.2"
+opentelemetry-instrumentation = "^0.35b0"
+opentelemetry-distro = "^0.35b0"
+opentelemetry-instrumentation-flask = "^0.35b0"
+opentelemetry-exporter-otlp-proto-grpc = "^1.14.0"
+honeycomb-opentelemetry-python = {path = "../../", develop = true}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
