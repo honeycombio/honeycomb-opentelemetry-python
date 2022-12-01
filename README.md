@@ -1,31 +1,27 @@
-# honeycomb-opentelemetry-python
+# Honeycomb OpenTelemetry Distro for Python
 
-## Dev Setup
-Requires [poetry](https://python-poetry.org/docs/) for dependency managament and packaging. 
-Run `poetry --version` to verify it is installed.
+<!-- Uncomment once repo is public -->
+<!-- [![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/honeycomb-opentelemetry-python)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md) -->
+<!-- [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python) -->
 
-### Package setup and build
-```bash
-poetry install
-poetry build
-```
+This is Honeycomb's Distribution of OpenTelemetry for python.
+It makes getting started with OpenTelemetry and Honeycomb easier!
 
-### Testing
-```bash
-poetry run pytest tests
-```
+## Getting Started
 
-or 
+Honeycomb's Distribution of OpenTelemetry for python allows you to streamline configuration and to instrument as quickly and easily as possible.
 
-```bash
-poetry run coverage run -m pytest tests
-```
+- [Documentation](https://docs.honeycomb.io/getting-data-in/opentelemetry/python/)
+- [Examples](/examples/)
 
-### Linting & Code Style
-```bash
- poetry run pylint examples src tests
- poetry run pycodestyle examples src tests  
- ```
+## Why would I want to use this?
 
- ### Example Flask Application
- Readme can be found [here](examples/hello-world-flask/README) for setting this up.
+- Streamlined configuration for sending data to Honeycomb!
+- Easy interop with existing instrumentation with OpenTelemetry!
+- Deterministic sampling!
+- Multi-span attributes!
+- Local visualizations!
+
+## License
+
+[Apache 2.0 License](./LICENSE).
