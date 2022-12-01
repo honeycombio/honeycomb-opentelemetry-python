@@ -2,7 +2,7 @@
 name = "hello-world-flask"
 version = "0.1.0"
 description = ""
-authors = ["Mike Goldsmth <goldsmith.mike@gmail.com>"]
+authors = ["Honeycomb <support@honeycomb.io>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
