@@ -18,6 +18,6 @@ poetry run coverage run -m pytest tests
 
 ### Linting & Code Style
 ```bash
- poetry run pylint honeycomb-opentelemetry-python tests
- poetry run pycodestyle honeycomb-opentelemetry-python tests  
+ poetry run pylint src tests
+ poetry run pycodestyle src tests  
  ```
