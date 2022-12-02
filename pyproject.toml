@@ -8,6 +8,8 @@ packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+opentelemetry-instrumentation = "^0.35b0"
+opentelemetry-sdk = "^1.14.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^6.5.0"
