@@ -1,6 +1,8 @@
 from flask import Flask
 from opentelemetry import trace
-from honeycomb.opentelemetry import hello
+from honeycomb.opentelemetry import configure_opentelemetry
+
+configure_opentelemetry()
 
 app = Flask(__name__)
 
@@ -10,4 +12,4 @@ def hello_world():
     with trace.get_tracer(__name__).start_as_current_span("foo"):
         with trace.get_tracer(__name__).start_as_current_span("bar"):
             print("baz")
-    return hello.hello_world()
+    return "hello, world"
