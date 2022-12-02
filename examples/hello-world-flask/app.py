@@ -1,8 +1,6 @@
 from flask import Flask
 from opentelemetry import trace
-from src.honeycomb.opentelemetry import hello
-# todo: how to not include the src in imports /
-# is this because a local dep? or bc the parent pyproject.toml config?
+from honeycomb.opentelemetry import hello
 
 app = Flask(__name__)
 
