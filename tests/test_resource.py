@@ -1,6 +1,6 @@
 import platform
 from honeycomb.opentelemetry.options import HoneycombOptions
-from honeycomb.opentelemetry.distro import create_resource
+from honeycomb.opentelemetry.resource import create_resource
 from honeycomb.opentelemetry.version import __version__
 from opentelemetry.sdk.environment_variables import OTEL_SERVICE_NAME
 

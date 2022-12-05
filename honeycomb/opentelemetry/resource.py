@@ -1,3 +1,4 @@
+import platform
 from honeycomb.opentelemetry.options import HoneycombOptions
 from opentelemetry.sdk.resources import Resource
 from honeycomb.opentelemetry.version import __version__
