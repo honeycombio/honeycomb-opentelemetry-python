@@ -8,9 +8,11 @@ from opentelemetry.sdk.environment_variables import (
     OTEL_EXPORTER_OTLP_ENDPOINT
 )
 
-from honeycomb.opentelemetry.distro import (
-    configure_opentelemetry,
+from honeycomb.opentelemetry.options import (
     HONEYCOMB_API_KEY
+)
+from honeycomb.opentelemetry.distro import (
+    configure_opentelemetry
 )
 
 # classic keys are 32 chars long
