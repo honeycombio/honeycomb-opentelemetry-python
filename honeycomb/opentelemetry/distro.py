@@ -20,25 +20,32 @@ DEFAULT_SERVICE_NAME = "unknown_service:python"
 
 def configure_opentelemetry(
     apikey: str = None,
-    service_name: str = DEFAULT_SERVICE_NAME,
-    endpoint: str = DEFAULT_API_ENDPOINT
+    service_name: str = None,
+    endpoint: str = None
 ):
-    print(os.environ.setdefault(OTEL_SERVICE_NAME, os.environ.get(
-        OTEL_SERVICE_NAME, service_name)))
-    os.environ.setdefault(OTEL_SERVICE_NAME, os.environ.get(
-        OTEL_SERVICE_NAME, service_name))
-
+    os.environ.setdefault(OTEL_EXPORTER_OTLP_PROTOCOL, "grpc")
     os.environ.setdefault(OTEL_TRACES_EXPORTER, "otlp")
     # disable metrics for now
     os.environ.setdefault(OTEL_METRICS_EXPORTER, "none")
-    os.environ.setdefault(OTEL_EXPORTER_OTLP_PROTOCOL, "grpc")
 
-    os.environ.setdefault(
-        OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
+    service_name = os.environ.get(OTEL_SERVICE_NAME, service_name)
+    if not service_name:
+        # TODO - warn no service name set, defaulting to unknown_service:python
+        service_name = DEFAULT_SERVICE_NAME
+    os.environ.setdefault(OTEL_SERVICE_NAME, service_name)
 
+    endpoint = os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
+    if not endpoint:
+        endpoint = DEFAULT_API_ENDPOINT
+    os.environ.setdefault(OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
+
+    apikey = os.environ.get(HONEYCOMB_API_KEY, apikey)
     if apikey:
         os.environ.setdefault(OTEL_EXPORTER_OTLP_HEADERS,
                               f"x-honeycomb-team={apikey}")
+    else:
+        # TODO - warn no API key set
+        pass
 
 
 class HoneycombDistro(BaseDistro):
