@@ -25,6 +25,8 @@ jobs:
       - run: poetry install
       - run: mkdir test-results
       - run: poetry run pytest tests --junitxml=test-results/junit.xml
+      - store_test_results:
+          path: test-results
 
 workflows:
   build:
