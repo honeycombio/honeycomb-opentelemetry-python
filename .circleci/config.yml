@@ -1,0 +1,36 @@
+version: 2.1
+
+executors:
+  python:
+    docker:
+      - image: cimg/python:3.8
+
+jobs:
+  # run_lint:
+  #   executor: python
+  #   steps:
+  #     - checkout 
+  #     - run: poetry install --only dev
+  #     - run: poetry run pylint honeycomb
+  run_codestyle:
+    executor: python
+    steps:
+      - checkout 
+      - run: poetry install --only dev
+      - run: poetry run pycodestyle honeycomb
+  run_tests:
+    executor: python
+    steps:
+      - checkout 
+      - run: poetry install
+      - run: mkdir test-results
+      - run: poetry run pytest tests --junitxml=test-results/junit.xml
+      - store_test_results:
+          path: test-results
+
+workflows:
+  build:
+    jobs:
+      # - run_lint
+      - run_codestyle
+      - run_tests

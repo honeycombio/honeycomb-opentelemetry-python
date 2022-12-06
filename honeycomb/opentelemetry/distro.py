@@ -4,7 +4,9 @@ Add module doc string
 import os
 from honeycomb.opentelemetry.options import HoneycombOptions
 from opentelemetry.instrumentation.distro import BaseDistro
-from opentelemetry.environment_variables import OTEL_TRACES_EXPORTER, OTEL_METRICS_EXPORTER
+from opentelemetry.environment_variables import (
+    OTEL_TRACES_EXPORTER, OTEL_METRICS_EXPORTER
+)
 from opentelemetry.sdk.environment_variables import (
     OTEL_SERVICE_NAME,
     OTEL_EXPORTER_OTLP_PROTOCOL,
@@ -17,6 +19,7 @@ HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
 
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
+
 
 def configure_opentelemetry(
     apikey: str = None,
