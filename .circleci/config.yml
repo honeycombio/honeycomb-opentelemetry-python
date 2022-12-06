@@ -11,13 +11,13 @@ jobs:
     steps:
       - checkout 
       - run: poetry install --only dev
-      - run: poetry run pylint src
+      - run: poetry run pylint honeycomb
   run_codestyle:
     executor: python
     steps:
       - checkout 
       - run: poetry install --only dev
-      - run: poetry run pycodestyle src
+      - run: poetry run pycodestyle honeycomb
   run_tests:
     executor: python
     steps:
