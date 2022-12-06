@@ -1,30 +1,13 @@
 """
 Add module doc string
 """
-import os
 from honeycomb.opentelemetry.metrics import create_meter_provider
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.resource import create_resource
-from honeycomb.opentelemetry.tracing import create_tracer_provider
-from opentelemetry.environment_variables import (
-    OTEL_TRACES_EXPORTER,
-    OTEL_METRICS_EXPORTER
-)
+from honeycomb.opentelemetry.trace import create_tracer_provider
 from opentelemetry.instrumentation.distro import BaseDistro
 from opentelemetry.metrics import set_meter_provider
-from opentelemetry.sdk.environment_variables import (
-    OTEL_SERVICE_NAME,
-    OTEL_EXPORTER_OTLP_PROTOCOL,
-    OTEL_EXPORTER_OTLP_HEADERS,
-    OTEL_EXPORTER_OTLP_ENDPOINT
-)
 from opentelemetry.trace import set_tracer_provider
-
-HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
-HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
-
-DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
-DEFAULT_SERVICE_NAME = "unknown_service:python"
 
 
 def configure_opentelemetry(
@@ -33,30 +16,14 @@ def configure_opentelemetry(
     endpoint: str = None
 ):
     options = HoneycombOptions(apikey, service_name, endpoint)
-
-    # TODO - remove once pipelines are configured directly
-    os.environ.setdefault(OTEL_EXPORTER_OTLP_PROTOCOL, "grpc")
-    os.environ.setdefault(OTEL_TRACES_EXPORTER, "otlp")
-    # disable metrics for now
-    os.environ.setdefault(OTEL_METRICS_EXPORTER, "none")
-    os.environ.setdefault(OTEL_SERVICE_NAME, options.service_name)
-    os.environ.setdefault(OTEL_EXPORTER_OTLP_ENDPOINT, options.endpoint)
-    if options.apikey:
-        os.environ.setdefault(OTEL_EXPORTER_OTLP_HEADERS,
-                              f"x-honeycomb-team={options.apikey}")
-
-    # configure resource
     resource = create_resource(options)
-
-    # configure trace pipeline
     set_tracer_provider(
         create_tracer_provider(options, resource)
     )
-
-    # configure metrics pipeline
-    set_meter_provider(
-        create_meter_provider(options, resource)
-    )
+    if options.enable_metrics:
+        set_meter_provider(
+            create_meter_provider(options, resource)
+        )
 
 
 class HoneycombDistro(BaseDistro):
