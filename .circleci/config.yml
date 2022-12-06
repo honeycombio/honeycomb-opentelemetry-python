@@ -6,12 +6,12 @@ executors:
       - image: cimg/python:3.8
 
 jobs:
-  run_lint:
-    executor: python
-    steps:
-      - checkout 
-      - run: poetry install --only dev
-      - run: poetry run pylint honeycomb
+  # run_lint:
+  #   executor: python
+  #   steps:
+  #     - checkout 
+  #     - run: poetry install --only dev
+  #     - run: poetry run pylint honeycomb
   run_codestyle:
     executor: python
     steps:
@@ -31,6 +31,6 @@ jobs:
 workflows:
   build:
     jobs:
-      - run_lint
+      # - run_lint
       - run_codestyle
       - run_tests
