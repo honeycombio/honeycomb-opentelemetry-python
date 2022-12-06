@@ -1,6 +1,6 @@
 ## Dev Setup
 Requires [poetry](https://python-poetry.org/docs/) for dependency managament and packaging.
-Run `poetry --version` to verify it is installed.
+Run `poetry --version` to verify it is installed. A minimum of Poetry 1.2 is required.
 
 ### Package setup and build
 ```bash
