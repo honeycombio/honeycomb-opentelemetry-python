@@ -22,7 +22,7 @@ poetry run coverage run -m pytest tests
 ### Linting & Code Style
 ```bash
  poetry run pylint examples src tests
- poetry run pycodestyle examples src tests
+ poetry run pycodestyle honeycomb tests
  ```
 
  ### Example Flask Application
