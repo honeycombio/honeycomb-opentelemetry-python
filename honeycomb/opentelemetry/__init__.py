@@ -1,1 +1,1 @@
-from honeycomb.opentelemetry.distro import configure_opentelemetry
+from honeycomb.opentelemetry.distro import configure_opentelemetry, HoneycombDistro
