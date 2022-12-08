@@ -18,6 +18,9 @@ pytest = "^7.2.0"
 pylint = "^2.15.7"
 pycodestyle = "^2.10.0"
 
+[tool.poetry.plugins."opentelemetry_distro"]
+distro = "honeycomb.opentelemetry.distro:HoneycombDistro"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
