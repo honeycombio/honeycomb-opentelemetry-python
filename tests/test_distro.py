@@ -1,8 +1,6 @@
 import platform
 
-import pytest
 from honeycomb.opentelemetry.distro import configure_opentelemetry
-from honeycomb.opentelemetry.options import HONEYCOMB_API_KEY
 from honeycomb.opentelemetry.version import __version__
 from opentelemetry.environment_variables import OTEL_TRACES_EXPORTER
 from opentelemetry.sdk.environment_variables import (
@@ -14,7 +12,6 @@ from opentelemetry.sdk.environment_variables import (
 from opentelemetry.metrics import get_meter_provider
 from opentelemetry.trace import get_tracer_provider
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.instrumentation.distro import BaseDistro
 
 from pkg_resources import DistributionNotFound, require
 
@@ -38,8 +35,8 @@ def test_distro_configure_defaults(monkeypatch):
     assert tracer_provider._resource._attributes["honeycomb.distro.version"] == __version__
     assert tracer_provider._resource._attributes["honeycomb.distro.runtime_version"] == platform.python_version(
     )
-    # spanExporter = tracer_provider._active_span_processor._span_processors[0].span_exporter
-    # assert isinstance(spanExporter, OTLPSpanExporter)
+    spanExporter = tracer_provider._active_span_processor._span_processors[0].span_exporter
+    assert isinstance(spanExporter, OTLPSpanExporter)
 
     meter_provider = get_meter_provider()
     assert len(meter_provider._meters) == 0
@@ -49,7 +46,6 @@ def test_can_set_service_name_with_param(monkeypatch):
     monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
     configure_opentelemetry(service_name="my-service")
     tracer_provider = get_tracer_provider()
-    print(vars(tracer_provider._resource._attributes))
     assert tracer_provider._resource._attributes["service.name"] == "my-service"
 
 
@@ -77,10 +73,3 @@ def test_can_set_service_name_with_param(monkeypatch):
 #     configure_opentelemetry()
 #     assert os.environ.get(
 #         OTEL_EXPORTER_OTLP_HEADERS) == f'x-honeycomb-team={APIKEY}'
-
-
-def test_package_available():
-    try:
-        require(["opentelemetry-distro"])
-    except DistributionNotFound:
-        pytest.fail("opentelemetry-distro not installed")
