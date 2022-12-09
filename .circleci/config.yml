@@ -10,19 +10,15 @@ matrix_python_versions: &matrix_python_versions
       python_version: ["3.10", "3.11"]
 
 jobs:
-  lint:
-    executor:
-      name: python/default
-      tag: *default_python_version
-    steps:
-      - checkout
-      - python/install-packages:
-          pkg-manager: poetry
-      - run:
-          name: Lint, but ⚠️ failures are ignored at the moment
-          command: |
-            make lint || \
-            ( printf "\n 🙈 We're ignoring this failure until we have our rules sorted. ᕕ( ᐛ )ᕗ \n\n" ; true )
+  # lint:
+  #   executor:
+  #     name: python/default
+  #     tag: *default_python_version
+  #   steps:
+  #     - checkout
+  #     - python/install-packages:
+  #         pkg-manager: poetry
+  #     - run: make lint
   codestyle:
     executor:
       name: python/default
@@ -51,7 +47,7 @@ jobs:
 workflows:
   build:
     jobs:
-      - lint
+      # - lint # We need to get our rules in order.
       - codestyle
       - test:
           <<: *matrix_python_versions
