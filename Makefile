@@ -35,7 +35,7 @@ run_example:
 	poetry install && \
 	poetry run opentelemetry-instrument flask run
 
-JOB ?= run_tests
+JOB ?= run_tests-3.10
 #: run a CI job in docker locally, set JOB to override default 'run_tests'
 local_ci_exec: forbidden_in_real_ci .circleci/process.yml
 	circleci local execute \
