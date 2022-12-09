@@ -12,9 +12,6 @@ lint: build
 
 .PHONY: install build test lint
 
-# example:
-# 	cd ./examples/hello-world-flask && poetry run flask run
-
 example:
 	cd ./examples/hello-world-flask && \
 	poetry install && \
