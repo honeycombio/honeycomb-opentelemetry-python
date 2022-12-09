@@ -9,22 +9,18 @@ jobs:
   # run_lint:
   #   executor: python
   #   steps:
-  #     - checkout 
-  #     - run: poetry install --only dev
-  #     - run: poetry run pylint honeycomb
+  #     - checkout
+  #     - run: make lint
   run_codestyle:
     executor: python
     steps:
-      - checkout 
-      - run: poetry install --only dev
-      - run: poetry run pycodestyle honeycomb
+      - checkout
+      - run: make style
   run_tests:
     executor: python
     steps:
-      - checkout 
-      - run: poetry install
-      - run: mkdir test-results
-      - run: poetry run pytest tests --junitxml=test-results/junit.xml
+      - checkout
+      - run: make test
       - store_test_results:
           path: test-results
 
