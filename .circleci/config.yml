@@ -10,15 +10,19 @@ matrix_python_versions: &matrix_python_versions
       python_version: ["3.10", "3.11"]
 
 jobs:
-  # run_lint:
-  #   executor:
-  #     name: python/default
-  #     tag: *default_python_version
-  #   steps:
-  #     - checkout
-  #     - python/install-packages:
-  #         pkg-manager: poetry
-  #     - run: make lint
+  run_lint:
+    executor:
+      name: python/default
+      tag: *default_python_version
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          name: Lint, but ⚠️ failures are ignored at the moment
+          command: |
+            make lint || \
+            ( printf "\n 🙈 We're ignoring this failure until we have our rules sorted. ᕕ( ᐛ )ᕗ \n\n" ; true )
   run_codestyle:
     executor:
       name: python/default
@@ -47,7 +51,7 @@ jobs:
 workflows:
   build:
     jobs:
-      # - run_lint
+      - run_lint
       - run_codestyle
       - run_tests:
           <<: *matrix_python_versions
