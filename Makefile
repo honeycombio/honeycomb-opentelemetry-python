@@ -1,6 +1,10 @@
-#: install dependencies
+#: install dependencies; set dev_only for only development dependencies or use the install_dev target
 install:
+ifeq ($(dev_only),) # dev_only not set
 	poetry install
+else
+	poetry install --only dev
+endif
 
 #: install only development dependencies
 install_dev:
