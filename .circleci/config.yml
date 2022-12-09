@@ -1,36 +1,53 @@
 version: 2.1
 
-executors:
-  python:
-    docker:
-      - image: cimg/python:3.8
+orbs:
+  python: circleci/python@2.1.1
+
+default_python_version: &default_python_version "3.10"
+matrix_python_versions: &matrix_python_versions
+  matrix:
+    parameters:
+      python_version: ["3.10", "3.11"]
 
 jobs:
-  # run_lint:
-  #   executor: python
+  # lint:
+  #   executor:
+  #     name: python/default
+  #     tag: *default_python_version
   #   steps:
-  #     - checkout 
-  #     - run: poetry install --only dev
-  #     - run: poetry run pylint honeycomb
-  run_codestyle:
-    executor: python
+  #     - checkout
+  #     - python/install-packages:
+  #         pkg-manager: poetry
+  #     - run: make lint
+  codestyle:
+    executor:
+      name: python/default
+      tag: *default_python_version
     steps:
-      - checkout 
-      - run: poetry install --only dev
-      - run: poetry run pycodestyle honeycomb
-  run_tests:
-    executor: python
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run: make style
+  test:
+    parameters:
+      python_version:
+        type: string
+        default: *default_python_version
+    executor:
+      name: python/default
+      tag: "<< parameters.python_version >>"
     steps:
-      - checkout 
-      - run: poetry install
-      - run: mkdir test-results
-      - run: poetry run pytest tests --junitxml=test-results/junit.xml
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run: make test
       - store_test_results:
           path: test-results
 
 workflows:
   build:
     jobs:
-      # - run_lint
-      - run_codestyle
-      - run_tests
+      # - lint # We need to get our rules in order.
+      - codestyle
+      - test:
+          <<: *matrix_python_versions
