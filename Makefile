@@ -16,4 +16,6 @@ lint: build
 # 	cd ./examples/hello-world-flask && poetry run flask run
 
 example:
-	cd ./examples/hello-world-flask && poetry run opentelemetry-instrument flask run
+	cd ./examples/hello-world-flask && \
+	poetry install && \
+	poetry run opentelemetry-instrument flask run
