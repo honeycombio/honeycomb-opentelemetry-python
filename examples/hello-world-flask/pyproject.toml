@@ -8,8 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 flask = "^2.2.2"
+honeycomb-opentelemetry = {path = "../../", develop = true}
 opentelemetry-instrumentation-flask = "^0.35b0"
-honeycomb-opentelemetry = "0.1.0"
 
 [build-system]
 requires = ["poetry-core"]

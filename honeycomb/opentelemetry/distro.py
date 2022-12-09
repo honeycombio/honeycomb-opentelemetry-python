@@ -54,10 +54,9 @@ def configure_opentelemetry(
 
 class HoneycombDistro(BaseDistro):
     """
-    The OpenTelemetry provided Distro configures a default set of
-    configuration out of the box.
+    This honey-flavored Distro configures OpenTelemetry for use with Honeycomb.
     """
 
     def _configure(self, **kwargs):
-        print("auto instrumented")
+        print('🐝 auto instrumented 🐝')
         configure_opentelemetry()
