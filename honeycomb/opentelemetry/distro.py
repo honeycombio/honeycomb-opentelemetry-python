@@ -11,16 +11,8 @@ from opentelemetry.trace import set_tracer_provider
 
 
 def configure_opentelemetry(
-    apikey: str = None,
-    service_name: str = None,
-    endpoint: str = None
+    options: HoneycombOptions = HoneycombOptions(),
 ):
-    options = HoneycombOptions(
-        apikey=apikey,
-        service_name=service_name,
-        endpoint=endpoint
-    )
-
     resource = create_resource(options)
     set_tracer_provider(
         create_tracer_provider(options, resource)

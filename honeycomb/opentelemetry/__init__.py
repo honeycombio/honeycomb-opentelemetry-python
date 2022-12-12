@@ -1,1 +1,2 @@
 from honeycomb.opentelemetry.distro import configure_opentelemetry
+from honeycomb.opentelemetry.options import HoneycombOptions
