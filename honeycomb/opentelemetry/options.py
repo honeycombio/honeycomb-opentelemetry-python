@@ -9,6 +9,7 @@ from grpc import ssl_channel_credentials
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
 HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
 OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
+OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
@@ -28,6 +29,7 @@ _logger = logging.getLogger(__name__)
 class HoneycombOptions:
     apikey = None
     service_name = DEFAULT_SERVICE_NAME
+    service_version = None
     endpoint = DEFAULT_API_ENDPOINT
     insecure = False
     enable_metrics = False
@@ -37,6 +39,7 @@ class HoneycombOptions:
         self,
         apikey: str = None,
         service_name: str = None,
+        service_version: str = None,
         endpoint: str = None,
         insecure: bool = False,
         log_level: str = None
@@ -53,6 +56,8 @@ class HoneycombOptions:
             # TODO - warn no service name set,
             # defaulting to unknown_service:python
             self.service_name = DEFAULT_SERVICE_NAME
+        self.service_version = os.environ.get(
+            OTEL_SERVICE_VERSION, service_version)
 
         self.endpoint = os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
         if not self.endpoint:
