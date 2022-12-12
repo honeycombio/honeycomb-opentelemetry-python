@@ -6,7 +6,6 @@ from opentelemetry.sdk.environment_variables import (
 )
 from grpc import ssl_channel_credentials
 
-
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
 HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
 OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
@@ -24,6 +23,7 @@ log_levels = {
 }
 
 _logger = logging.getLogger(__name__)
+
 
 class HoneycombOptions:
     apikey = None

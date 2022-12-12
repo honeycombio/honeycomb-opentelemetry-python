@@ -10,8 +10,8 @@ from opentelemetry.instrumentation.distro import BaseDistro
 from opentelemetry.metrics import set_meter_provider
 from opentelemetry.trace import set_tracer_provider
 
-
 _logger = getLogger(__name__)
+
 
 def configure_opentelemetry(
     options: HoneycombOptions = HoneycombOptions(),
