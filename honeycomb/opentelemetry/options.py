@@ -7,6 +7,8 @@ from opentelemetry.sdk.environment_variables import (
 from grpc import ssl_channel_credentials
 
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
+HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
+HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
 HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
 OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
@@ -28,6 +30,8 @@ _logger = logging.getLogger(__name__)
 
 class HoneycombOptions:
     apikey = None
+    traces_apikey = None
+    metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
     service_version = None
     endpoint = DEFAULT_API_ENDPOINT
@@ -38,6 +42,8 @@ class HoneycombOptions:
     def __init__(
         self,
         apikey: str = None,
+        traces_apikey: str = None,
+        metrics_apikey: str = None,
         service_name: str = None,
         service_version: str = None,
         endpoint: str = None,
@@ -50,6 +56,10 @@ class HoneycombOptions:
         logging.basicConfig(level=log_levels[self.log_level])
 
         self.apikey = os.environ.get(HONEYCOMB_API_KEY, apikey)
+        self.traces_apikey = os.environ.get(
+            HONEYCOMB_TRACES_APIKEY, traces_apikey)
+        self.metrics_apikey = os.environ.get(
+            HONEYCOMB_METRICS_APIKEY, metrics_apikey)
 
         self.service_name = os.environ.get(OTEL_SERVICE_NAME, service_name)
         if not self.service_name:
@@ -65,6 +75,16 @@ class HoneycombOptions:
 
         self.insecure = insecure
 
+    def get_traces_apikey(self):
+        if self.traces_apikey:
+            return self.traces_apikey
+        return self.apikey
+
+    def get_metrics_apikey(self):
+        if self.metrics_apikey:
+            return self.metrics_apikey
+        return self.apikey
+
     def get_trace_endpoint_credentials(self):
         # TODO: use trace endpoint
         if self.insecure:
@@ -78,16 +98,15 @@ class HoneycombOptions:
         return ssl_channel_credentials()
 
     def get_trace_headers(self):
-        # TODO: use trace api key
         headers = {
-            "x-honeycomb-team": self.apikey,
+            "x-honeycomb-team": self.get_traces_apikey(),
         }
         return headers
 
     def get_metrics_headers(self):
         # TODO: use metrics api key & metrics dataset
         headers = {
-            "x-honeycomb-team": self.apikey,
+            "x-honeycomb-team": self.get_metrics_apikey(),
             "x-honeycomb-dataset": self.service_name + "_metrics"
         }
         return headers

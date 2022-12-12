@@ -1,4 +1,9 @@
-from honeycomb.opentelemetry.options import HONEYCOMB_API_KEY, HoneycombOptions
+from honeycomb.opentelemetry.options import (
+    HONEYCOMB_API_KEY,
+    HONEYCOMB_METRICS_APIKEY,
+    HONEYCOMB_TRACES_APIKEY,
+    HoneycombOptions
+)
 from opentelemetry.sdk.environment_variables import (
     OTEL_SERVICE_NAME,
     OTEL_EXPORTER_OTLP_ENDPOINT
@@ -53,3 +58,31 @@ def test_can_set_apikey_with_envvar(monkeypatch):
     monkeypatch.setenv(HONEYCOMB_API_KEY, APIKEY)
     options = HoneycombOptions()
     assert options.apikey == APIKEY
+
+
+def test_can_set_traces_apikey_with_param(monkeypatch):
+    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
+    monkeypatch.delenv(HONEYCOMB_TRACES_APIKEY, raising=False)
+    options = HoneycombOptions(traces_apikey=APIKEY)
+    assert options.traces_apikey == APIKEY
+
+
+def test_can_set_traces_apikey_with_envvar(monkeypatch):
+    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
+    monkeypatch.setenv(HONEYCOMB_TRACES_APIKEY, APIKEY)
+    options = HoneycombOptions()
+    assert options.traces_apikey == APIKEY
+
+
+def test_can_set_metrics_apikey_with_param(monkeypatch):
+    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
+    monkeypatch.delenv(HONEYCOMB_METRICS_APIKEY, raising=False)
+    options = HoneycombOptions(traces_apikey=APIKEY)
+    assert options.traces_apikey == APIKEY
+
+
+def test_can_set_metrics_apikey_with_envvar(monkeypatch):
+    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
+    monkeypatch.setenv(HONEYCOMB_METRICS_APIKEY, APIKEY)
+    options = HoneycombOptions()
+    assert options.metrics_apikey == APIKEY
