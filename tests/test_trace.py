@@ -1,10 +1,11 @@
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.resource import create_resource
-from honeycomb.opentelemetry.trace import create_span_exporter
+from honeycomb.opentelemetry.trace import create_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 
 
 def test_returns_tracer_provider():
     options = HoneycombOptions()
-    exporter = create_span_exporter(options)
-    # assert isinstance(exporter, TracerProvider)
+    resource = create_resource(options)
+    tracer_provider = create_tracer_provider(options, resource)
+    assert isinstance(tracer_provider, TracerProvider)

@@ -7,5 +7,5 @@ from opentelemetry.sdk.metrics import MeterProvider
 def test_returns_meter_provider():
     options = HoneycombOptions()
     resource = create_resource(options)
-    provider = create_meter_provider(options, resource)
-    assert isinstance(provider, MeterProvider)
+    meter_provider = create_meter_provider(options, resource)
+    assert isinstance(meter_provider, MeterProvider)
