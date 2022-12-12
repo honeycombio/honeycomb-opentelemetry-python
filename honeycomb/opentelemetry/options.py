@@ -1,3 +1,4 @@
+import logging
 import os
 from opentelemetry.sdk.environment_variables import (
     OTEL_SERVICE_NAME,
@@ -8,9 +9,21 @@ from grpc import ssl_channel_credentials
 
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
 HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
+OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
+DEFAULT_LOG_LEVEL = "ERROR"
 
+log_levels = {
+    "NOTSET": logging.NOTSET,
+    "DEBUG": logging.DEBUG,
+    "INFO": logging.INFO,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+    "CRITICAL": logging.CRITICAL,
+}
+
+_logger = logging.getLogger(__name__)
 
 class HoneycombOptions:
     apikey = None
@@ -18,13 +31,21 @@ class HoneycombOptions:
     endpoint = DEFAULT_API_ENDPOINT
     insecure = False
     enable_metrics = False
+    log_level = DEFAULT_LOG_LEVEL
 
     def __init__(
-        self, apikey: str = None,
+        self,
+        apikey: str = None,
         service_name: str = None,
         endpoint: str = None,
-        insecure: bool = False
+        insecure: bool = False,
+        log_level: str = None
     ):
+        log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
+        if log_level and log_level.upper() in log_levels:
+            self.log_level = log_level.upper()
+        logging.basicConfig(level=log_levels[self.log_level])
+
         self.apikey = os.environ.get(HONEYCOMB_API_KEY, apikey)
 
         self.service_name = os.environ.get(OTEL_SERVICE_NAME, service_name)
