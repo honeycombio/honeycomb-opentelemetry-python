@@ -1,5 +1,7 @@
-import os
+import platform
 
+from honeycomb.opentelemetry.distro import configure_opentelemetry
+from honeycomb.opentelemetry.version import __version__
 from opentelemetry.environment_variables import OTEL_TRACES_EXPORTER
 from opentelemetry.sdk.environment_variables import (
     OTEL_SERVICE_NAME,
@@ -7,11 +9,10 @@ from opentelemetry.sdk.environment_variables import (
     OTEL_EXPORTER_OTLP_HEADERS,
     OTEL_EXPORTER_OTLP_ENDPOINT
 )
+from opentelemetry.metrics import get_meter_provider
+from opentelemetry.trace import get_tracer_provider
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
-from honeycomb.opentelemetry.distro import (
-    configure_opentelemetry,
-    HONEYCOMB_API_KEY
-)
 
 # classic keys are 32 chars long
 CLASSIC_APIKEY = "this is a string that is 32 char"
@@ -27,47 +28,13 @@ def test_distro_configure_defaults(monkeypatch):
     monkeypatch.delenv(OTEL_EXPORTER_OTLP_HEADERS, raising=False)
 
     configure_opentelemetry()
-    assert os.environ.get(OTEL_SERVICE_NAME) == "unknown_service:python"
-    assert os.environ.get(OTEL_TRACES_EXPORTER) == "otlp"
-    assert os.environ.get(OTEL_EXPORTER_OTLP_PROTOCOL) == "grpc"
-    assert os.environ.get(
-        OTEL_EXPORTER_OTLP_ENDPOINT) == "api.honeycomb.io:443"
-    assert os.environ.get(OTEL_EXPORTER_OTLP_HEADERS) is None
+    tracer_provider = get_tracer_provider()
+    assert tracer_provider._resource._attributes["service.name"] == "unknown_service:python"
+    assert tracer_provider._resource._attributes["honeycomb.distro.version"] == __version__
+    assert tracer_provider._resource._attributes["honeycomb.distro.runtime_version"] == platform.python_version(
+    )
+    spanExporter = tracer_provider._active_span_processor._span_processors[0].span_exporter
+    assert isinstance(spanExporter, OTLPSpanExporter)
 
-
-def test_can_set_service_name_with_param(monkeypatch):
-    monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
-    configure_opentelemetry(service_name='my-service')
-    assert os.environ.get(OTEL_SERVICE_NAME) == 'my-service'
-
-
-def test_can_set_service_name_with_envvar(monkeypatch):
-    monkeypatch.setenv(OTEL_SERVICE_NAME, "my-service")
-    configure_opentelemetry()
-    assert os.getenv(OTEL_SERVICE_NAME) == 'my-service'
-
-
-def test_can_set_endpoint_with_param(monkeypatch):
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
-    configure_opentelemetry(endpoint='localhost:4317')
-    assert os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT) == 'localhost:4317'
-
-
-def test_can_set_endpoint_with_envvar(monkeypatch):
-    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, "localhost:4317")
-    configure_opentelemetry()
-    assert os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT) == 'localhost:4317'
-
-
-def test_can_set_apikey_with_param(monkeypatch):
-    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
-    configure_opentelemetry(apikey=APIKEY)
-    assert os.environ.get(
-        OTEL_EXPORTER_OTLP_HEADERS) == f'x-honeycomb-team={APIKEY}'
-
-
-def test_can_set_apikey_with_envvar(monkeypatch):
-    monkeypatch.setenv(HONEYCOMB_API_KEY, APIKEY)
-    configure_opentelemetry()
-    assert os.environ.get(
-        OTEL_EXPORTER_OTLP_HEADERS) == f'x-honeycomb-team={APIKEY}'
+    meter_provider = get_meter_provider()
+    assert len(meter_provider._meters) == 0

@@ -10,7 +10,9 @@ CLASSIC_APIKEY = "this is a string that is 32 char"
 APIKEY = "an api key for 22 char"
 
 
-def test_defaults():
+def test_defaults(monkeypatch):
+    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
+    monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
     options = HoneycombOptions()
     assert options.apikey == None
     assert options.endpoint == "api.honeycomb.io:443"
