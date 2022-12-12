@@ -1,24 +1,19 @@
 from honeycomb.opentelemetry.options import HoneycombOptions
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (
-    BatchSpanProcessor
-)
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
-    OTLPSpanExporter,
-)
-from grpc import ssl_channel_credentials
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
 
-def create_span_exporter(options: HoneycombOptions):
-    if options.insecure:
-        credentials = None
-    else:
-        credentials = ssl_channel_credentials()
-    return OTLPSpanExporter(
-        endpoint=options.endpoint,
-        credentials=credentials,
-        headers={
-            "x-honeycomb-team": options.apikey
-        },
+def create_tracer_provider(options: HoneycombOptions, resource: Resource):
+    trace_provider = TracerProvider(resource=resource)
+    trace_provider.add_span_processor(
+        BatchSpanProcessor(
+            OTLPSpanExporter(
+                endpoint=options.endpoint,
+                credentials=options.get_trace_endpoint_credentials(),
+                headers=options.get_trace_headers()
+            )
+        )
     )
+    return trace_provider

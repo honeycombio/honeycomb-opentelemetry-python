@@ -1,21 +1,15 @@
 from honeycomb.opentelemetry.options import HoneycombOptions
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import (
-    PeriodicExportingMetricReader,
-)
-from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
-    OTLPMetricExporter,
-)
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 
 
 def create_meter_provider(options: HoneycombOptions, resource: Resource):
     exporter = OTLPMetricExporter(
         endpoint=options.endpoint,
-        insecure=options.insecure,
-        headers={
-            "x-honeycomb-team": options.apikey
-        }
+        credentials=options.get_metrics_endpoint_credentials(),
+        headers=options.get_metrics_headers()
     )
     reader = PeriodicExportingMetricReader(
         exporter,
