@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "honeycomb" }]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.7, >= 3.7.2"
 opentelemetry-api = "^1.14.0"
 opentelemetry-sdk = "^1.14.0"
 opentelemetry-exporter-otlp = "^1.14.0"
@@ -18,6 +18,7 @@ coverage = "^6.5.0"
 pytest = "^7.2.0"
 pylint = "^2.15.7"
 pycodestyle = "^2.10.0"
+importlib-metadata = { version = ">=0.12", python = "<3.8" }
 
 [tool.poetry.plugins."opentelemetry_distro"]
 distro = "honeycomb.opentelemetry.distro:HoneycombDistro"
