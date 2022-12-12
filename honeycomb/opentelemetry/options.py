@@ -23,8 +23,7 @@ class HoneycombOptions:
         self, apikey: str = None,
         service_name: str = None,
         endpoint: str = None,
-        insecure: bool = False,
-        enable_metrics: bool = False
+        insecure: bool = False
     ):
         self.apikey = os.environ.get(HONEYCOMB_API_KEY, apikey)
 
@@ -39,7 +38,6 @@ class HoneycombOptions:
             self.endpoint = DEFAULT_API_ENDPOINT
 
         self.insecure = insecure
-        self.enable_metrics = enable_metrics
 
     def get_trace_endpoint_credentials(self):
         # TODO: use trace endpoint
