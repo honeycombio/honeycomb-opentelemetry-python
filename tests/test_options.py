@@ -22,7 +22,6 @@ def test_defaults(monkeypatch):
 def test_can_set_service_name_with_param(monkeypatch):
     monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
     options = HoneycombOptions(service_name='my-service')
-    print(vars(options))
     assert options.service_name == 'my-service'
 
 
