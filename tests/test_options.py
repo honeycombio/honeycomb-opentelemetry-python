@@ -19,8 +19,6 @@ CUSTOM_ENDPOINT = "localhost:4317"
 
 
 def test_defaults(monkeypatch):
-    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
-    monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
     options = HoneycombOptions()
     assert options.apikey == None
     assert options.endpoint == "api.honeycomb.io:443"
@@ -28,7 +26,6 @@ def test_defaults(monkeypatch):
 
 
 def test_can_set_service_name_with_param(monkeypatch):
-    monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
     options = HoneycombOptions(service_name='my-service')
     assert options.service_name == 'my-service'
 
@@ -40,7 +37,6 @@ def test_can_set_service_name_with_envvar(monkeypatch):
 
 
 def test_can_set_endpoint_with_param(monkeypatch):
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
     options = HoneycombOptions(endpoint='localhost:4317')
     assert options.endpoint == 'localhost:4317'
 
@@ -69,14 +65,11 @@ def test_can_set_traces_endpoint_with_endpoint_envvar(monkeypatch):
 
 
 def test_can_set_metrics_endpoint_with_param(monkeypatch):
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_METRICS_ENDPOINT, raising=False)
     options = HoneycombOptions(metrics_endpoint=CUSTOM_ENDPOINT)
     assert options.metrics_endpoint == CUSTOM_ENDPOINT
 
 
 def test_can_set_metrics_endpoint_with_metrics_envvar(monkeypatch):
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
     monkeypatch.setenv(OTEL_EXPORTER_METRICS_ENDPOINT, CUSTOM_ENDPOINT)
     options = HoneycombOptions()
     assert options.metrics_endpoint == CUSTOM_ENDPOINT
@@ -84,27 +77,21 @@ def test_can_set_metrics_endpoint_with_metrics_envvar(monkeypatch):
 
 def test_can_set_metrics_endpoint_with_endpoint_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, CUSTOM_ENDPOINT)
-    monkeypatch.delenv(OTEL_EXPORTER_METRICS_ENDPOINT, raising=False)
     options = HoneycombOptions()
     assert options.metrics_endpoint == CUSTOM_ENDPOINT
 
 
 def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set(monkeypatch):
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_TRACES_ENDPOINT, raising=False)
     options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
     assert options.get_traces_endpoint() == CUSTOM_ENDPOINT
 
 
 def test_get_metrics_endpoint_returns_endpoint_when_metricss_endpoint_not_set(monkeypatch):
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_METRICS_ENDPOINT, raising=False)
     options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
     assert options.get_metrics_endpoint() == CUSTOM_ENDPOINT
 
 
 def test_can_set_apikey_with_param(monkeypatch):
-    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
     options = HoneycombOptions(apikey=APIKEY)
     assert options.apikey == APIKEY
 
@@ -116,28 +103,22 @@ def test_can_set_apikey_with_envvar(monkeypatch):
 
 
 def test_can_set_traces_apikey_with_param(monkeypatch):
-    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
-    monkeypatch.delenv(HONEYCOMB_TRACES_APIKEY, raising=False)
     options = HoneycombOptions(traces_apikey=APIKEY)
     assert options.traces_apikey == APIKEY
 
 
 def test_can_set_traces_apikey_with_envvar(monkeypatch):
-    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
     monkeypatch.setenv(HONEYCOMB_TRACES_APIKEY, APIKEY)
     options = HoneycombOptions()
     assert options.traces_apikey == APIKEY
 
 
 def test_can_set_metrics_apikey_with_param(monkeypatch):
-    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
-    monkeypatch.delenv(HONEYCOMB_METRICS_APIKEY, raising=False)
     options = HoneycombOptions(traces_apikey=APIKEY)
     assert options.traces_apikey == APIKEY
 
 
 def test_can_set_metrics_apikey_with_envvar(monkeypatch):
-    monkeypatch.delenv(HONEYCOMB_API_KEY, raising=False)
     monkeypatch.setenv(HONEYCOMB_METRICS_APIKEY, APIKEY)
     options = HoneycombOptions()
     assert options.metrics_apikey == APIKEY

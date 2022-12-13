@@ -21,12 +21,6 @@ APIKEY = "an api key for 22 char"
 
 
 def test_distro_configure_defaults(monkeypatch):
-    monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
-    monkeypatch.delenv(OTEL_TRACES_EXPORTER, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_PROTOCOL, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_HEADERS, raising=False)
-
     configure_opentelemetry()
     tracer_provider = get_tracer_provider()
     assert tracer_provider._resource._attributes["service.name"] == "unknown_service:python"
