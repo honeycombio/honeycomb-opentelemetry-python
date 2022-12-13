@@ -10,6 +10,8 @@ DEBUG = "DEBUG"
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
 HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
 HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
+HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
+HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
 OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 OTEL_EXPORTER_TRACES_ENDPOINT = "OTEL_EXPORTER_TRACES_ENDPOINT"
@@ -35,6 +37,9 @@ log_levels = {
 _logger = logging.getLogger(__name__)
 
 
+def is_clasic(apikey: str):
+    return apikey and len(apikey) == 32
+
 class HoneycombOptions:
     traces_apikey = None
     metrics_apikey = None
@@ -47,6 +52,8 @@ class HoneycombOptions:
     sample_rate = DEFAULT_SAMPLE_RATE
     debug = False
     log_level = DEFAULT_LOG_LEVEL
+    dataset = None
+    metrics_dataset = None
 
     def __init__(
         self,
@@ -63,7 +70,9 @@ class HoneycombOptions:
         metrics_endpoint_insecure: bool = False,
         sample_rate: int = None,
         debug: bool = False,
-        log_level: str = None
+        log_level: str = None,
+        dataset: str = None,
+        metrics_dataset: str = None
     ):
         log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
         if log_level and log_level.upper() in log_levels:
@@ -163,6 +172,11 @@ class HoneycombOptions:
             self.metrics_endpoint_insecure = (
                 metrics_endpoint_insecure or endpoint_insecure)
 
+        self.dataset = os.environ.get(
+            HONEYCOMB_DATASET, dataset)
+        self.metrics_dataset = os.environ.get(
+            HONEYCOMB_METRICS_DATASET, metrics_dataset)
+
     def get_traces_apikey(self):
         return self.traces_apikey
 
@@ -189,12 +203,14 @@ class HoneycombOptions:
         headers = {
             "x-honeycomb-team": self.get_traces_apikey(),
         }
+        if self.dataset and is_clasic(self.traces_apikey):
+            headers["x-honeycomb-dataset"] = self.dataset
         return headers
 
     def get_metrics_headers(self):
-        # TODO: use metrics api key & metrics dataset
         headers = {
-            "x-honeycomb-team": self.get_metrics_apikey(),
-            "x-honeycomb-dataset": self.service_name + "_metrics"
+            "x-honeycomb-team": self.get_metrics_apikey()
         }
+        if self.metrics_dataset:
+            headers["x-honeycomb-dataset"] = self.metrics_dataset
         return headers

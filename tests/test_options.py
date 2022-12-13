@@ -1,7 +1,9 @@
 from honeycomb.opentelemetry.options import (
     DEBUG,
     HONEYCOMB_API_KEY,
+    HONEYCOMB_DATASET,
     HONEYCOMB_METRICS_APIKEY,
+    HONEYCOMB_METRICS_DATASET,
     HONEYCOMB_TRACES_APIKEY,
     OTEL_EXPORTER_METRICS_ENDPOINT,
     OTEL_EXPORTER_OTLP_INSECURE,
@@ -30,6 +32,8 @@ def test_defaults(monkeypatch):
     assert options.traces_endpoint == "api.honeycomb.io:443"
     assert options.metrics_endpoint == "api.honeycomb.io:443"
     assert options.service_name == "unknown_service:python"
+    assert options.dataset == None
+    assert options.metrics_dataset == None
 
 
 def test_can_set_service_name_with_param(monkeypatch):
@@ -193,3 +197,25 @@ def test_can_set_metrics_insecure_with_traces_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_METRICS_INSECURE, "TRUE")
     options = HoneycombOptions()
     assert options.metrics_endpoint_insecure == True
+
+
+def test_can_set_dataset_with_param():
+    options = HoneycombOptions(dataset="my-dataset")
+    assert options.dataset == "my-dataset"
+
+
+def test_can_set_dataset_with_envar(monkeypatch):
+    monkeypatch.setenv(HONEYCOMB_DATASET, "my-dataset")
+    options = HoneycombOptions()
+    assert options.dataset == "my-dataset"
+
+
+def test_can_set_metrics_dataset_with_param():
+    options = HoneycombOptions(metrics_dataset="my-metrics-dataset")
+    assert options.metrics_dataset == "my-metrics-dataset"
+
+
+def test_can_set_metrics_dataset_with_envvar(monkeypatch):
+    monkeypatch.setenv(HONEYCOMB_METRICS_DATASET, "my-metrics-dataset")
+    options = HoneycombOptions()
+    assert options.metrics_dataset == "my-metrics-dataset"
