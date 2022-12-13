@@ -9,9 +9,10 @@ from grpc import ssl_channel_credentials
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
 HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
 HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
-HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
 OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
+OTEL_EXPORTER_TRACES_ENDPOINT = "OTEL_EXPORTER_TRACES_ENDPOINT"
+OTEL_EXPORTER_METRICS_ENDPOINT = "OTEL_EXPORTER_METRICS_ENDPOINT"
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
@@ -35,6 +36,8 @@ class HoneycombOptions:
     service_name = DEFAULT_SERVICE_NAME
     service_version = None
     endpoint = DEFAULT_API_ENDPOINT
+    traces_endpoint = None,
+    metrics_endpoint = None,
     insecure = False
     enable_metrics = False
     log_level = DEFAULT_LOG_LEVEL
@@ -47,6 +50,8 @@ class HoneycombOptions:
         service_name: str = None,
         service_version: str = None,
         endpoint: str = None,
+        traces_endpoint: str = None,
+        metrics_endpoint: str = None,
         insecure: bool = False,
         log_level: str = None
     ):
@@ -72,6 +77,20 @@ class HoneycombOptions:
         self.endpoint = os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
         if not self.endpoint:
             self.endpoint = DEFAULT_API_ENDPOINT
+        self.traces_endpoint = os.environ.get(
+            OTEL_EXPORTER_TRACES_ENDPOINT,
+            os.environ.get(
+                OTEL_EXPORTER_OTLP_ENDPOINT,
+                traces_endpoint
+            )
+        )
+        self.metrics_endpoint = os.environ.get(
+            OTEL_EXPORTER_METRICS_ENDPOINT,
+            os.environ.get(
+                OTEL_EXPORTER_OTLP_ENDPOINT,
+                metrics_endpoint
+            )
+        )
 
         self.insecure = insecure
 
@@ -84,6 +103,16 @@ class HoneycombOptions:
         if self.metrics_apikey:
             return self.metrics_apikey
         return self.apikey
+
+    def get_traces_endpoint(self):
+        if self.traces_endpoint:
+            return self.traces_endpoint
+        return self.endpoint
+
+    def get_metrics_endpoint(self):
+        if self.metrics_endpoint:
+            return self.metrics_endpoint
+        return self.endpoint
 
     def get_trace_endpoint_credentials(self):
         # TODO: use trace endpoint

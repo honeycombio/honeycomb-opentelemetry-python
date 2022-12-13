@@ -2,6 +2,8 @@ from honeycomb.opentelemetry.options import (
     HONEYCOMB_API_KEY,
     HONEYCOMB_METRICS_APIKEY,
     HONEYCOMB_TRACES_APIKEY,
+    OTEL_EXPORTER_METRICS_ENDPOINT,
+    OTEL_EXPORTER_TRACES_ENDPOINT,
     HoneycombOptions
 )
 from opentelemetry.sdk.environment_variables import (
@@ -13,6 +15,7 @@ from opentelemetry.sdk.environment_variables import (
 CLASSIC_APIKEY = "this is a string that is 32 char"
 # non-classic keys are 22 chars log
 APIKEY = "an api key for 22 char"
+CUSTOM_ENDPOINT = "localhost:4317"
 
 
 def test_defaults(monkeypatch):
@@ -46,6 +49,58 @@ def test_can_set_endpoint_with_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, "localhost:4317")
     options = HoneycombOptions()
     assert options.endpoint == 'localhost:4317'
+
+
+def test_can_set_traces_endpoint_with_param(monkeypatch):
+    options = HoneycombOptions(traces_endpoint=CUSTOM_ENDPOINT)
+    assert options.traces_endpoint == CUSTOM_ENDPOINT
+
+
+def test_can_set_traces_endpoint_with_traces_envvar(monkeypatch):
+    monkeypatch.setenv(OTEL_EXPORTER_TRACES_ENDPOINT, CUSTOM_ENDPOINT)
+    options = HoneycombOptions()
+    assert options.traces_endpoint == CUSTOM_ENDPOINT
+
+
+def test_can_set_traces_endpoint_with_endpoint_envvar(monkeypatch):
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, CUSTOM_ENDPOINT)
+    options = HoneycombOptions()
+    assert options.traces_endpoint == CUSTOM_ENDPOINT
+
+
+def test_can_set_metrics_endpoint_with_param(monkeypatch):
+    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
+    monkeypatch.delenv(OTEL_EXPORTER_METRICS_ENDPOINT, raising=False)
+    options = HoneycombOptions(metrics_endpoint=CUSTOM_ENDPOINT)
+    assert options.metrics_endpoint == CUSTOM_ENDPOINT
+
+
+def test_can_set_metrics_endpoint_with_metrics_envvar(monkeypatch):
+    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
+    monkeypatch.setenv(OTEL_EXPORTER_METRICS_ENDPOINT, CUSTOM_ENDPOINT)
+    options = HoneycombOptions()
+    assert options.metrics_endpoint == CUSTOM_ENDPOINT
+
+
+def test_can_set_metrics_endpoint_with_endpoint_envvar(monkeypatch):
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, CUSTOM_ENDPOINT)
+    monkeypatch.delenv(OTEL_EXPORTER_METRICS_ENDPOINT, raising=False)
+    options = HoneycombOptions()
+    assert options.metrics_endpoint == CUSTOM_ENDPOINT
+
+
+def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set(monkeypatch):
+    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
+    monkeypatch.delenv(OTEL_EXPORTER_TRACES_ENDPOINT, raising=False)
+    options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
+    assert options.get_traces_endpoint() == CUSTOM_ENDPOINT
+
+
+def test_get_metrics_endpoint_returns_endpoint_when_metricss_endpoint_not_set(monkeypatch):
+    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
+    monkeypatch.delenv(OTEL_EXPORTER_METRICS_ENDPOINT, raising=False)
+    options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
+    assert options.get_metrics_endpoint() == CUSTOM_ENDPOINT
 
 
 def test_can_set_apikey_with_param(monkeypatch):
