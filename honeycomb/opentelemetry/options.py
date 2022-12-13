@@ -44,7 +44,6 @@ class HoneycombOptions:
     metrics_endpoint = None,
     traces_endpoint_insecure = False,
     metrics_endpoint_insecure = False,
-    enable_metrics = False
     sample_rate = DEFAULT_SAMPLE_RATE
     debug = False
     log_level = DEFAULT_LOG_LEVEL
