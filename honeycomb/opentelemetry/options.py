@@ -6,6 +6,7 @@ from opentelemetry.sdk.environment_variables import (
 )
 from grpc import ssl_channel_credentials
 
+DEBUG = "DEBUG"
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
 HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
 HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
@@ -43,6 +44,7 @@ class HoneycombOptions:
     insecure = False
     enable_metrics = False
     sample_rate = DEFAULT_SAMPLE_RATE
+    debug = False
     log_level = DEFAULT_LOG_LEVEL
 
     def __init__(
@@ -57,6 +59,7 @@ class HoneycombOptions:
         metrics_endpoint: str = None,
         insecure: bool = False,
         sample_rate: int = None,
+        debug: bool = False,
         log_level: str = None
     ):
         log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
@@ -105,6 +108,16 @@ class HoneycombOptions:
                     "Unable to parse integer from SAMPLE_RATE enviornment variable. Using sample rate of 1.")
         elif sample_rate:
             self.sample_rate = sample_rate
+
+        debug_str = os.environ.get(DEBUG, None)
+        if debug_str:
+            try:
+                self.debug = bool(debug_str)
+            except ValueError:
+                _logger.warning(
+                    "Unable to parse bool from DEBUG environment variable.")
+        else:
+            self.debug = debug
 
         self.insecure = insecure
 

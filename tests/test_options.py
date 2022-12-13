@@ -1,4 +1,5 @@
 from honeycomb.opentelemetry.options import (
+    DEBUG,
     HONEYCOMB_API_KEY,
     HONEYCOMB_METRICS_APIKEY,
     HONEYCOMB_TRACES_APIKEY,
@@ -139,3 +140,19 @@ def test_can_set_sample_rate_with_envvar(monkeypatch):
     monkeypatch.setenv(SAMPLE_RATE, "321")
     options = HoneycombOptions()
     assert options.sample_rate == 321
+
+
+def test_default_debug_is_false():
+    options = HoneycombOptions()
+    assert options.debug == False
+
+
+def test_can_set_debug_with_param():
+    options = HoneycombOptions(debug=True)
+    assert options.debug == True
+
+
+def test_can_set_debug_with_envvar(monkeypatch):
+    monkeypatch.setenv(DEBUG, "TRUE")
+    options = HoneycombOptions()
+    assert options.debug == True
