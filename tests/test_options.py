@@ -4,6 +4,7 @@ from honeycomb.opentelemetry.options import (
     HONEYCOMB_TRACES_APIKEY,
     OTEL_EXPORTER_METRICS_ENDPOINT,
     OTEL_EXPORTER_TRACES_ENDPOINT,
+    SAMPLE_RATE,
     HoneycombOptions
 )
 from opentelemetry.sdk.environment_variables import (
@@ -122,3 +123,19 @@ def test_can_set_metrics_apikey_with_envvar(monkeypatch):
     monkeypatch.setenv(HONEYCOMB_METRICS_APIKEY, APIKEY)
     options = HoneycombOptions()
     assert options.metrics_apikey == APIKEY
+
+
+def test_default_sample_rate_is_1():
+    options = HoneycombOptions()
+    assert options.sample_rate == 1
+
+
+def test_can_set_sample_rate_with_param():
+    options = HoneycombOptions(sample_rate=123)
+    assert options.sample_rate == 123
+
+
+def test_can_set_sample_rate_with_envvar(monkeypatch):
+    monkeypatch.setenv(SAMPLE_RATE, "321")
+    options = HoneycombOptions()
+    assert options.sample_rate == 321

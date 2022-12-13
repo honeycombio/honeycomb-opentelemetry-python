@@ -13,9 +13,11 @@ OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 OTEL_EXPORTER_TRACES_ENDPOINT = "OTEL_EXPORTER_TRACES_ENDPOINT"
 OTEL_EXPORTER_METRICS_ENDPOINT = "OTEL_EXPORTER_METRICS_ENDPOINT"
+SAMPLE_RATE = "SAMPLE_RATE"
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
+DEFAULT_SAMPLE_RATE = 1
 
 log_levels = {
     "NOTSET": logging.NOTSET,
@@ -40,6 +42,7 @@ class HoneycombOptions:
     metrics_endpoint = None,
     insecure = False
     enable_metrics = False
+    sample_rate = DEFAULT_SAMPLE_RATE
     log_level = DEFAULT_LOG_LEVEL
 
     def __init__(
@@ -53,6 +56,7 @@ class HoneycombOptions:
         traces_endpoint: str = None,
         metrics_endpoint: str = None,
         insecure: bool = False,
+        sample_rate: int = None,
         log_level: str = None
     ):
         log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
@@ -91,6 +95,16 @@ class HoneycombOptions:
                 metrics_endpoint
             )
         )
+
+        sample_rate_str = os.environ.get(SAMPLE_RATE, None)
+        if sample_rate_str:
+            try:
+                self.sample_rate = int(sample_rate_str)
+            except ValueError:
+                _logger.warning(
+                    "Unable to parse integer from SAMPLE_RATE enviornment variable. Using sample rate of 1.")
+        elif sample_rate:
+            self.sample_rate = sample_rate
 
         self.insecure = insecure
 
