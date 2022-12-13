@@ -41,7 +41,6 @@ class HoneycombOptions:
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
     service_version = None
-    endpoint = DEFAULT_API_ENDPOINT
     traces_endpoint = None,
     metrics_endpoint = None,
     traces_endpoint_insecure = False,
@@ -87,21 +86,21 @@ class HoneycombOptions:
         self.service_version = os.environ.get(
             OTEL_SERVICE_VERSION, service_version)
 
-        self.endpoint = os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
-        if not self.endpoint:
-            self.endpoint = DEFAULT_API_ENDPOINT
+        endpoint = os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
+        if not endpoint:
+            endpoint = DEFAULT_API_ENDPOINT
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_TRACES_ENDPOINT,
             os.environ.get(
                 OTEL_EXPORTER_OTLP_ENDPOINT,
-                traces_endpoint
+                (traces_endpoint or endpoint)
             )
         )
         self.metrics_endpoint = os.environ.get(
             OTEL_EXPORTER_METRICS_ENDPOINT,
             os.environ.get(
                 OTEL_EXPORTER_OTLP_ENDPOINT,
-                metrics_endpoint
+                (metrics_endpoint or endpoint)
             )
         )
 
@@ -171,14 +170,10 @@ class HoneycombOptions:
         return self.apikey
 
     def get_traces_endpoint(self):
-        if self.traces_endpoint:
-            return self.traces_endpoint
-        return self.endpoint
+        return self.traces_endpoint
 
     def get_metrics_endpoint(self):
-        if self.metrics_endpoint:
-            return self.metrics_endpoint
-        return self.endpoint
+        return self.metrics_endpoint
 
     def get_trace_endpoint_credentials(self):
         if self.traces_endpoint_insecure:

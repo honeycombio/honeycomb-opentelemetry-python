@@ -26,7 +26,8 @@ CUSTOM_ENDPOINT = "localhost:4317"
 def test_defaults(monkeypatch):
     options = HoneycombOptions()
     assert options.apikey == None
-    assert options.endpoint == "api.honeycomb.io:443"
+    assert options.traces_endpoint == "api.honeycomb.io:443"
+    assert options.metrics_endpoint == "api.honeycomb.io:443"
     assert options.service_name == "unknown_service:python"
 
 
@@ -39,17 +40,6 @@ def test_can_set_service_name_with_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_SERVICE_NAME, "my-service")
     options = HoneycombOptions()
     assert options.service_name == 'my-service'
-
-
-def test_can_set_endpoint_with_param(monkeypatch):
-    options = HoneycombOptions(endpoint='localhost:4317')
-    assert options.endpoint == 'localhost:4317'
-
-
-def test_can_set_endpoint_with_envvar(monkeypatch):
-    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, "localhost:4317")
-    options = HoneycombOptions()
-    assert options.endpoint == 'localhost:4317'
 
 
 def test_can_set_traces_endpoint_with_param(monkeypatch):
