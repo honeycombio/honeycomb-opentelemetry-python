@@ -2,6 +2,7 @@ from honeycomb.opentelemetry.options import (
     DEBUG,
     HONEYCOMB_API_KEY,
     HONEYCOMB_DATASET,
+    HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS,
     HONEYCOMB_METRICS_APIKEY,
     HONEYCOMB_METRICS_DATASET,
     HONEYCOMB_TRACES_APIKEY,
@@ -34,6 +35,7 @@ def test_defaults(monkeypatch):
     assert options.service_name == "unknown_service:python"
     assert options.dataset == None
     assert options.metrics_dataset == None
+    assert options.enable_local_visualizations == False
 
 
 def test_can_set_service_name_with_param(monkeypatch):
@@ -219,3 +221,14 @@ def test_can_set_metrics_dataset_with_envvar(monkeypatch):
     monkeypatch.setenv(HONEYCOMB_METRICS_DATASET, "my-metrics-dataset")
     options = HoneycombOptions()
     assert options.metrics_dataset == "my-metrics-dataset"
+
+
+def test_can_set_enable_local_visualizations_with_param():
+    options = HoneycombOptions(enable_local_visualizations=True)
+    assert options.enable_local_visualizations == True
+
+
+def test_can_set_enable_local_visualizations_with_envvare(monkeypatch):
+    monkeypatch.setenv(HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS, "TRUE")
+    options = HoneycombOptions()
+    assert options.enable_local_visualizations == True

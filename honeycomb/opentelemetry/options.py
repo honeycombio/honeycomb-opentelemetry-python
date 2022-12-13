@@ -12,6 +12,7 @@ HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
 HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
 HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
 HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
+HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS"
 OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 OTEL_EXPORTER_TRACES_ENDPOINT = "OTEL_EXPORTER_TRACES_ENDPOINT"
@@ -54,6 +55,7 @@ class HoneycombOptions:
     log_level = DEFAULT_LOG_LEVEL
     dataset = None
     metrics_dataset = None
+    enable_local_visualizations = False
 
     def __init__(
         self,
@@ -72,7 +74,8 @@ class HoneycombOptions:
         debug: bool = False,
         log_level: str = None,
         dataset: str = None,
-        metrics_dataset: str = None
+        metrics_dataset: str = None,
+        enable_local_visualizations: bool = False
     ):
         log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
         if log_level and log_level.upper() in log_levels:
@@ -176,6 +179,18 @@ class HoneycombOptions:
             HONEYCOMB_DATASET, dataset)
         self.metrics_dataset = os.environ.get(
             HONEYCOMB_METRICS_DATASET, metrics_dataset)
+
+        enable_local_visualizations_str = os.environ.get(
+            HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS, None)
+        if enable_local_visualizations_str:
+            try:
+                self.enable_local_visualizations = bool(
+                    enable_local_visualizations_str)
+            except ValueError:
+                _logger.warning(
+                    "Unable to parse bool from HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS environment variable. Defaulting to false.")
+        else:
+            self.enable_local_visualizations = enable_local_visualizations
 
     def get_traces_apikey(self):
         return self.traces_apikey
