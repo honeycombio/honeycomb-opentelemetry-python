@@ -41,6 +41,7 @@ _logger = logging.getLogger(__name__)
 def is_clasic(apikey: str):
     return apikey and len(apikey) == 32
 
+
 class HoneycombOptions:
     traces_apikey = None
     metrics_apikey = None
@@ -192,12 +193,6 @@ class HoneycombOptions:
         else:
             self.enable_local_visualizations = enable_local_visualizations
 
-    def get_traces_apikey(self):
-        return self.traces_apikey
-
-    def get_metrics_apikey(self):
-        return self.metrics_apikey
-
     def get_traces_endpoint(self):
         return self.traces_endpoint
 
@@ -216,7 +211,7 @@ class HoneycombOptions:
 
     def get_trace_headers(self):
         headers = {
-            "x-honeycomb-team": self.get_traces_apikey(),
+            "x-honeycomb-team": self.traces_apikey,
         }
         if self.dataset and is_clasic(self.traces_apikey):
             headers["x-honeycomb-dataset"] = self.dataset
@@ -224,7 +219,7 @@ class HoneycombOptions:
 
     def get_metrics_headers(self):
         headers = {
-            "x-honeycomb-team": self.get_metrics_apikey()
+            "x-honeycomb-team": self.metrics_apikey
         }
         if self.metrics_dataset:
             headers["x-honeycomb-dataset"] = self.metrics_dataset
