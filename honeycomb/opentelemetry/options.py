@@ -25,6 +25,19 @@ DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
 DEFAULT_SAMPLE_RATE = 1
+INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
+    "Using sample rate of 1."
+INVALID_DEBUG_ERROR = "Unable to parse DEBUG environment variable. " + \
+    "Defaulting to False."
+INVALID_INSECURE_ERROR = "Unable to parse " + \
+    "OTEL_EXPORTER_OTLP_INSECURE. Defaulting to False."
+INVALID_TRACES_INSECURE_ERROR = "Unable to parse  " + \
+    "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
+INVALID_METRICS_INSECURE_ERROR = "Unable to parse  " + \
+    "OTEL_EXPORTER_OTLP_METRICS_INSECURE. Defaulting to False."
+INVALID_LOCAL_VIS_ERROR = "Unable to parse " + \
+    "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS environment variable. " + \
+    "Defaulting to false."
 
 log_levels = {
     "NOTSET": logging.NOTSET,
@@ -127,7 +140,7 @@ class HoneycombOptions:
                 self.sample_rate = int(sample_rate_str)
             except ValueError:
                 _logger.warning(
-                    "Unable to parse integer from SAMPLE_RATE enviornment variable. Using sample rate of 1.")
+                    INVALID_SAMPLE_RATE_ERROR)
         elif sample_rate:
             self.sample_rate = sample_rate
 
@@ -137,7 +150,7 @@ class HoneycombOptions:
                 self.debug = bool(debug_str)
             except ValueError:
                 _logger.warning(
-                    "Unable to parse bool from DEBUG environment variable.")
+                    INVALID_DEBUG_ERROR)
         else:
             self.debug = debug
 
@@ -148,7 +161,7 @@ class HoneycombOptions:
                 endpoint_insecure = bool(endpoint_insecure_str)
             except ValueError:
                 _logger.warning(
-                    "Unable to parse bool from OTEL_EXPORTER_OTLP_INSECURE. Defaulting to False.")
+                    INVALID_INSECURE_ERROR)
 
         traces_endpoint_insecure_str = os.getenv(
             OTEL_EXPORTER_OTLP_TRACES_INSECURE, endpoint_insecure_str)
@@ -158,7 +171,7 @@ class HoneycombOptions:
                     traces_endpoint_insecure_str)
             except ValueError:
                 _logger.warning(
-                    "Unable to parse bool from OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False.")
+                    INVALID_TRACES_INSECURE_ERROR)
         else:
             self.traces_endpoint_insecure = (
                 traces_endpoint_insecure or endpoint_insecure)
@@ -171,7 +184,7 @@ class HoneycombOptions:
                     metrics_endpoint_insecure_str)
             except ValueError:
                 _logger.warning(
-                    "Unable to parse bool from OTEL_EXPORTER_OTLP_METRICS_INSECURE. Defaulting to False.")
+                    INVALID_METRICS_INSECURE_ERROR)
         else:
             self.metrics_endpoint_insecure = (
                 metrics_endpoint_insecure or endpoint_insecure)
@@ -189,7 +202,7 @@ class HoneycombOptions:
                     enable_local_visualizations_str)
             except ValueError:
                 _logger.warning(
-                    "Unable to parse bool from HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS environment variable. Defaulting to false.")
+                    INVALID_LOCAL_VIS_ERROR)
         else:
             self.enable_local_visualizations = enable_local_visualizations
 
