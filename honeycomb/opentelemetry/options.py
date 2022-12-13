@@ -36,7 +36,6 @@ _logger = logging.getLogger(__name__)
 
 
 class HoneycombOptions:
-    apikey = None
     traces_apikey = None
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
@@ -72,11 +71,20 @@ class HoneycombOptions:
             self.log_level = log_level.upper()
         logging.basicConfig(level=log_levels[self.log_level])
 
-        self.apikey = os.environ.get(HONEYCOMB_API_KEY, apikey)
         self.traces_apikey = os.environ.get(
-            HONEYCOMB_TRACES_APIKEY, traces_apikey)
+            HONEYCOMB_TRACES_APIKEY,
+            os.environ.get(
+                HONEYCOMB_API_KEY,
+                (traces_apikey or apikey)
+            )
+        )
         self.metrics_apikey = os.environ.get(
-            HONEYCOMB_METRICS_APIKEY, metrics_apikey)
+            HONEYCOMB_METRICS_APIKEY,
+            os.environ.get(
+                HONEYCOMB_API_KEY,
+                (metrics_apikey or apikey)
+            )
+        )
 
         self.service_name = os.environ.get(OTEL_SERVICE_NAME, service_name)
         if not self.service_name:
@@ -86,21 +94,18 @@ class HoneycombOptions:
         self.service_version = os.environ.get(
             OTEL_SERVICE_VERSION, service_version)
 
-        endpoint = os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, endpoint)
-        if not endpoint:
-            endpoint = DEFAULT_API_ENDPOINT
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_TRACES_ENDPOINT,
             os.environ.get(
                 OTEL_EXPORTER_OTLP_ENDPOINT,
-                (traces_endpoint or endpoint)
+                (traces_endpoint or endpoint or DEFAULT_API_ENDPOINT)
             )
         )
         self.metrics_endpoint = os.environ.get(
             OTEL_EXPORTER_METRICS_ENDPOINT,
             os.environ.get(
                 OTEL_EXPORTER_OTLP_ENDPOINT,
-                (metrics_endpoint or endpoint)
+                (metrics_endpoint or endpoint or DEFAULT_API_ENDPOINT)
             )
         )
 
@@ -160,14 +165,10 @@ class HoneycombOptions:
                 metrics_endpoint_insecure or endpoint_insecure)
 
     def get_traces_apikey(self):
-        if self.traces_apikey:
-            return self.traces_apikey
-        return self.apikey
+        return self.traces_apikey
 
     def get_metrics_apikey(self):
-        if self.metrics_apikey:
-            return self.metrics_apikey
-        return self.apikey
+        return self.metrics_apikey
 
     def get_traces_endpoint(self):
         return self.traces_endpoint

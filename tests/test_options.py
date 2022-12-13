@@ -25,7 +25,8 @@ CUSTOM_ENDPOINT = "localhost:4317"
 
 def test_defaults(monkeypatch):
     options = HoneycombOptions()
-    assert options.apikey == None
+    assert options.traces_apikey == None
+    assert options.metrics_apikey == None
     assert options.traces_endpoint == "api.honeycomb.io:443"
     assert options.metrics_endpoint == "api.honeycomb.io:443"
     assert options.service_name == "unknown_service:python"
@@ -84,17 +85,6 @@ def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set(monke
 def test_get_metrics_endpoint_returns_endpoint_when_metricss_endpoint_not_set(monkeypatch):
     options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
     assert options.get_metrics_endpoint() == CUSTOM_ENDPOINT
-
-
-def test_can_set_apikey_with_param(monkeypatch):
-    options = HoneycombOptions(apikey=APIKEY)
-    assert options.apikey == APIKEY
-
-
-def test_can_set_apikey_with_envvar(monkeypatch):
-    monkeypatch.setenv(HONEYCOMB_API_KEY, APIKEY)
-    options = HoneycombOptions()
-    assert options.apikey == APIKEY
 
 
 def test_can_set_traces_apikey_with_param(monkeypatch):
