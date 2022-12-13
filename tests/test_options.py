@@ -4,6 +4,9 @@ from honeycomb.opentelemetry.options import (
     HONEYCOMB_METRICS_APIKEY,
     HONEYCOMB_TRACES_APIKEY,
     OTEL_EXPORTER_METRICS_ENDPOINT,
+    OTEL_EXPORTER_OTLP_INSECURE,
+    OTEL_EXPORTER_OTLP_METRICS_INSECURE,
+    OTEL_EXPORTER_OTLP_TRACES_INSECURE,
     OTEL_EXPORTER_TRACES_ENDPOINT,
     SAMPLE_RATE,
     HoneycombOptions
@@ -156,3 +159,57 @@ def test_can_set_debug_with_envvar(monkeypatch):
     monkeypatch.setenv(DEBUG, "TRUE")
     options = HoneycombOptions()
     assert options.debug == True
+
+
+def test_traces_endpoint_insecure_defaults_to_false():
+    options = HoneycombOptions()
+    assert options.traces_endpoint_insecure == False
+
+
+def test_can_set_traces_insecure_with_generic_param():
+    options = HoneycombOptions(endpoint_insecure=True)
+    assert options.traces_endpoint_insecure == True
+
+
+def test_can_set_traces_insecure_with_traces_param():
+    options = HoneycombOptions(traces_endpoint_insecure=True)
+    assert options.traces_endpoint_insecure == True
+
+
+def test_can_set_traces_insecure_with_generic_envvar(monkeypatch):
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_INSECURE, "TRUE")
+    options = HoneycombOptions()
+    assert options.traces_endpoint_insecure == True
+
+
+def test_can_set_traces_insecure_with_traces_envvar(monkeypatch):
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_TRACES_INSECURE, "TRUE")
+    options = HoneycombOptions()
+    assert options.traces_endpoint_insecure == True
+
+
+def test_metrics_endpoint_insecure_defaults_to_false():
+    options = HoneycombOptions()
+    assert options.metrics_endpoint_insecure == False
+
+
+def test_can_set_metrics_insecure_with_generic_param():
+    options = HoneycombOptions(endpoint_insecure=True)
+    assert options.metrics_endpoint_insecure == True
+
+
+def test_can_set_metrics_insecure_with_traces_param():
+    options = HoneycombOptions(metrics_endpoint_insecure=True)
+    assert options.metrics_endpoint_insecure == True
+
+
+def test_can_set_metrics_insecure_with_generic_envvar(monkeypatch):
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_INSECURE, "TRUE")
+    options = HoneycombOptions()
+    assert options.metrics_endpoint_insecure == True
+
+
+def test_can_set_metrics_insecure_with_traces_envvar(monkeypatch):
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_METRICS_INSECURE, "TRUE")
+    options = HoneycombOptions()
+    assert options.metrics_endpoint_insecure == True

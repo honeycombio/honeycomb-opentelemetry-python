@@ -14,6 +14,9 @@ OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 OTEL_EXPORTER_TRACES_ENDPOINT = "OTEL_EXPORTER_TRACES_ENDPOINT"
 OTEL_EXPORTER_METRICS_ENDPOINT = "OTEL_EXPORTER_METRICS_ENDPOINT"
+OTEL_EXPORTER_OTLP_INSECURE = "OTEL_EXPORTER_OTLP_INSECURE"
+OTEL_EXPORTER_OTLP_TRACES_INSECURE = "OTEL_EXPORTER_OTLP_TRACES_INSECURE"
+OTEL_EXPORTER_OTLP_METRICS_INSECURE = "OTEL_EXPORTER_OTLP_METRICS_INSECURE"
 SAMPLE_RATE = "SAMPLE_RATE"
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
@@ -41,7 +44,8 @@ class HoneycombOptions:
     endpoint = DEFAULT_API_ENDPOINT
     traces_endpoint = None,
     metrics_endpoint = None,
-    insecure = False
+    traces_endpoint_insecure = False,
+    metrics_endpoint_insecure = False,
     enable_metrics = False
     sample_rate = DEFAULT_SAMPLE_RATE
     debug = False
@@ -57,7 +61,9 @@ class HoneycombOptions:
         endpoint: str = None,
         traces_endpoint: str = None,
         metrics_endpoint: str = None,
-        insecure: bool = False,
+        endpoint_insecure: bool = False,
+        traces_endpoint_insecure: bool = False,
+        metrics_endpoint_insecure: bool = False,
         sample_rate: int = None,
         debug: bool = False,
         log_level: str = None
@@ -119,7 +125,40 @@ class HoneycombOptions:
         else:
             self.debug = debug
 
-        self.insecure = insecure
+        endpoint_insecure_str = os.environ.get(
+            OTEL_EXPORTER_OTLP_INSECURE, None)
+        if endpoint_insecure_str:
+            try:
+                endpoint_insecure = bool(endpoint_insecure_str)
+            except ValueError:
+                _logger.warning(
+                    "Unable to parse bool from OTEL_EXPORTER_OTLP_INSECURE. Defaulting to False.")
+
+        traces_endpoint_insecure_str = os.getenv(
+            OTEL_EXPORTER_OTLP_TRACES_INSECURE, endpoint_insecure_str)
+        if traces_endpoint_insecure_str:
+            try:
+                self.traces_endpoint_insecure = bool(
+                    traces_endpoint_insecure_str)
+            except ValueError:
+                _logger.warning(
+                    "Unable to parse bool from OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False.")
+        else:
+            self.traces_endpoint_insecure = (
+                traces_endpoint_insecure or endpoint_insecure)
+
+        metrics_endpoint_insecure_str = os.getenv(
+            OTEL_EXPORTER_OTLP_METRICS_INSECURE, endpoint_insecure_str)
+        if metrics_endpoint_insecure_str:
+            try:
+                self.metrics_endpoint_insecure = bool(
+                    metrics_endpoint_insecure_str)
+            except ValueError:
+                _logger.warning(
+                    "Unable to parse bool from OTEL_EXPORTER_OTLP_METRICS_INSECURE. Defaulting to False.")
+        else:
+            self.metrics_endpoint_insecure = (
+                metrics_endpoint_insecure or endpoint_insecure)
 
     def get_traces_apikey(self):
         if self.traces_apikey:
@@ -142,14 +181,12 @@ class HoneycombOptions:
         return self.endpoint
 
     def get_trace_endpoint_credentials(self):
-        # TODO: use trace endpoint
-        if self.insecure:
+        if self.traces_endpoint_insecure:
             return None
         return ssl_channel_credentials()
 
     def get_metrics_endpoint_credentials(self):
-        # TODO: use metrics endpoint
-        if self.insecure:
+        if self.metrics_endpoint_insecure:
             return None
         return ssl_channel_credentials()
 
