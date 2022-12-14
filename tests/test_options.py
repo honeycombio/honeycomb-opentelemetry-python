@@ -1,16 +1,15 @@
 from honeycomb.opentelemetry.options import (
     DEBUG,
-    HONEYCOMB_API_KEY,
     HONEYCOMB_DATASET,
     HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS,
     HONEYCOMB_METRICS_APIKEY,
     HONEYCOMB_METRICS_DATASET,
     HONEYCOMB_TRACES_APIKEY,
-    OTEL_EXPORTER_METRICS_ENDPOINT,
     OTEL_EXPORTER_OTLP_INSECURE,
     OTEL_EXPORTER_OTLP_METRICS_INSECURE,
     OTEL_EXPORTER_OTLP_TRACES_INSECURE,
-    OTEL_EXPORTER_TRACES_ENDPOINT,
+    OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
+    OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
     SAMPLE_RATE,
     HoneycombOptions
 )
@@ -55,7 +54,7 @@ def test_can_set_traces_endpoint_with_param(monkeypatch):
 
 
 def test_can_set_traces_endpoint_with_traces_envvar(monkeypatch):
-    monkeypatch.setenv(OTEL_EXPORTER_TRACES_ENDPOINT, CUSTOM_ENDPOINT)
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, CUSTOM_ENDPOINT)
     options = HoneycombOptions()
     assert options.traces_endpoint == CUSTOM_ENDPOINT
 
@@ -72,7 +71,7 @@ def test_can_set_metrics_endpoint_with_param(monkeypatch):
 
 
 def test_can_set_metrics_endpoint_with_metrics_envvar(monkeypatch):
-    monkeypatch.setenv(OTEL_EXPORTER_METRICS_ENDPOINT, CUSTOM_ENDPOINT)
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, CUSTOM_ENDPOINT)
     options = HoneycombOptions()
     assert options.metrics_endpoint == CUSTOM_ENDPOINT
 
