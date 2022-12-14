@@ -30,8 +30,8 @@ def test_defaults():
     options = HoneycombOptions()
     assert options.traces_apikey is None
     assert options.metrics_apikey is None
-    assert options.traces_endpoint == "api.honeycomb.io:443"
-    assert options.metrics_endpoint == "api.honeycomb.io:443"
+    assert options.get_traces_endpoint() == "api.honeycomb.io:443"
+    assert options.get_metrics_endpoint() == "api.honeycomb.io:443"
     assert options.service_name == "unknown_service:python"
     assert options.dataset is None
     assert options.metrics_dataset is None
@@ -51,19 +51,19 @@ def test_can_set_service_name_with_envvar(monkeypatch):
 
 def test_can_set_traces_endpoint_with_param():
     options = HoneycombOptions(traces_endpoint=EXPECTED_ENDPOINT)
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_traces_endpoint_with_traces_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_traces_endpoint_with_endpoint_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_set_from_generic_env_beats_params(monkeypatch):
@@ -72,7 +72,7 @@ def test_traces_endpoint_set_from_generic_env_beats_params(monkeypatch):
         endpoint="generic param",
         traces_endpoint="specific param"
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_specifc_env_beats_params(monkeypatch):
@@ -81,7 +81,7 @@ def test_traces_endpoint_specifc_env_beats_params(monkeypatch):
         endpoint="generic param",
         traces_endpoint="specific param"
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_set_from_specifc_param_beats_generic_param():
@@ -89,7 +89,7 @@ def test_traces_endpoint_set_from_specifc_param_beats_generic_param():
         endpoint="generic param",
         traces_endpoint=EXPECTED_ENDPOINT
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_set_from_traces_env_beats_params(
@@ -100,24 +100,24 @@ def test_traces_endpoint_set_from_traces_env_beats_params(
         endpoint="generic param",
         traces_endpoint="specific param"
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_metrics_endpoint_with_param():
     options = HoneycombOptions(metrics_endpoint=EXPECTED_ENDPOINT)
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_metrics_endpoint_with_metrics_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_metrics_endpoint_with_endpoint_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set():
@@ -323,7 +323,7 @@ def test_metrics_endpoint_set_from_generic_env_beats_params(monkeypatch):
         endpoint="generic param",
         metrics_endpoint="specific param"
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_metrics_endpoint_specifc_env_beats_params(monkeypatch):
@@ -332,7 +332,7 @@ def test_metrics_endpoint_specifc_env_beats_params(monkeypatch):
         endpoint="generic param",
         metrics_endpoint="specific param"
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_metrics_endpoint_set_from_specifc_param_beats_generic_param():
@@ -340,7 +340,7 @@ def test_metrics_endpoint_set_from_specifc_param_beats_generic_param():
         endpoint="generic param",
         metrics_endpoint=EXPECTED_ENDPOINT
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_metrics_endpoint_set_from_metrics_env_beats_params(
@@ -351,7 +351,7 @@ def test_metrics_endpoint_set_from_metrics_env_beats_params(
         endpoint="generic param",
         metrics_endpoint="specific param"
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_dataset_with_param():
