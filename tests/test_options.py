@@ -118,8 +118,8 @@ def test_can_set_traces_apikey_with_envvar(monkeypatch):
 
 
 def test_can_set_metrics_apikey_with_param():
-    options = HoneycombOptions(traces_apikey=APIKEY)
-    assert options.traces_apikey == APIKEY
+    options = HoneycombOptions(metrics_apikey=APIKEY)
+    assert options.metrics_apikey == APIKEY
 
 
 def test_can_set_metrics_apikey_with_envvar(monkeypatch):
