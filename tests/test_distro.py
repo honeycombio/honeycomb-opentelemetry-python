@@ -2,13 +2,6 @@ import platform
 
 from honeycomb.opentelemetry.distro import configure_opentelemetry
 from honeycomb.opentelemetry.version import __version__
-from opentelemetry.environment_variables import OTEL_TRACES_EXPORTER
-from opentelemetry.sdk.environment_variables import (
-    OTEL_SERVICE_NAME,
-    OTEL_EXPORTER_OTLP_PROTOCOL,
-    OTEL_EXPORTER_OTLP_HEADERS,
-    OTEL_EXPORTER_OTLP_ENDPOINT
-)
 from opentelemetry.metrics import get_meter_provider
 from opentelemetry.trace import get_tracer_provider
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
@@ -20,13 +13,7 @@ CLASSIC_APIKEY = "this is a string that is 32 char"
 APIKEY = "an api key for 22 char"
 
 
-def test_distro_configure_defaults(monkeypatch):
-    monkeypatch.delenv(OTEL_SERVICE_NAME, raising=False)
-    monkeypatch.delenv(OTEL_TRACES_EXPORTER, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_PROTOCOL, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_ENDPOINT, raising=False)
-    monkeypatch.delenv(OTEL_EXPORTER_OTLP_HEADERS, raising=False)
-
+def test_distro_configure_defaults():
     configure_opentelemetry()
     tracer_provider = get_tracer_provider()
     assert tracer_provider._resource._attributes["service.name"] == "unknown_service:python"

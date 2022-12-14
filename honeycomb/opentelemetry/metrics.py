@@ -9,7 +9,7 @@ from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
 
 def create_meter_provider(options: HoneycombOptions, resource: Resource):
     exporter = OTLPMetricExporter(
-        endpoint=options.endpoint,
+        endpoint=options.get_metrics_endpoint(),
         credentials=options.get_metrics_endpoint_credentials(),
         headers=options.get_metrics_headers()
     )

@@ -32,5 +32,5 @@ class HoneycombDistro(BaseDistro):
     """
 
     def _configure(self, **kwargs):
-        print('🐝 auto instrumented 🐝')
+        print("🐝 auto instrumented 🐝")
         configure_opentelemetry()
