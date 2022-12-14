@@ -13,33 +13,33 @@ from opentelemetry.sdk.environment_variables import (
 from grpc import ssl_channel_credentials
 
 DEBUG = "DEBUG"
-HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
-HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
-HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
-HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
-HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
-HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS"
-# not currently supported in OTel SDK, open PR:
-# https://github.com/open-telemetry/opentelemetry-specification/issues/1901
-OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
-SAMPLE_RATE = "SAMPLE_RATE"
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
 DEFAULT_SAMPLE_RATE = 1
-INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
-    "Using sample rate of 1."
+HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
+HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
+HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS"
+HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
+HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
+HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
 INVALID_DEBUG_ERROR = "Unable to parse DEBUG environment variable. " + \
     "Defaulting to False."
 INVALID_INSECURE_ERROR = "Unable to parse " + \
     "OTEL_EXPORTER_OTLP_INSECURE. Defaulting to False."
-INVALID_TRACES_INSECURE_ERROR = "Unable to parse  " + \
-    "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
-INVALID_METRICS_INSECURE_ERROR = "Unable to parse  " + \
-    "OTEL_EXPORTER_OTLP_METRICS_INSECURE. Defaulting to False."
 INVALID_LOCAL_VIS_ERROR = "Unable to parse " + \
     "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS environment variable. " + \
     "Defaulting to false."
+INVALID_METRICS_INSECURE_ERROR = "Unable to parse " + \
+    "OTEL_EXPORTER_OTLP_METRICS_INSECURE. Defaulting to False."
+INVALID_TRACES_INSECURE_ERROR = "Unable to parse " + \
+    "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
+INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
+    "Using sample rate of 1."
+# not currently supported in OTel SDK, open PR:
+# https://github.com/open-telemetry/opentelemetry-specification/issues/1901
+OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
+SAMPLE_RATE = "SAMPLE_RATE"
 
 log_levels = {
     "NOTSET": logging.NOTSET,
