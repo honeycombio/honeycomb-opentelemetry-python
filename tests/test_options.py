@@ -1,22 +1,22 @@
 from honeycomb.opentelemetry.options import (
     DEBUG,
+    HoneycombOptions,
     HONEYCOMB_API_KEY,
     HONEYCOMB_DATASET,
     HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS,
     HONEYCOMB_METRICS_APIKEY,
     HONEYCOMB_METRICS_DATASET,
     HONEYCOMB_TRACES_APIKEY,
+    SAMPLE_RATE
+)
+from opentelemetry.sdk.environment_variables import (
+    OTEL_EXPORTER_OTLP_ENDPOINT,
     OTEL_EXPORTER_OTLP_INSECURE,
+    OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
     OTEL_EXPORTER_OTLP_METRICS_INSECURE,
     OTEL_EXPORTER_OTLP_TRACES_INSECURE,
     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
-    OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
-    SAMPLE_RATE,
-    HoneycombOptions
-)
-from opentelemetry.sdk.environment_variables import (
     OTEL_SERVICE_NAME,
-    OTEL_EXPORTER_OTLP_ENDPOINT
 )
 
 # classic keys are 32 chars long
@@ -26,7 +26,7 @@ APIKEY = "an api key for 22 char"
 CUSTOM_ENDPOINT = "localhost:4317"
 
 
-def test_defaults(monkeypatch):
+def test_defaults():
     options = HoneycombOptions()
     assert options.traces_apikey is None
     assert options.metrics_apikey is None
@@ -38,7 +38,7 @@ def test_defaults(monkeypatch):
     assert options.enable_local_visualizations is False
 
 
-def test_can_set_service_name_with_param(monkeypatch):
+def test_can_set_service_name_with_param():
     options = HoneycombOptions(service_name="my-service")
     assert options.service_name == "my-service"
 
@@ -49,7 +49,7 @@ def test_can_set_service_name_with_envvar(monkeypatch):
     assert options.service_name == "my-service"
 
 
-def test_can_set_traces_endpoint_with_param(monkeypatch):
+def test_can_set_traces_endpoint_with_param():
     options = HoneycombOptions(traces_endpoint=CUSTOM_ENDPOINT)
     assert options.traces_endpoint == CUSTOM_ENDPOINT
 
@@ -66,7 +66,7 @@ def test_can_set_traces_endpoint_with_endpoint_envvar(monkeypatch):
     assert options.traces_endpoint == CUSTOM_ENDPOINT
 
 
-def test_can_set_metrics_endpoint_with_param(monkeypatch):
+def test_can_set_metrics_endpoint_with_param():
     options = HoneycombOptions(metrics_endpoint=CUSTOM_ENDPOINT)
     assert options.metrics_endpoint == CUSTOM_ENDPOINT
 
@@ -83,12 +83,12 @@ def test_can_set_metrics_endpoint_with_endpoint_envvar(monkeypatch):
     assert options.metrics_endpoint == CUSTOM_ENDPOINT
 
 
-def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set(monkeypatch):
+def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set():
     options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
     assert options.get_traces_endpoint() == CUSTOM_ENDPOINT
 
 
-def test_get_metrics_endpoint_returns_endpoint_when_metricss_endpoint_not_set(monkeypatch):
+def test_get_metrics_endpoint_returns_endpoint_when_metricss_endpoint_not_set():
     options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
     assert options.get_metrics_endpoint() == CUSTOM_ENDPOINT
 
@@ -106,7 +106,7 @@ def test_can_set_apikey_with_envvar(monkeypatch):
     assert options.metrics_apikey == APIKEY
 
 
-def test_can_set_traces_apikey_with_param(monkeypatch):
+def test_can_set_traces_apikey_with_param():
     options = HoneycombOptions(traces_apikey=APIKEY)
     assert options.traces_apikey == APIKEY
 
@@ -117,7 +117,7 @@ def test_can_set_traces_apikey_with_envvar(monkeypatch):
     assert options.traces_apikey == APIKEY
 
 
-def test_can_set_metrics_apikey_with_param(monkeypatch):
+def test_can_set_metrics_apikey_with_param():
     options = HoneycombOptions(traces_apikey=APIKEY)
     assert options.traces_apikey == APIKEY
 
