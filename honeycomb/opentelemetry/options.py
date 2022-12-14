@@ -7,13 +7,17 @@ from opentelemetry.sdk.environment_variables import (
     OTEL_EXPORTER_OTLP_METRICS_INSECURE,
     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
     OTEL_EXPORTER_OTLP_TRACES_INSECURE,
+    OTEL_EXPORTER_OTLP_PROTOCOL,
     OTEL_LOG_LEVEL,
-    OTEL_SERVICE_NAME
+    OTEL_SERVICE_NAME,
+    OTEL_EXPORTER_OTLP_TRACES_PROTOCOL,
+    OTEL_EXPORTER_OTLP_METRICS_PROTOCOL
 )
 from grpc import ssl_channel_credentials
 
 DEBUG = "DEBUG"
 DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
+DEFAULT_EXPORTER_PROTOCOL = "grpc"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
 DEFAULT_SAMPLE_RATE = 1
@@ -36,6 +40,15 @@ INVALID_TRACES_INSECURE_ERROR = "Unable to parse " + \
     "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
 INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
     "Using sample rate of 1."
+INVALID_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
+    " detected in OTEL_EXPORTER_OTLP_PROTOCOL." + \
+    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
+INVALID_TRACES_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
+    " detected in OTEL_TRACES_EXPORTER_OTLP_PROTOCOL." + \
+    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
+INVALID_METRICS_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
+    " detected in OTEL_METRICS_EXPORTER_OTLP_PROTOCOL." + \
+    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
 # not currently supported in OTel SDK, open PR:
 # https://github.com/open-telemetry/opentelemetry-specification/issues/1901
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
@@ -48,6 +61,11 @@ log_levels = {
     "WARNING": logging.WARNING,
     "ERROR": logging.ERROR,
     "CRITICAL": logging.CRITICAL,
+}
+
+exporter_protocols = {
+    "grpc",
+    "http/protobuf"
 }
 
 _logger = logging.getLogger(__name__)
@@ -66,6 +84,8 @@ class HoneycombOptions:
     metrics_endpoint = None,
     traces_endpoint_insecure = False,
     metrics_endpoint_insecure = False,
+    traces_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
+    metrics_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
     sample_rate = DEFAULT_SAMPLE_RATE
     debug = False
     log_level = DEFAULT_LOG_LEVEL
@@ -91,7 +111,10 @@ class HoneycombOptions:
         log_level: str = None,
         dataset: str = None,
         metrics_dataset: str = None,
-        enable_local_visualizations: bool = False
+        enable_local_visualizations: bool = False,
+        exporter_protocol: str = None,
+        traces_exporter_protocol: str = None,
+        metrics_exporter_protocol: str = None
     ):
         log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
         if log_level and log_level.upper() in log_levels:
@@ -120,6 +143,27 @@ class HoneycombOptions:
             self.service_name = DEFAULT_SERVICE_NAME
         self.service_version = os.environ.get(
             OTEL_SERVICE_VERSION, service_version)
+
+        exporter_protocol = os.environ.get(
+            OTEL_EXPORTER_OTLP_PROTOCOL,
+            (exporter_protocol or DEFAULT_EXPORTER_PROTOCOL))
+        if exporter_protocol not in exporter_protocols:
+            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
+            exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
+
+        self.traces_exporter_protocol = os.environ.get(
+            OTEL_EXPORTER_OTLP_TRACES_PROTOCOL,
+            (traces_exporter_protocol or exporter_protocol))
+        if traces_exporter_protocol not in exporter_protocols:
+            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
+            self.traces_exporter_protocol = exporter_protocol
+
+        self.metrics_exporter_protocol = os.environ.get(
+            OTEL_EXPORTER_OTLP_METRICS_PROTOCOL,
+            (metrics_exporter_protocol or exporter_protocol))
+        if traces_exporter_protocol not in exporter_protocols:
+            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
+            self.traces_exporter_protocol = exporter_protocol
 
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
