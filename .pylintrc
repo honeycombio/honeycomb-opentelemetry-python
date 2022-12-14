@@ -416,7 +416,11 @@ disable=raw-checker-failed,
         suppressed-message,
         useless-suppression,
         deprecated-pragma,
-        use-symbolic-message-instead
+        use-symbolic-message-instead,
+#         missing-docstring, # need docstrings for functions? disable for tests maybe
+#         import-error, # this is a linting thing, not an actual problem :(
+#         no-name-in-module # this is a linting thing, not an actual problem :(
+
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
