@@ -1,5 +1,6 @@
 from honeycomb.opentelemetry.options import (
     DEBUG,
+    HONEYCOMB_API_KEY,
     HONEYCOMB_DATASET,
     HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS,
     HONEYCOMB_METRICS_APIKEY,
@@ -90,6 +91,19 @@ def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set(monke
 def test_get_metrics_endpoint_returns_endpoint_when_metricss_endpoint_not_set(monkeypatch):
     options = HoneycombOptions(endpoint=CUSTOM_ENDPOINT)
     assert options.get_metrics_endpoint() == CUSTOM_ENDPOINT
+
+
+def test_can_set_apikey_with_param():
+    options = HoneycombOptions(apikey=APIKEY)
+    assert options.traces_apikey == APIKEY
+    assert options.metrics_apikey == APIKEY
+
+
+def test_can_set_apikey_with_envvar(monkeypatch):
+    monkeypatch.setenv(HONEYCOMB_API_KEY, APIKEY)
+    options = HoneycombOptions()
+    assert options.traces_apikey == APIKEY
+    assert options.metrics_apikey == APIKEY
 
 
 def test_can_set_traces_apikey_with_param(monkeypatch):
