@@ -1,56 +1,45 @@
 import logging
 import os
 from opentelemetry.sdk.environment_variables import (
-    OTEL_SERVICE_NAME,
-    OTEL_EXPORTER_OTLP_ENDPOINT
+    OTEL_EXPORTER_OTLP_ENDPOINT,
+    OTEL_EXPORTER_OTLP_INSECURE,
+    OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
+    OTEL_EXPORTER_OTLP_METRICS_INSECURE,
+    OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
+    OTEL_EXPORTER_OTLP_TRACES_INSECURE,
+    OTEL_LOG_LEVEL,
+    OTEL_SERVICE_NAME
 )
 from grpc import ssl_channel_credentials
 
 DEBUG = "DEBUG"
-HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
-HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
-HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
-HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
-HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
-HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS"
-OTEL_LOG_LEVEL = "OTEL_LOG_LEVEL"
-OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
-OTEL_EXPORTER_TRACES_ENDPOINT = "OTEL_EXPORTER_TRACES_ENDPOINT"
-OTEL_EXPORTER_METRICS_ENDPOINT = "OTEL_EXPORTER_METRICS_ENDPOINT"
-OTEL_EXPORTER_OTLP_INSECURE = "OTEL_EXPORTER_OTLP_INSECURE"
-OTEL_EXPORTER_OTLP_TRACES_INSECURE = "OTEL_EXPORTER_OTLP_TRACES_INSECURE"
-OTEL_EXPORTER_OTLP_METRICS_INSECURE = "OTEL_EXPORTER_OTLP_METRICS_INSECURE"
-OTEL_EXPORTER_OTLP_PROTOCOL = "OTEL_EXPORTER_OTLP_PROTOCOL"
-OTEL_EXPORTER_OTLP_TRACES_PROTOCOL = "OTEL_EXPORTER_OTLP_TRACES_PROTOCOL"
-OTEL_EXPORTER_OTLP_METRICS_PROTOCOL = "OTEL_EXPORTER_OTLP_METRICS_PROTOCOL"
-SAMPLE_RATE = "SAMPLE_RATE"
-DEFAULT_API_ENDPOINT = "https://api.honeycomb.io:443"
+DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
 DEFAULT_SAMPLE_RATE = 1
-DEFAULT_EXPORTER_PROTOCOL = "grpc"
-INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
-    "Using sample rate of 1."
+HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
+HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
+HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS"
+HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
+HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
+HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
 INVALID_DEBUG_ERROR = "Unable to parse DEBUG environment variable. " + \
     "Defaulting to False."
 INVALID_INSECURE_ERROR = "Unable to parse " + \
     "OTEL_EXPORTER_OTLP_INSECURE. Defaulting to False."
-INVALID_TRACES_INSECURE_ERROR = "Unable to parse  " + \
-    "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
-INVALID_METRICS_INSECURE_ERROR = "Unable to parse  " + \
-    "OTEL_EXPORTER_OTLP_METRICS_INSECURE. Defaulting to False."
 INVALID_LOCAL_VIS_ERROR = "Unable to parse " + \
     "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS environment variable. " + \
     "Defaulting to false."
-INVALID_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
-    " detected in OTEL_EXPORTER_OTLP_PROTOCOL." + \
-    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
-INVALID_TRACES_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
-    " detected in OTEL_TRACES_EXPORTER_OTLP_PROTOCOL." + \
-    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
-INVALID_METRICS_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
-    " detected in OTEL_METRICS_EXPORTER_OTLP_PROTOCOL." + \
-    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
+INVALID_METRICS_INSECURE_ERROR = "Unable to parse " + \
+    "OTEL_EXPORTER_OTLP_METRICS_INSECURE. Defaulting to False."
+INVALID_TRACES_INSECURE_ERROR = "Unable to parse " + \
+    "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
+INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
+    "Using sample rate of 1."
+# not currently supported in OTel SDK, open PR:
+# https://github.com/open-telemetry/opentelemetry-specification/issues/1901
+OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
+SAMPLE_RATE = "SAMPLE_RATE"
 
 log_levels = {
     "NOTSET": logging.NOTSET,
@@ -61,22 +50,12 @@ log_levels = {
     "CRITICAL": logging.CRITICAL,
 }
 
-exporter_protocols = {
-    "grpc",
-    "http/protobuf"
-}
-
 _logger = logging.getLogger(__name__)
 
 
-def is_clasic(apikey: str):
+def is_classic(apikey: str):
     return apikey and len(apikey) == 32
 
-
-def maybe_append_path(url: str, protocol: str):
-    if protocol == "grpc":
-        return url
-    return
 
 class HoneycombOptions:
     traces_apikey = None
@@ -93,8 +72,6 @@ class HoneycombOptions:
     dataset = None
     metrics_dataset = None
     enable_local_visualizations = False
-    traces_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
-    metrics_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
 
     def __init__(
         self,
@@ -114,10 +91,7 @@ class HoneycombOptions:
         log_level: str = None,
         dataset: str = None,
         metrics_dataset: str = None,
-        enable_local_visualizations: bool = False,
-        exporter_protocol: str = None,
-        traces_exporter_protocol: str = None,
-        metrics_exporter_protocol: str = None
+        enable_local_visualizations: bool = False
     ):
         log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
         if log_level and log_level.upper() in log_levels:
@@ -147,36 +121,15 @@ class HoneycombOptions:
         self.service_version = os.environ.get(
             OTEL_SERVICE_VERSION, service_version)
 
-        exporter_protocol = os.environ.get(
-            OTEL_EXPORTER_OTLP_PROTOCOL,
-            (exporter_protocol or DEFAULT_EXPORTER_PROTOCOL))
-        if exporter_protocol not in exporter_protocols:
-            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
-            exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
-
-        self.traces_exporter_protocol = os.environ.get(
-            OTEL_EXPORTER_OTLP_TRACES_PROTOCOL,
-            (traces_exporter_protocol or exporter_protocol))
-        if traces_exporter_protocol not in exporter_protocols:
-            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
-            self.traces_exporter_protocol = exporter_protocol
-
-        self.metrics_exporter_protocol = os.environ.get(
-            OTEL_EXPORTER_OTLP_METRICS_PROTOCOL,
-            (metrics_exporter_protocol or exporter_protocol))
-        if traces_exporter_protocol not in exporter_protocols:
-            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
-            self.traces_exporter_protocol = exporter_protocol
-
         self.traces_endpoint = os.environ.get(
-            OTEL_EXPORTER_TRACES_ENDPOINT,
+            OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
             os.environ.get(
-                maybe_append_path(OTEL_EXPORTER_OTLP_ENDPOINT, protocol),
+                OTEL_EXPORTER_OTLP_ENDPOINT,
                 (traces_endpoint or endpoint or DEFAULT_API_ENDPOINT)
             )
         )
         self.metrics_endpoint = os.environ.get(
-            OTEL_EXPORTER_METRICS_ENDPOINT,
+            OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
             os.environ.get(
                 OTEL_EXPORTER_OTLP_ENDPOINT,
                 (metrics_endpoint or endpoint or DEFAULT_API_ENDPOINT)
@@ -256,8 +209,6 @@ class HoneycombOptions:
             self.enable_local_visualizations = enable_local_visualizations
 
     def get_traces_endpoint(self):
-        if self.traces_exporter_protocol == "http/protobuf" and not self.traces_endpoint.endswith("v1/traces"):
-            return
         return self.traces_endpoint
 
     def get_metrics_endpoint(self):
@@ -277,7 +228,7 @@ class HoneycombOptions:
         headers = {
             "x-honeycomb-team": self.traces_apikey,
         }
-        if self.dataset and is_clasic(self.traces_apikey):
+        if self.dataset and is_classic(self.traces_apikey):
             headers["x-honeycomb-dataset"] = self.dataset
         return headers
 
