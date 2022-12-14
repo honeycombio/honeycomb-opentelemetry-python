@@ -51,7 +51,7 @@ log_levels = {
 _logger = logging.getLogger(__name__)
 
 
-def is_clasic(apikey: str):
+def is_classic(apikey: str):
     return apikey and len(apikey) == 32
 
 
@@ -226,7 +226,7 @@ class HoneycombOptions:
         headers = {
             "x-honeycomb-team": self.traces_apikey,
         }
-        if self.dataset and is_clasic(self.traces_apikey):
+        if self.dataset and is_classic(self.traces_apikey):
             headers["x-honeycomb-dataset"] = self.dataset
         return headers
 
