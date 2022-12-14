@@ -39,14 +39,14 @@ def test_defaults(monkeypatch):
 
 
 def test_can_set_service_name_with_param(monkeypatch):
-    options = HoneycombOptions(service_name='my-service')
-    assert options.service_name == 'my-service'
+    options = HoneycombOptions(service_name="my-service")
+    assert options.service_name == "my-service"
 
 
 def test_can_set_service_name_with_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_SERVICE_NAME, "my-service")
     options = HoneycombOptions()
-    assert options.service_name == 'my-service'
+    assert options.service_name == "my-service"
 
 
 def test_can_set_traces_endpoint_with_param(monkeypatch):
