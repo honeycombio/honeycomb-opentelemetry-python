@@ -57,6 +57,26 @@ def is_classic(apikey: str):
     return apikey and len(apikey) == 32
 
 
+def parse_bool(environment_variable: str, default_value: bool, error_message: str):
+    val = os.getenv(environment_variable, None)
+    if val:
+        try:
+            return bool(val)
+        except ValueError:
+            _logger.warning(error_message)
+    return default_value
+
+
+def parse_int(environment_variable: str, default_value: int, error_message: str):
+    val = os.getenv(environment_variable, None)
+    if val:
+        try:
+            return int(val)
+        except ValueError:
+            _logger.warning(error_message)
+    return default_value
+
+
 class HoneycombOptions:
     traces_apikey = None
     metrics_apikey = None
@@ -136,77 +156,44 @@ class HoneycombOptions:
             )
         )
 
-        sample_rate_str = os.environ.get(SAMPLE_RATE, None)
-        if sample_rate_str:
-            try:
-                self.sample_rate = int(sample_rate_str)
-            except ValueError:
-                _logger.warning(
-                    INVALID_SAMPLE_RATE_ERROR)
-        elif sample_rate:
-            self.sample_rate = sample_rate
+        self.sample_rate = parse_int(
+            SAMPLE_RATE,
+            (sample_rate or DEFAULT_SAMPLE_RATE),
+            INVALID_SAMPLE_RATE_ERROR
+        )
 
-        debug_str = os.environ.get(DEBUG, None)
-        if debug_str:
-            try:
-                self.debug = bool(debug_str)
-            except ValueError:
-                _logger.warning(
-                    INVALID_DEBUG_ERROR)
-        else:
-            self.debug = debug
+        self.debug = parse_bool(
+            DEBUG,
+            (debug or False),
+            INVALID_DEBUG_ERROR
+        )
 
-        endpoint_insecure_str = os.environ.get(
-            OTEL_EXPORTER_OTLP_INSECURE, None)
-        if endpoint_insecure_str:
-            try:
-                endpoint_insecure = bool(endpoint_insecure_str)
-            except ValueError:
-                _logger.warning(
-                    INVALID_INSECURE_ERROR)
-
-        traces_endpoint_insecure_str = os.getenv(
-            OTEL_EXPORTER_OTLP_TRACES_INSECURE, endpoint_insecure_str)
-        if traces_endpoint_insecure_str:
-            try:
-                self.traces_endpoint_insecure = bool(
-                    traces_endpoint_insecure_str)
-            except ValueError:
-                _logger.warning(
-                    INVALID_TRACES_INSECURE_ERROR)
-        else:
-            self.traces_endpoint_insecure = (
-                traces_endpoint_insecure or endpoint_insecure)
-
-        metrics_endpoint_insecure_str = os.getenv(
-            OTEL_EXPORTER_OTLP_METRICS_INSECURE, endpoint_insecure_str)
-        if metrics_endpoint_insecure_str:
-            try:
-                self.metrics_endpoint_insecure = bool(
-                    metrics_endpoint_insecure_str)
-            except ValueError:
-                _logger.warning(
-                    INVALID_METRICS_INSECURE_ERROR)
-        else:
-            self.metrics_endpoint_insecure = (
-                metrics_endpoint_insecure or endpoint_insecure)
+        endpoint_insecure = parse_bool(
+            OTEL_EXPORTER_OTLP_INSECURE,
+            (endpoint_insecure or False),
+            INVALID_INSECURE_ERROR
+        )
+        self.traces_endpoint_insecure = parse_bool(
+            OTEL_EXPORTER_OTLP_TRACES_INSECURE,
+            (traces_endpoint_insecure or endpoint_insecure),
+            INVALID_TRACES_INSECURE_ERROR
+        )
+        self.metrics_endpoint_insecure = parse_bool(
+            OTEL_EXPORTER_OTLP_METRICS_INSECURE,
+            (metrics_endpoint_insecure or endpoint_insecure),
+            INVALID_METRICS_INSECURE_ERROR
+        )
 
         self.dataset = os.environ.get(
             HONEYCOMB_DATASET, dataset)
         self.metrics_dataset = os.environ.get(
             HONEYCOMB_METRICS_DATASET, metrics_dataset)
 
-        enable_local_visualizations_str = os.environ.get(
-            HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS, None)
-        if enable_local_visualizations_str:
-            try:
-                self.enable_local_visualizations = bool(
-                    enable_local_visualizations_str)
-            except ValueError:
-                _logger.warning(
-                    INVALID_LOCAL_VIS_ERROR)
-        else:
-            self.enable_local_visualizations = enable_local_visualizations
+        self.enable_local_visualizations = parse_bool(
+            HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS,
+            enable_local_visualizations,
+            INVALID_LOCAL_VIS_ERROR
+        )
 
     def get_traces_endpoint(self):
         return self.traces_endpoint
