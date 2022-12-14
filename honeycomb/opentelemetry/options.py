@@ -57,7 +57,9 @@ def is_classic(apikey: str):
     return apikey and len(apikey) == 32
 
 
-def parse_bool(environment_variable: str, default_value: bool, error_message: str):
+def parse_bool(environment_variable: str,
+               default_value: bool,
+               error_message: str):
     val = os.getenv(environment_variable, None)
     if val:
         try:
@@ -67,7 +69,9 @@ def parse_bool(environment_variable: str, default_value: bool, error_message: st
     return default_value
 
 
-def parse_int(environment_variable: str, default_value: int, error_message: str):
+def parse_int(environment_variable: str,
+              default_value: int,
+              error_message: str):
     val = os.getenv(environment_variable, None)
     if val:
         try:
