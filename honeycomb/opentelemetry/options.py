@@ -205,9 +205,7 @@ class HoneycombOptions:
             if not self.traces_endpoint:
                 self.traces_endpoint = traces_endpoint
                 if not self.traces_endpoint:
-                    self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, endpoint)
-                    if not self.traces_endpoint:
-                        self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, DEFAULT_API_ENDPOINT)
+                    self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, endpoint or DEFAULT_API_ENDPOINT)
 
         self.metrics_endpoint = os.environ.get(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, None)
         if not self.metrics_endpoint:
@@ -215,9 +213,7 @@ class HoneycombOptions:
             if not self.metrics_endpoint:
                 self.metrics_endpoint = metrics_endpoint
                 if not self.metrics_endpoint:
-                    self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, self.metrics_endpoint)
-                    if not self.metrics_endpoint:
-                        self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, DEFAULT_API_ENDPOINT)
+                    self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, endpoint or DEFAULT_API_ENDPOINT)
 
         self.sample_rate = parse_int(
             SAMPLE_RATE,
