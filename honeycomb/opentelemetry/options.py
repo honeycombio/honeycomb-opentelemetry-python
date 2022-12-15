@@ -98,6 +98,16 @@ def parse_int(environment_variable: str,
             _logger.warning(error_message)
     return default_value
 
+def _append_traces_path(protocol: str, endpoint: str):
+    if endpoint and protocol == "http/protobuf":
+        print("adding path")
+        return "/".join([endpoint.strip("/"), "/v1/traces"])
+    return endpoint
+
+def _append_metrics_path(protocol: str, endpoint: str):
+    if endpoint and protocol == "http/protobuf":
+        return "/".join([endpoint.strip("/"), "/v1/metrics"])
+    return endpoint
 
 class HoneycombOptions:
     traces_apikey = None
@@ -189,20 +199,28 @@ class HoneycombOptions:
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
             self.traces_exporter_protocol = exporter_protocol
 
-        self.traces_endpoint = os.environ.get(
-            OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
-            os.environ.get(
-                OTEL_EXPORTER_OTLP_ENDPOINT,
-                (traces_endpoint or endpoint or DEFAULT_API_ENDPOINT)
-            )
-        )
-        self.metrics_endpoint = os.environ.get(
-            OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
-            os.environ.get(
-                OTEL_EXPORTER_OTLP_ENDPOINT,
-                (metrics_endpoint or endpoint or DEFAULT_API_ENDPOINT)
-            )
-        )
+        self.traces_endpoint = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, None)
+        if not self.traces_endpoint:
+            self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None))
+            if not self.traces_endpoint:
+                self.traces_endpoint = traces_endpoint
+                if not self.traces_endpoint:
+                    print("mike")
+                    self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, endpoint)
+                    if not self.traces_endpoint:
+                        self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, DEFAULT_API_ENDPOINT)
+        print(self.traces_endpoint)
+
+        self.metrics_endpoint = os.environ.get(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, None)
+        if not self.metrics_endpoint:
+            self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None))
+            if not self.metrics_endpoint:
+                self.metrics_endpoint = metrics_endpoint
+                if not self.metrics_endpoint:
+                    self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, self.metrics_endpoint)
+                    if not self.metrics_endpoint:
+                        self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, DEFAULT_API_ENDPOINT)
+        print(self.metrics_endpoint)
 
         self.sample_rate = parse_int(
             SAMPLE_RATE,
