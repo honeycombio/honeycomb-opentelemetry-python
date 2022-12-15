@@ -30,8 +30,8 @@ def test_defaults():
     options = HoneycombOptions()
     assert options.traces_apikey is None
     assert options.metrics_apikey is None
-    assert options.get_traces_endpoint() == "api.honeycomb.io:443"
-    assert options.get_metrics_endpoint() == "api.honeycomb.io:443"
+    assert options.get_traces_endpoint() == "https://api.honeycomb.io:443"
+    assert options.get_metrics_endpoint() == "https://api.honeycomb.io:443"
     assert options.service_name == "unknown_service:python"
     assert options.dataset is None
     assert options.metrics_dataset is None

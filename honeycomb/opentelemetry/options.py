@@ -16,7 +16,7 @@ from opentelemetry.sdk.environment_variables import (
 from grpc import ssl_channel_credentials
 
 DEBUG = "DEBUG"
-DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
+DEFAULT_API_ENDPOINT = "https://api.honeycomb.io:443"
 DEFAULT_EXPORTER_PROTOCOL = "grpc"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
@@ -101,12 +101,12 @@ def parse_int(environment_variable: str,
 def _append_traces_path(protocol: str, endpoint: str):
     if endpoint and protocol == "http/protobuf":
         print("adding path")
-        return "/".join([endpoint.strip("/"), "/v1/traces"])
+        return "/".join([endpoint.strip("/"), "v1/traces"])
     return endpoint
 
 def _append_metrics_path(protocol: str, endpoint: str):
     if endpoint and protocol == "http/protobuf":
-        return "/".join([endpoint.strip("/"), "/v1/metrics"])
+        return "/".join([endpoint.strip("/"), "v1/metrics"])
     return endpoint
 
 class HoneycombOptions:
