@@ -40,15 +40,8 @@ INVALID_TRACES_INSECURE_ERROR = "Unable to parse " + \
     "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
 INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
     "Using sample rate of 1."
-INVALID_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
-    " detected in OTEL_EXPORTER_OTLP_PROTOCOL." + \
-    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
-INVALID_TRACES_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
-    " detected in OTEL_TRACES_EXPORTER_OTLP_PROTOCOL." + \
-    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
-INVALID_METRICS_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol" + \
-    " detected in OTEL_METRICS_EXPORTER_OTLP_PROTOCOL." + \
-    " Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
+INVALID_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol " + \
+    "detected. Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
 # not currently supported in OTel SDK, open PR:
 # https://github.com/open-telemetry/opentelemetry-specification/issues/1901
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
