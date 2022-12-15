@@ -85,7 +85,8 @@ class HoneycombOptions:
     """
     Honeycomb Options used to configure the OpenTelemetry SDK.
 
-    Setting the debug flag enables verbose logging and sets the otel log level to DEBUG.
+    Setting the debug flag enables verbose logging and sets the OTEL_LOG_LEVEL
+    to DEBUG.
     """
 
     traces_apikey = None
