@@ -391,3 +391,13 @@ def test_local_vis_from_env_beats_param(monkeypatch):
     monkeypatch.setenv(HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS, "TRUE")
     options = HoneycombOptions(enable_local_visualizations=False)
     assert options.enable_local_visualizations is True
+
+
+def test_debug_sets_log_level_to_debug():
+    options = HoneycombOptions(debug=True)
+    assert options.log_level == "DEBUG"
+
+
+def test_debug_with_custom_log_level_sets_log_level_to_debug():
+    options = HoneycombOptions(debug=True, log_level="INFO")
+    assert options.log_level == "DEBUG"

@@ -117,9 +117,17 @@ class HoneycombOptions:
         metrics_dataset: str = None,
         enable_local_visualizations: bool = False
     ):
-        log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
-        if log_level and log_level.upper() in log_levels:
-            self.log_level = log_level.upper()
+        self.debug = parse_bool(
+            DEBUG,
+            (debug or False),
+            INVALID_DEBUG_ERROR
+        )
+        if self.debug:
+            self.log_level = "DEBUG"
+        else:
+            log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
+            if log_level and log_level.upper() in log_levels:
+                self.log_level = log_level.upper()
         logging.basicConfig(level=log_levels[self.log_level])
 
         self.traces_apikey = os.environ.get(
@@ -164,12 +172,6 @@ class HoneycombOptions:
             SAMPLE_RATE,
             (sample_rate or DEFAULT_SAMPLE_RATE),
             INVALID_SAMPLE_RATE_ERROR
-        )
-
-        self.debug = parse_bool(
-            DEBUG,
-            (debug or False),
-            INVALID_DEBUG_ERROR
         )
 
         endpoint_insecure = parse_bool(
