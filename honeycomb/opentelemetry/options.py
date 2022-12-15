@@ -63,9 +63,12 @@ log_levels = {
     "CRITICAL": logging.CRITICAL,
 }
 
+EXPORTER_PROTOCOL_GRPC = "grpc"
+EXPORTER_PROTOCOL_HTTP_PROTO = "http/protobuf"
+
 exporter_protocols = {
-    "grpc",
-    "http/protobuf"
+    EXPORTER_PROTOCOL_GRPC,
+    EXPORTER_PROTOCOL_HTTP_PROTO
 }
 
 _logger = logging.getLogger(__name__)
@@ -199,6 +202,8 @@ class HoneycombOptions:
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
             self.traces_exporter_protocol = exporter_protocol
 
+        # fall back through env vars and params
+        # if http/protobuf and using generic env or param, append /v1/traces path
         self.traces_endpoint = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, None)
         if not self.traces_endpoint:
             self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None))
@@ -207,6 +212,8 @@ class HoneycombOptions:
                 if not self.traces_endpoint:
                     self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, endpoint or DEFAULT_API_ENDPOINT)
 
+        # fall back through env vars and params
+        # if http/protobuf and using generic env or param, append /v1/metrics path
         self.metrics_endpoint = os.environ.get(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, None)
         if not self.metrics_endpoint:
             self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None))
