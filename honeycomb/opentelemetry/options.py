@@ -94,15 +94,18 @@ def parse_int(environment_variable: str,
             _logger.warning(error_message)
     return default_value
 
+
 def _append_traces_path(protocol: str, endpoint: str):
     if endpoint and protocol == "http/protobuf":
         return "/".join([endpoint.strip("/"), "v1/traces"])
     return endpoint
 
+
 def _append_metrics_path(protocol: str, endpoint: str):
     if endpoint and protocol == "http/protobuf":
         return "/".join([endpoint.strip("/"), "v1/metrics"])
     return endpoint
+
 
 class HoneycombOptions:
     traces_apikey = None
@@ -194,25 +197,43 @@ class HoneycombOptions:
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
             self.traces_exporter_protocol = exporter_protocol
 
-        # fall back through env vars and params
-        # if http/protobuf and using generic env or param, append /v1/traces path
-        self.traces_endpoint = os.environ.get(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, None)
+        # if htt/protobuf protocol and using generic env or param
+        # append /v1/traces path
+        self.traces_endpoint = os.environ.get(
+            OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
+            None
+        )
         if not self.traces_endpoint:
-            self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None))
+            self.traces_endpoint = _append_traces_path(
+                self.traces_exporter_protocol,
+                os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None)
+            )
             if not self.traces_endpoint:
                 self.traces_endpoint = traces_endpoint
                 if not self.traces_endpoint:
-                    self.traces_endpoint = _append_traces_path(self.traces_exporter_protocol, endpoint or DEFAULT_API_ENDPOINT)
+                    self.traces_endpoint = _append_traces_path(
+                        self.traces_exporter_protocol,
+                        endpoint or DEFAULT_API_ENDPOINT
+                    )
 
-        # fall back through env vars and params
-        # if http/protobuf and using generic env or param, append /v1/metrics path
-        self.metrics_endpoint = os.environ.get(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, None)
+        # if htt/protobuf protocol and using generic env or param
+        # append /v1/metrics path
+        self.metrics_endpoint = os.environ.get(
+            OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
+            None
+        )
         if not self.metrics_endpoint:
-            self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None))
+            self.metrics_endpoint = _append_metrics_path(
+                self.metrics_exporter_protocol,
+                os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None)
+            )
             if not self.metrics_endpoint:
                 self.metrics_endpoint = metrics_endpoint
                 if not self.metrics_endpoint:
-                    self.metrics_endpoint = _append_metrics_path(self.metrics_exporter_protocol, endpoint or DEFAULT_API_ENDPOINT)
+                    self.metrics_endpoint = _append_metrics_path(
+                        self.metrics_exporter_protocol,
+                        endpoint or DEFAULT_API_ENDPOINT
+                    )
 
         self.sample_rate = parse_int(
             SAMPLE_RATE,
