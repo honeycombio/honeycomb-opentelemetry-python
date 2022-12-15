@@ -108,6 +108,13 @@ def _append_metrics_path(protocol: str, endpoint: str):
 
 
 class HoneycombOptions:
+    """
+    Honeycomb Options used to configure the OpenTelemetry SDK.
+
+    Setting the debug flag enables verbose logging and sets the OTEL_LOG_LEVEL
+    to DEBUG.
+    """
+
     traces_apikey = None
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
@@ -148,9 +155,17 @@ class HoneycombOptions:
         traces_exporter_protocol: str = None,
         metrics_exporter_protocol: str = None
     ):
-        log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
-        if log_level and log_level.upper() in log_levels:
-            self.log_level = log_level.upper()
+        self.debug = parse_bool(
+            DEBUG,
+            (debug or False),
+            INVALID_DEBUG_ERROR
+        )
+        if self.debug:
+            self.log_level = "DEBUG"
+        else:
+            log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
+            if log_level and log_level.upper() in log_levels:
+                self.log_level = log_level.upper()
         logging.basicConfig(level=log_levels[self.log_level])
 
         self.traces_apikey = os.environ.get(
@@ -239,12 +254,6 @@ class HoneycombOptions:
             SAMPLE_RATE,
             (sample_rate or DEFAULT_SAMPLE_RATE),
             INVALID_SAMPLE_RATE_ERROR
-        )
-
-        self.debug = parse_bool(
-            DEBUG,
-            (debug or False),
-            INVALID_DEBUG_ERROR
         )
 
         endpoint_insecure = parse_bool(

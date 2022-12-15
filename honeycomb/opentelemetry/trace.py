@@ -1,7 +1,11 @@
 from honeycomb.opentelemetry.options import HoneycombOptions
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
+    SimpleSpanProcessor,
+    ConsoleSpanExporter
+)
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
     OTLPSpanExporter as GRPCSpanExporter
 )
@@ -28,4 +32,10 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
             exporter
         )
     )
+    if options.debug:
+        trace_provider.add_span_processor(
+            SimpleSpanProcessor(
+                ConsoleSpanExporter()
+            )
+        )
     return trace_provider

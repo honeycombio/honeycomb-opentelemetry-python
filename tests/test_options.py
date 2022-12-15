@@ -502,3 +502,13 @@ def test_get_metrics_endpoint_with_http_proto_protocol_returns_correctly_formatt
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions(exporter_protocol=protocol)
     assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+
+def test_debug_sets_log_level_to_debug():
+    options = HoneycombOptions(debug=True)
+    assert options.log_level == "DEBUG"
+
+
+def test_debug_with_custom_log_level_sets_log_level_to_debug():
+    options = HoneycombOptions(debug=True, log_level="INFO")
+    assert options.log_level == "DEBUG"
