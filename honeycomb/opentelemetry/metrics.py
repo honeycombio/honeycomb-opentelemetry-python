@@ -20,7 +20,6 @@ def create_meter_provider(options: HoneycombOptions, resource: Resource):
     else:
         exporter = HTTPSpanExporter(
             endpoint=options.get_metrics_endpoint(),
-            # credentials=options.get_metrics_endpoint_credentials(),
             headers=options.get_metrics_headers()
         )
     reader = PeriodicExportingMetricReader(

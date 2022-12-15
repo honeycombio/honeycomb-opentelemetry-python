@@ -20,7 +20,6 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
     else:
         exporter = HTTPSpanExporter(
             endpoint=options.get_traces_endpoint(),
-            # credentials=options.get_trace_endpoint_credentials(),
             headers=options.get_trace_headers()
         )
     trace_provider = TracerProvider(resource=resource)
