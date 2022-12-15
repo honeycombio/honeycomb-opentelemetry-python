@@ -82,6 +82,12 @@ def parse_int(environment_variable: str,
 
 
 class HoneycombOptions:
+    """
+    Honeycomb Options used to configure the OpenTelemetry SDK.
+
+    Setting the debug flag enables verbose logging and sets the otel log level to DEBUG.
+    """
+
     traces_apikey = None
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
