@@ -33,10 +33,10 @@ To send traces to local console:
 
 For local export right now
 ```bash
-$ poetry run opentelemetry-instrument --traces_exporter console --metrics_exporter console flask run
+$ DEBUG=TRUE poetry run opentelemetry-instrument flask run
 ```
 
-To send to Honeycomb: 
+To send to Honeycomb:
 
 ```bash
 HONEYCOMB_API_KEY="your-api-key" OTEL_SERVICE_NAME="your-service-name" poetry run opentelemetry-instrument flask run
