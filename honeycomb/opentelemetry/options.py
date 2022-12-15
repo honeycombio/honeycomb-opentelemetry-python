@@ -103,7 +103,6 @@ def parse_int(environment_variable: str,
 
 def _append_traces_path(protocol: str, endpoint: str):
     if endpoint and protocol == "http/protobuf":
-        print("adding path")
         return "/".join([endpoint.strip("/"), "v1/traces"])
     return endpoint
 
