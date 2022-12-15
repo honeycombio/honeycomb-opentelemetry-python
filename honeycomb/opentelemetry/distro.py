@@ -17,6 +17,7 @@ def configure_opentelemetry(
     options: HoneycombOptions = HoneycombOptions(),
 ):
     _logger.debug("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
+    _logger.debug(vars(options))
     resource = create_resource(options)
     set_tracer_provider(
         create_tracer_provider(options, resource)
