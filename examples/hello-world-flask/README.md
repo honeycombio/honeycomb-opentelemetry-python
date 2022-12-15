@@ -42,8 +42,8 @@ To send to Honeycomb:
 HONEYCOMB_API_KEY="your-api-key" OTEL_SERVICE_NAME="your-service-name" poetry run opentelemetry-instrument flask run
 ```
 
-Note: a Metrics-enabled Team API key is required for Honeycomb to receive metrics, if not available try including the `--metrics_exporter console` flag for opentelemetry-instrument above to see them locally instead
-
+You can configure exporter protocol with this flag:
+`OTEL_EXPORTER_OTLP_PROTOCOL=grpc` or `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`
 
 If you make changes in the package's pyproject.toml you may need to run `poetry build` for the changes to take effect
 
