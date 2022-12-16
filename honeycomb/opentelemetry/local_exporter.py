@@ -6,8 +6,8 @@ from honeycomb.opentelemetry.options import HoneycombOptions, is_classic
 
 
 class LocalTraceLinkSpanExporter(SpanExporter):
-    """Implementation of :class:`SpanExporter` that prints spans to the
-    console.
+    """Implementation of :class:`SpanExporter` that direct trace links to
+    Honeycomb to the console.
     This class can be used for diagnostic purposes. It prints the exported
     spans to the console STDOUT.
     """
