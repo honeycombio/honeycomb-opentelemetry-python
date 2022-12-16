@@ -125,12 +125,26 @@ def parse_int(environment_variable: str,
 
 
 def _append_traces_path(protocol: str, endpoint: str):
+    """
+    Appends the OTLP traces HTTP path '/v1/trces' to the endpoint if the
+    protocol is http/protobuf.
+
+    Returns:
+        string: the endpoint, optionally appended with traces path
+    """
     if endpoint and protocol == "http/protobuf":
         return "/".join([endpoint.strip("/"), "v1/traces"])
     return endpoint
 
 
 def _append_metrics_path(protocol: str, endpoint: str):
+    """
+    Appends the OTLP metrics HTTP path '/v1/metrics' to the endpoint if the
+    protocol is http/protobuf.
+
+    Returns:
+        string: the endpoint, optionally appended with metrics path
+    """
     if endpoint and protocol == "http/protobuf":
         return "/".join([endpoint.strip("/"), "v1/metrics"])
     return endpoint
@@ -144,7 +158,6 @@ class HoneycombOptions:
     Setting the debug flag enables verbose logging and sets the OTEL_LOG_LEVEL
     to DEBUG.
     """
-
     traces_apikey = None
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
