@@ -1,3 +1,4 @@
+from honeycomb.opentelemetry.local_exporter import LocalTraceLinkSpanExporter
 from honeycomb.opentelemetry.options import HoneycombOptions
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
@@ -36,6 +37,12 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
         trace_provider.add_span_processor(
             SimpleSpanProcessor(
                 ConsoleSpanExporter()
+            )
+        )
+    if options.enable_local_visualizations:
+        trace_provider.add_span_processor(
+            SimpleSpanProcessor(
+                LocalTraceLinkSpanExporter(options)
             )
         )
     return trace_provider
