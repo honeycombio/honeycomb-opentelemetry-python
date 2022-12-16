@@ -12,6 +12,7 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
     OTLPSpanExporter as HTTPSpanExporter
 )
 from honeycomb.opentelemetry.options import HoneycombOptions
+from honeycomb.opentelemetry.sampler import DeterministicSampler
 
 
 def create_tracer_provider(options: HoneycombOptions, resource: Resource):
@@ -36,7 +37,7 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
             endpoint=options.get_traces_endpoint(),
             headers=options.get_trace_headers()
         )
-    trace_provider = TracerProvider(resource=resource)
+    trace_provider = TracerProvider(resource=resource, sampler=DeterministicSampler)
     trace_provider.add_span_processor(
         BatchSpanProcessor(
             exporter
