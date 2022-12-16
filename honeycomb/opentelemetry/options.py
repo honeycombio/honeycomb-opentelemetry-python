@@ -81,15 +81,16 @@ def parse_int(environment_variable: str,
     return default_value
 
 
+# pylint: disable=too-many-arguments,too-many-instance-attributes
 class HoneycombOptions:
     traces_apikey = None
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
     service_version = None
-    traces_endpoint = None,
-    metrics_endpoint = None,
-    traces_endpoint_insecure = False,
-    metrics_endpoint_insecure = False,
+    traces_endpoint = None
+    metrics_endpoint = None
+    traces_endpoint_insecure = False
+    metrics_endpoint_insecure = False
     sample_rate = DEFAULT_SAMPLE_RATE
     debug = False
     log_level = DEFAULT_LOG_LEVEL
@@ -97,6 +98,7 @@ class HoneycombOptions:
     metrics_dataset = None
     enable_local_visualizations = False
 
+    # pylint: disable=too-many-locals
     def __init__(
         self,
         apikey: str = None,
