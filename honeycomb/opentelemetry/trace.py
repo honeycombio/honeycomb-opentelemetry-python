@@ -37,7 +37,10 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
             endpoint=options.get_traces_endpoint(),
             headers=options.get_trace_headers()
         )
-    trace_provider = TracerProvider(resource=resource, sampler=DeterministicSampler)
+    trace_provider = TracerProvider(
+        resource=resource,
+        sampler=DeterministicSampler(options.sample_rate)
+    )
     trace_provider.add_span_processor(
         BatchSpanProcessor(
             exporter

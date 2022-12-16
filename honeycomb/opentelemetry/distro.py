@@ -34,8 +34,8 @@ def configure_opentelemetry(
         create_meter_provider(options, resource)
     )
 
-    _logger.debug(f"🐝 Configure a Sample Rate of {options.sample_rate} 🐝")
     configure_sampler(options)
+
 
 # pylint: disable=too-few-public-methods
 class HoneycombDistro(BaseDistro):
