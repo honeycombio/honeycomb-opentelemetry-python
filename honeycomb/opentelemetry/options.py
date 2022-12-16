@@ -5,15 +5,19 @@ from opentelemetry.sdk.environment_variables import (
     OTEL_EXPORTER_OTLP_INSECURE,
     OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
     OTEL_EXPORTER_OTLP_METRICS_INSECURE,
+    OTEL_EXPORTER_OTLP_METRICS_PROTOCOL,
+    OTEL_EXPORTER_OTLP_PROTOCOL,
     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
     OTEL_EXPORTER_OTLP_TRACES_INSECURE,
+    OTEL_EXPORTER_OTLP_TRACES_PROTOCOL,
     OTEL_LOG_LEVEL,
     OTEL_SERVICE_NAME
 )
 from grpc import ssl_channel_credentials
 
 DEBUG = "DEBUG"
-DEFAULT_API_ENDPOINT = "api.honeycomb.io:443"
+DEFAULT_API_ENDPOINT = "https://api.honeycomb.io:443"
+DEFAULT_EXPORTER_PROTOCOL = "grpc"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
 DEFAULT_SAMPLE_RATE = 1
@@ -36,6 +40,8 @@ INVALID_TRACES_INSECURE_ERROR = "Unable to parse " + \
     "OTEL_EXPORTER_OTLP_TRACES_INSECURE. Defaulting to False."
 INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
     "Using sample rate of 1."
+INVALID_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol " + \
+    "detected. Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
 # not currently supported in OTel SDK, open PR:
 # https://github.com/open-telemetry/opentelemetry-specification/issues/1901
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
@@ -48,6 +54,14 @@ log_levels = {
     "WARNING": logging.WARNING,
     "ERROR": logging.ERROR,
     "CRITICAL": logging.CRITICAL,
+}
+
+EXPORTER_PROTOCOL_GRPC = "grpc"
+EXPORTER_PROTOCOL_HTTP_PROTO = "http/protobuf"
+
+exporter_protocols = {
+    EXPORTER_PROTOCOL_GRPC,
+    EXPORTER_PROTOCOL_HTTP_PROTO
 }
 
 _logger = logging.getLogger(__name__)
@@ -110,12 +124,27 @@ def parse_int(environment_variable: str,
     return default_value
 
 
+def _append_traces_path(protocol: str, endpoint: str):
+    if endpoint and protocol == "http/protobuf":
+        return "/".join([endpoint.strip("/"), "v1/traces"])
+    return endpoint
+
+
+def _append_metrics_path(protocol: str, endpoint: str):
+    if endpoint and protocol == "http/protobuf":
+        return "/".join([endpoint.strip("/"), "v1/metrics"])
+    return endpoint
+
+
 # pylint: disable=too-many-arguments,too-many-instance-attributes
 class HoneycombOptions:
     """
-    Options class to configure the OpenTelemtry SDK to send telemetry to
-    Honeycomb.
+    Honeycomb Options used to configure the OpenTelemetry SDK.
+
+    Setting the debug flag enables verbose logging and sets the OTEL_LOG_LEVEL
+    to DEBUG.
     """
+
     traces_apikey = None
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
@@ -124,6 +153,8 @@ class HoneycombOptions:
     metrics_endpoint = None
     traces_endpoint_insecure = False
     metrics_endpoint_insecure = False
+    traces_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
+    metrics_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
     sample_rate = DEFAULT_SAMPLE_RATE
     debug = False
     log_level = DEFAULT_LOG_LEVEL
@@ -150,11 +181,22 @@ class HoneycombOptions:
         log_level: str = None,
         dataset: str = None,
         metrics_dataset: str = None,
-        enable_local_visualizations: bool = False
+        enable_local_visualizations: bool = False,
+        exporter_protocol: str = None,
+        traces_exporter_protocol: str = None,
+        metrics_exporter_protocol: str = None
     ):
-        log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
-        if log_level and log_level.upper() in log_levels:
-            self.log_level = log_level.upper()
+        self.debug = parse_bool(
+            DEBUG,
+            (debug or False),
+            INVALID_DEBUG_ERROR
+        )
+        if self.debug:
+            self.log_level = "DEBUG"
+        else:
+            log_level = os.environ.get(OTEL_LOG_LEVEL, log_level)
+            if log_level and log_level.upper() in log_levels:
+                self.log_level = log_level.upper()
         logging.basicConfig(level=log_levels[self.log_level])
 
         self.traces_apikey = os.environ.get(
@@ -180,31 +222,69 @@ class HoneycombOptions:
         self.service_version = os.environ.get(
             OTEL_SERVICE_VERSION, service_version)
 
+        exporter_protocol = os.environ.get(
+            OTEL_EXPORTER_OTLP_PROTOCOL,
+            (exporter_protocol or DEFAULT_EXPORTER_PROTOCOL))
+        if exporter_protocol not in exporter_protocols:
+            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
+            exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
+
+        self.traces_exporter_protocol = os.environ.get(
+            OTEL_EXPORTER_OTLP_TRACES_PROTOCOL,
+            (traces_exporter_protocol or exporter_protocol))
+        if traces_exporter_protocol not in exporter_protocols:
+            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
+            self.traces_exporter_protocol = exporter_protocol
+
+        self.metrics_exporter_protocol = os.environ.get(
+            OTEL_EXPORTER_OTLP_METRICS_PROTOCOL,
+            (metrics_exporter_protocol or exporter_protocol))
+        if traces_exporter_protocol not in exporter_protocols:
+            _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
+            self.traces_exporter_protocol = exporter_protocol
+
+        # if htt/protobuf protocol and using generic env or param
+        # append /v1/traces path
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
-            os.environ.get(
-                OTEL_EXPORTER_OTLP_ENDPOINT,
-                (traces_endpoint or endpoint or DEFAULT_API_ENDPOINT)
-            )
+            None
         )
+        if not self.traces_endpoint:
+            self.traces_endpoint = _append_traces_path(
+                self.traces_exporter_protocol,
+                os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None)
+            )
+            if not self.traces_endpoint:
+                self.traces_endpoint = traces_endpoint
+                if not self.traces_endpoint:
+                    self.traces_endpoint = _append_traces_path(
+                        self.traces_exporter_protocol,
+                        endpoint or DEFAULT_API_ENDPOINT
+                    )
+
+        # if htt/protobuf protocol and using generic env or param
+        # append /v1/metrics path
         self.metrics_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
-            os.environ.get(
-                OTEL_EXPORTER_OTLP_ENDPOINT,
-                (metrics_endpoint or endpoint or DEFAULT_API_ENDPOINT)
-            )
+            None
         )
+        if not self.metrics_endpoint:
+            self.metrics_endpoint = _append_metrics_path(
+                self.metrics_exporter_protocol,
+                os.environ.get(OTEL_EXPORTER_OTLP_ENDPOINT, None)
+            )
+            if not self.metrics_endpoint:
+                self.metrics_endpoint = metrics_endpoint
+                if not self.metrics_endpoint:
+                    self.metrics_endpoint = _append_metrics_path(
+                        self.metrics_exporter_protocol,
+                        endpoint or DEFAULT_API_ENDPOINT
+                    )
 
         self.sample_rate = parse_int(
             SAMPLE_RATE,
             (sample_rate or DEFAULT_SAMPLE_RATE),
             INVALID_SAMPLE_RATE_ERROR
-        )
-
-        self.debug = parse_bool(
-            DEBUG,
-            (debug or False),
-            INVALID_DEBUG_ERROR
         )
 
         endpoint_insecure = parse_bool(

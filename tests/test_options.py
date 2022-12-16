@@ -1,5 +1,8 @@
 from honeycomb.opentelemetry.options import (
     DEBUG,
+    DEFAULT_API_ENDPOINT,
+    EXPORTER_PROTOCOL_GRPC,
+    EXPORTER_PROTOCOL_HTTP_PROTO,
     HoneycombOptions,
     HONEYCOMB_API_KEY,
     HONEYCOMB_DATASET,
@@ -30,8 +33,8 @@ def test_defaults():
     options = HoneycombOptions()
     assert options.traces_apikey is None
     assert options.metrics_apikey is None
-    assert options.traces_endpoint == "api.honeycomb.io:443"
-    assert options.metrics_endpoint == "api.honeycomb.io:443"
+    assert options.get_traces_endpoint() == "https://api.honeycomb.io:443"
+    assert options.get_metrics_endpoint() == "https://api.honeycomb.io:443"
     assert options.service_name == "unknown_service:python"
     assert options.dataset is None
     assert options.metrics_dataset is None
@@ -51,19 +54,19 @@ def test_can_set_service_name_with_envvar(monkeypatch):
 
 def test_can_set_traces_endpoint_with_param():
     options = HoneycombOptions(traces_endpoint=EXPECTED_ENDPOINT)
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_traces_endpoint_with_traces_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_traces_endpoint_with_endpoint_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_set_from_generic_env_beats_params(monkeypatch):
@@ -72,7 +75,7 @@ def test_traces_endpoint_set_from_generic_env_beats_params(monkeypatch):
         endpoint="generic param",
         traces_endpoint="specific param"
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_specifc_env_beats_params(monkeypatch):
@@ -81,7 +84,7 @@ def test_traces_endpoint_specifc_env_beats_params(monkeypatch):
         endpoint="generic param",
         traces_endpoint="specific param"
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_set_from_specifc_param_beats_generic_param():
@@ -89,7 +92,7 @@ def test_traces_endpoint_set_from_specifc_param_beats_generic_param():
         endpoint="generic param",
         traces_endpoint=EXPECTED_ENDPOINT
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_traces_endpoint_set_from_traces_env_beats_params(
@@ -100,24 +103,24 @@ def test_traces_endpoint_set_from_traces_env_beats_params(
         endpoint="generic param",
         traces_endpoint="specific param"
     )
-    assert options.traces_endpoint == EXPECTED_ENDPOINT
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_metrics_endpoint_with_param():
     options = HoneycombOptions(metrics_endpoint=EXPECTED_ENDPOINT)
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_metrics_endpoint_with_metrics_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_metrics_endpoint_with_endpoint_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
     options = HoneycombOptions()
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_get_traces_endpoint_returns_endpoint_when_traces_endpoint_not_set():
@@ -323,7 +326,7 @@ def test_metrics_endpoint_set_from_generic_env_beats_params(monkeypatch):
         endpoint="generic param",
         metrics_endpoint="specific param"
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_metrics_endpoint_specifc_env_beats_params(monkeypatch):
@@ -332,7 +335,7 @@ def test_metrics_endpoint_specifc_env_beats_params(monkeypatch):
         endpoint="generic param",
         metrics_endpoint="specific param"
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_metrics_endpoint_set_from_specifc_param_beats_generic_param():
@@ -340,7 +343,7 @@ def test_metrics_endpoint_set_from_specifc_param_beats_generic_param():
         endpoint="generic param",
         metrics_endpoint=EXPECTED_ENDPOINT
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_metrics_endpoint_set_from_metrics_env_beats_params(
@@ -351,7 +354,7 @@ def test_metrics_endpoint_set_from_metrics_env_beats_params(
         endpoint="generic param",
         metrics_endpoint="specific param"
     )
-    assert options.metrics_endpoint == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_dataset_with_param():
@@ -391,3 +394,121 @@ def test_local_vis_from_env_beats_param(monkeypatch):
     monkeypatch.setenv(HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS, "TRUE")
     options = HoneycombOptions(enable_local_visualizations=False)
     assert options.enable_local_visualizations is True
+
+
+def test_get_traces_endpoint_with_grpc_protocol_returns_correctly_formatted_endpoint(monkeypatch):
+    #grpc
+    protocol = EXPORTER_PROTOCOL_GRPC
+
+    # default endpoint
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_traces_endpoint() == DEFAULT_API_ENDPOINT
+
+    # generic endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+
+    # traces endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, traces_endpoint=EXPECTED_ENDPOINT)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+
+    # generic endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+
+    # traces endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+
+
+def test_get_traces_endpoint_with_http_proto_protocol_returns_correctly_formatted_endpoint(monkeypatch):
+    #grpc
+    protocol = EXPORTER_PROTOCOL_HTTP_PROTO
+
+    # default endpoint
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_traces_endpoint() == DEFAULT_API_ENDPOINT + "/v1/traces"
+
+    # generic endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT + "/v1/traces"
+
+    # traces endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, traces_endpoint=EXPECTED_ENDPOINT)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+
+    # generic endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT + "/v1/traces"
+
+    # traces endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+
+
+def test_get_metrics_endpoint_with_grpc_protocol_returns_correctly_formatted_endpoint(monkeypatch):
+    #grpc
+    protocol = EXPORTER_PROTOCOL_GRPC
+
+    # default endpoint
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_metrics_endpoint() == DEFAULT_API_ENDPOINT
+
+    # generic endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+    # metrics endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, metrics_endpoint=EXPECTED_ENDPOINT)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+    # generic endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+    # metrics endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_TRACES_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+
+def test_get_metrics_endpoint_with_http_proto_protocol_returns_correctly_formatted_endpoint(monkeypatch):
+    #grpc
+    protocol = EXPORTER_PROTOCOL_HTTP_PROTO
+
+    # default endpoint
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_metrics_endpoint() == DEFAULT_API_ENDPOINT + "/v1/metrics"
+
+    # generic endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT + "/v1/metrics"
+
+    # metrics endpoint param
+    options = HoneycombOptions(exporter_protocol=protocol, metrics_endpoint=EXPECTED_ENDPOINT)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+    # generic endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT + "/v1/metrics"
+
+    # metrics endpoint env
+    monkeypatch.setenv(OTEL_EXPORTER_OTLP_METRICS_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions(exporter_protocol=protocol)
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+
+def test_debug_sets_log_level_to_debug():
+    options = HoneycombOptions(debug=True)
+    assert options.log_level == "DEBUG"
+
+
+def test_debug_with_custom_log_level_sets_log_level_to_debug():
+    options = HoneycombOptions(debug=True, log_level="INFO")
+    assert options.log_level == "DEBUG"
