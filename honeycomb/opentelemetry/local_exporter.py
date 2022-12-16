@@ -29,12 +29,14 @@ class LocalTraceLinkSpanExporter(SpanExporter):
     def export(self, spans: typing.Sequence[ReadableSpan]) -> SpanExportResult:
         if self.trace_link_url:
             for span in spans:
-                print(
-                    "Honeycomb link: {url}={trace_id}".format(
-                        url=self.trace_link_url,
-                        trace_id=span.context.trace_id
+                # only print out links for root spans (span without a parent)
+                if not span.parent:
+                    print(
+                        "Honeycomb link: {url}={trace_id}".format(
+                            url=self.trace_link_url,
+                            trace_id=span.context.trace_id
+                        )
                     )
-                )
         return SpanExportResult.SUCCESS
 
     def force_flush(self, timeout_millis: int = 30000) -> bool:
