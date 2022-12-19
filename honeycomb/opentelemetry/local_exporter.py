@@ -1,5 +1,5 @@
-import requests
 import typing
+import requests
 from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
 from honeycomb.opentelemetry.options import HoneycombOptions, is_classic
@@ -27,25 +27,28 @@ class LocalTraceLinkSpanExporter(SpanExporter):
         )
 
     def export(self, spans: typing.Sequence[ReadableSpan]) -> SpanExportResult:
+        """Exports a batch of telemetry data.
+        """
         if self.trace_link_url:
             for span in spans:
                 # only print out links for root spans (span without a parent)
                 if not span.parent:
                     print(
-                        "Honeycomb link: {url}={trace_id}".format(
-                            url=self.trace_link_url,
-                            trace_id=span.context.trace_id
-                        )
+                        "Honeycomb link: " +
+                        f"{self.trace_link_url}={span.context.trace_id}"
                     )
         return SpanExportResult.SUCCESS
 
-    def force_flush(self, timeout_millis: int = 30000) -> bool:
+    def force_flush(self) -> bool:
+        """Ensures all telemetry waiting to be dispatched is processed.
+        """
         return True
 
     def _build_trace_link_url(self, apikey: str, service_name: str):
         resp = requests.get(
             "https://api.honeycomb.io/1/auth",
-            headers={"x-honeycomb-team": apikey}
+            headers={"x-honeycomb-team": apikey},
+            timeout=30000  # 30 seconds
         )
         if not resp.ok:
             print("failed to get auth data from Honeycomb API")
