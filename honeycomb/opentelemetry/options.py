@@ -186,7 +186,7 @@ class HoneycombOptions:
     metrics_dataset = None
     enable_local_visualizations = False
 
-    # pylint: disable=too-many-locals,too-many-branches
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     def __init__(
         self,
         apikey: str = None,
