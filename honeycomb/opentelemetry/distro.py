@@ -29,9 +29,10 @@ def configure_opentelemetry(
     set_tracer_provider(
         create_tracer_provider(options, resource)
     )
-    set_meter_provider(
-        create_meter_provider(options, resource)
-    )
+    if options.metrics_dataset:
+        set_meter_provider(
+            create_meter_provider(options, resource)
+        )
 
 
 # pylint: disable=too-few-public-methods

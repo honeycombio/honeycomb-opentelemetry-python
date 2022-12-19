@@ -1,6 +1,7 @@
 import platform
 
 from honeycomb.opentelemetry.distro import configure_opentelemetry
+from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.version import __version__
 from opentelemetry.metrics import get_meter_provider
 from opentelemetry.trace import get_tracer_provider
@@ -24,4 +25,14 @@ def test_distro_configure_defaults():
     assert isinstance(spanExporter, OTLPSpanExporter)
 
     meter_provider = get_meter_provider()
-    assert len(meter_provider._meters) == 0
+    # the noop meter provider does not have the _sdk_config property where meter readers are configured
+    assert not hasattr(meter_provider, "_sdk_config")
+
+def test_can_enable_metrics():
+    # metrics is enabled by providing a metrics dataset
+    options = HoneycombOptions(metrics_dataset="my-app-metrics")
+    configure_opentelemetry(options)
+
+    meter_provider = get_meter_provider()
+    # a real meter provider has it's _sdk_config property set, ensure we have a reader configured
+    assert len(meter_provider._sdk_config.metric_readers) == 1
