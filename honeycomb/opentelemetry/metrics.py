@@ -1,4 +1,3 @@
-from honeycomb.opentelemetry.options import HoneycombOptions
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import (
@@ -11,9 +10,20 @@ from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
 from opentelemetry.exporter.otlp.proto.http.metric_exporter import (
     OTLPMetricExporter as HTTPSpanExporter
 )
+from honeycomb.opentelemetry.options import HoneycombOptions
 
 
 def create_meter_provider(options: HoneycombOptions, resource: Resource):
+    """
+    Configures and returns a new MeterProvider to send metrics telemetry.
+
+    Args:
+        options (HoneycombOptions): the Honeycomb options to configure with
+        resource (Resource): the resource to use with the new meter provider
+
+    Returns:
+        MeterProvider: the new meter provider
+    """
     if options.metrics_exporter_protocol == "grpc":
         exporter = GRPCSpanExporter(
             endpoint=options.get_metrics_endpoint(),
