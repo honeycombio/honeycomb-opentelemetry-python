@@ -21,7 +21,7 @@ test: build
 
 #: nitpick lint
 lint: install_dev
-	poetry run pylint honeycomb tests
+	poetry run pylint honeycomb
 
 #: nitpick style
 style: install_dev
