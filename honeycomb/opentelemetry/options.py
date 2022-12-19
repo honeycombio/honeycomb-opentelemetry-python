@@ -68,12 +68,29 @@ _logger = logging.getLogger(__name__)
 
 
 def is_classic(apikey: str):
+    """
+    Determines whether the passed in API key is a classic API key or not.
+    Modern API keys have 22 or 23 characters.
+    Clasic API keys have 32 characters.
+    """
     return apikey and len(apikey) == 32
 
 
 def parse_bool(environment_variable: str,
                default_value: bool,
                error_message: str):
+    """
+    Attempts to parse the provided environment variable into a bool. If it
+    does not exist or fails parse, the default value is returned instead.
+
+    Args:
+        environment_variable (str): the environment variable name to use
+        default_value (bool): the default value if not found or unable parse
+        error_message (str): the error message to log if unable to parse
+
+    Returns:
+        bool: either the parsed environment variable or defautl value
+    """
     val = os.getenv(environment_variable, None)
     if val:
         try:
@@ -86,6 +103,18 @@ def parse_bool(environment_variable: str,
 def parse_int(environment_variable: str,
               default_value: int,
               error_message: str):
+    """
+    Attempts to parse the provided environment variable into an int. If it
+    does not exist or fails parse, the default value is returned instead.
+
+    Args:
+        environment_variable (str): the environment variable name to use
+        default_value (int): the default value if not found or unable parse
+        error_message (str): the error message to log if unable to parse
+
+    Returns:
+        int: either the parsed environment variable or defautl value
+    """
     val = os.getenv(environment_variable, None)
     if val:
         try:
@@ -96,17 +125,32 @@ def parse_int(environment_variable: str,
 
 
 def _append_traces_path(protocol: str, endpoint: str):
+    """
+    Appends the OTLP traces HTTP path '/v1/trces' to the endpoint if the
+    protocol is http/protobuf.
+
+    Returns:
+        string: the endpoint, optionally appended with traces path
+    """
     if endpoint and protocol == "http/protobuf":
         return "/".join([endpoint.strip("/"), "v1/traces"])
     return endpoint
 
 
 def _append_metrics_path(protocol: str, endpoint: str):
+    """
+    Appends the OTLP metrics HTTP path '/v1/metrics' to the endpoint if the
+    protocol is http/protobuf.
+
+    Returns:
+        string: the endpoint, optionally appended with metrics path
+    """
     if endpoint and protocol == "http/protobuf":
         return "/".join([endpoint.strip("/"), "v1/metrics"])
     return endpoint
 
 
+# pylint: disable=too-many-arguments,too-many-instance-attributes
 class HoneycombOptions:
     """
     Honeycomb Options used to configure the OpenTelemetry SDK.
@@ -114,15 +158,14 @@ class HoneycombOptions:
     Setting the debug flag enables verbose logging and sets the OTEL_LOG_LEVEL
     to DEBUG.
     """
-
     traces_apikey = None
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
     service_version = None
-    traces_endpoint = None,
-    metrics_endpoint = None,
-    traces_endpoint_insecure = False,
-    metrics_endpoint_insecure = False,
+    traces_endpoint = None
+    metrics_endpoint = None
+    traces_endpoint_insecure = False
+    metrics_endpoint_insecure = False
     traces_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
     metrics_exporter_protocol = DEFAULT_EXPORTER_PROTOCOL
     sample_rate = DEFAULT_SAMPLE_RATE
@@ -132,6 +175,7 @@ class HoneycombOptions:
     metrics_dataset = None
     enable_local_visualizations = False
 
+    # pylint: disable=too-many-locals,too-many-branches
     def __init__(
         self,
         apikey: str = None,
@@ -284,22 +328,37 @@ class HoneycombOptions:
         )
 
     def get_traces_endpoint(self):
+        """
+        Returns the OTLP traces endpoint to send spans to.
+        """
         return self.traces_endpoint
 
     def get_metrics_endpoint(self):
+        """
+        Returns the OTLP metrics endpoint to send metrics to.
+        """
         return self.metrics_endpoint
 
     def get_trace_endpoint_credentials(self):
+        """
+        Get the grpc credentials to use when sending to the traces endpoint.
+        """
         if self.traces_endpoint_insecure:
             return None
         return ssl_channel_credentials()
 
     def get_metrics_endpoint_credentials(self):
+        """
+        Get the grpc credentials to use when sending to the metrics endpoint.
+        """
         if self.metrics_endpoint_insecure:
             return None
         return ssl_channel_credentials()
 
     def get_trace_headers(self):
+        """
+        Gets the headers to send traces telemetry.
+        """
         headers = {
             "x-honeycomb-team": self.traces_apikey,
         }
@@ -308,6 +367,9 @@ class HoneycombOptions:
         return headers
 
     def get_metrics_headers(self):
+        """
+        Gets the headers to send metrics telemetry.
+        """
         headers = {
             "x-honeycomb-team": self.metrics_apikey
         }
