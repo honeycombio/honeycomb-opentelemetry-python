@@ -35,7 +35,7 @@ class LocalTraceLinkSpanExporter(SpanExporter):
                 if not span.parent:
                     print(
                         "Honeycomb link: " +
-                        f"{self.trace_link_url}={span.context.trace_id}"
+                        self._build_url(span.context.trace_id)
                     )
         return SpanExportResult.SUCCESS
 
@@ -64,3 +64,6 @@ class LocalTraceLinkSpanExporter(SpanExporter):
             url += f"/environments/{environment_slug}"
         url += f"/datasets/{service_name}/trace?trace_id"
         return url
+
+    def _build_url(self, trace_id: int):
+        return f"{self.trace_link_url}={trace_id:x}"
