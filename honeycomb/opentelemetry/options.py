@@ -42,6 +42,17 @@ INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
     "Using sample rate of 1."
 INVALID_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol " + \
     "detected. Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
+MISSING_API_KEY_ERROR = "Missing API key. Specify either " + \
+    "HONEYCOMB_API_KEY environment variable or apikey in the options" + \
+    "parameter."
+MISSING_SERVICE_NAME_ERROR = "Missing service name. Specify either " + \
+    "OTEL_SERVICE_NAME environment variable or service_name in the " + \
+    "options parameter. If left unset, this will show up in Honeycomb " + \
+    "as unknown_service:python"
+MISSING_DATASET_ERROR = "Missing dataset. Specify either " + \
+    "HONEYCOMB_DATASET environment variable or dataset in the options " + \
+    "parameter."
+IGNORED_DATASET_ERROR = "Dataset is ignored in favor of service name."
 # not currently supported in OTel SDK, open PR:
 # https://github.com/open-telemetry/opentelemetry-specification/issues/1901
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
@@ -175,7 +186,7 @@ class HoneycombOptions:
     metrics_dataset = None
     enable_local_visualizations = False
 
-    # pylint: disable=too-many-locals,too-many-branches
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     def __init__(
         self,
         apikey: str = None,
@@ -219,6 +230,9 @@ class HoneycombOptions:
                 (traces_apikey or apikey)
             )
         )
+        if not self.traces_apikey:
+            _logger.warning(MISSING_API_KEY_ERROR)
+
         self.metrics_apikey = os.environ.get(
             HONEYCOMB_METRICS_APIKEY,
             os.environ.get(
@@ -226,11 +240,12 @@ class HoneycombOptions:
                 (metrics_apikey or apikey)
             )
         )
+        if not self.traces_apikey:
+            _logger.warning(MISSING_API_KEY_ERROR)
 
         self.service_name = os.environ.get(OTEL_SERVICE_NAME, service_name)
         if not self.service_name:
-            # TODO - warn no service name set,
-            # defaulting to unknown_service:python
+            _logger.warning(MISSING_SERVICE_NAME_ERROR)
             self.service_name = DEFAULT_SERVICE_NAME
         self.service_version = os.environ.get(
             OTEL_SERVICE_VERSION, service_version)
@@ -318,6 +333,11 @@ class HoneycombOptions:
 
         self.dataset = os.environ.get(
             HONEYCOMB_DATASET, dataset)
+        if self.dataset and not is_classic(self.traces_apikey):
+            _logger.warning(IGNORED_DATASET_ERROR)
+        if not self.dataset and is_classic(self.traces_apikey):
+            _logger.warning(MISSING_DATASET_ERROR)
+
         self.metrics_dataset = os.environ.get(
             HONEYCOMB_METRICS_DATASET, metrics_dataset)
 
