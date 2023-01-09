@@ -9,7 +9,6 @@ from honeycomb.opentelemetry.metrics import create_meter_provider
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.resource import create_resource
 from honeycomb.opentelemetry.trace import create_tracer_provider
-from honeycomb.opentelemetry.sampler import configure_sampler
 
 _logger = getLogger(__name__)
 
@@ -33,8 +32,6 @@ def configure_opentelemetry(
     set_meter_provider(
         create_meter_provider(options, resource)
     )
-
-    configure_sampler(options)
 
 
 # pylint: disable=too-few-public-methods

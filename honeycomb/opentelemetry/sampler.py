@@ -1,7 +1,9 @@
 from logging import getLogger
 
 from opentelemetry.sdk.trace.sampling import (
+    DEFAULT_OFF,
     DEFAULT_ON,
+    ParentBasedTraceIdRatio,
     Sampler,
     SamplingResult
 )
@@ -32,17 +34,30 @@ class DeterministicSampler(Sampler):
     """
 
     def __init__(self, rate: int):
-        # do we need to check for sample rate undefined? I think the
-        # options would go back to the default if nothing is put in
         self.rate = rate
+
+        # Can't use match/case statement until minimum Python 3.10
+        if self.rate == 0:
+            # Sampler that respects its parent span's sampling decision,
+            # but otherwise never samples.
+            self._sampler = DEFAULT_OFF
+            print("[DeterministicSampler] default off")
+
+        if self.rate == 1:
+            # Sampler that respects its parent span's sampling decision,
+            # but otherwise always samples.
+            self._sampler = DEFAULT_ON
+            print("[DeterministicSampler] default on")
+
+        elif self.rate > 1:
+            # Sampler that respects its parent span's sampling decision,
+            # but otherwise samples probabalistically based on `rate`.
+            ratio = 1.0 / self.rate
+            self._sampler = ParentBasedTraceIdRatio(ratio)
+            print(f"[DeterministicSampler] traceId ratio: {ratio}")
 
     def _configure(self):
         configure_sampler()
-        # logic here for which sampler
-        # sample rate 0? use default off
-        # sample rate 1? use default on
-        # any other positive whole number, user 1/number as
-        # the ratio with the ratio sampler
 
     # pylint: disable=too-many-arguments
     def should_sample(
@@ -62,8 +77,7 @@ class DeterministicSampler(Sampler):
         else:
             attributes.update(sample_rate)
 
-        # TODO: call on a logic to determine which inner sampler
-        return DEFAULT_ON.should_sample(
+        return self._sampler.should_sample(
             parent_context,
             trace_id,
             name,
