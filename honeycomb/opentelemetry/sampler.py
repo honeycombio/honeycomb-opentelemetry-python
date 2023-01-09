@@ -44,6 +44,7 @@ class DeterministicSampler(Sampler):
         # any other positive whole number, user 1/number as
         # the ratio with the ratio sampler
 
+    # pylint: disable=too-many-arguments
     def should_sample(
         self,
         parent_context: Context,
