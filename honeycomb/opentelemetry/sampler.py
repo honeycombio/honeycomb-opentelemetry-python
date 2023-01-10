@@ -43,7 +43,7 @@ class DeterministicSampler(Sampler):
             self._sampler = DEFAULT_OFF
             print("[DeterministicSampler] default off")
 
-        if self.rate == 1:
+        elif self.rate == 1:
             # Sampler that respects its parent span's sampling decision,
             # but otherwise always samples.
             self._sampler = DEFAULT_ON
