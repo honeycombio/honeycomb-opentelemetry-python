@@ -7,9 +7,6 @@ from opentelemetry.sdk.trace.sampling import (
     Sampler,
     SamplingResult
 )
-# DEFAULT_OFF,
-# ParentBasedTraceIdRatio
-# not Decision // call and inner sampler instead
 
 from opentelemetry.trace import Link, SpanKind
 from opentelemetry.trace.span import TraceState
@@ -76,7 +73,7 @@ class DeterministicSampler(Sampler):
             attributes = sample_rate
         else:
             attributes.update(sample_rate)
-
+        # using _sampler logic based on rate (OFF, ON, TraceIdRatio)
         return self._sampler.should_sample(
             parent_context,
             trace_id,
