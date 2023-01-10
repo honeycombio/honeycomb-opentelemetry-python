@@ -419,7 +419,7 @@ disable=raw-checker-failed,
         use-symbolic-message-instead,
         import-error, # this is a linting thing, not an actual problem :(
         no-name-in-module, # this is a linting thing, not an actual problem :(
-        missing-module-docstring, # we don't want to docstring module
+        missing-module-docstring, # we don't want to docstring modules
 
 
 # Enable the message, report, category or checker with the given id(s). You can
