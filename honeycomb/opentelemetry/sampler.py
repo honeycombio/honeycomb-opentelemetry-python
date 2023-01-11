@@ -34,9 +34,10 @@ class DeterministicSampler(Sampler):
         self.rate = rate
 
         # Can't use match/case statement until minimum Python 3.10
-        if self.rate == 0:
+        if self.rate <= 0:
             # Sampler that respects its parent span's sampling decision,
-            # but otherwise never samples.
+            # but otherwise never samples. If it's negative, we assume
+            # a sample rate of 0
             self._sampler = DEFAULT_OFF
             print("[DeterministicSampler] default off")
 
@@ -46,15 +47,12 @@ class DeterministicSampler(Sampler):
             self._sampler = DEFAULT_ON
             print("[DeterministicSampler] default on")
 
-        elif self.rate > 1:
+        else:
             # Sampler that respects its parent span's sampling decision,
             # but otherwise samples probabalistically based on `rate`.
             ratio = 1.0 / self.rate
             self._sampler = ParentBasedTraceIdRatio(ratio)
             print(f"[DeterministicSampler] traceId ratio: {ratio}")
-
-    def _configure(self):
-        configure_sampler()
 
     # pylint: disable=too-many-arguments
     def should_sample(

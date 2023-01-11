@@ -298,6 +298,8 @@ class HoneycombOptions:
             SAMPLE_RATE,
             (sample_rate or DEFAULT_SAMPLE_RATE),
             INVALID_SAMPLE_RATE_ERROR
+            # TODO: add check and language for negative number,
+            # default to 1 or 0 if negative?
         )
 
         endpoint_insecure = parse_bool(
