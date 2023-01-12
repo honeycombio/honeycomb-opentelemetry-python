@@ -101,6 +101,7 @@ def parse_bool(environment_variable: str,
 
 
 def parse_int(environment_variable: str,
+              param: int,
               default_value: int,
               error_message: str):
     """
@@ -109,11 +110,12 @@ def parse_int(environment_variable: str,
 
     Args:
         environment_variable (str): the environment variable name to use
+        param(int): fallback parameter to check before setting default
         default_value (int): the default value if not found or unable parse
         error_message (str): the error message to log if unable to parse
 
     Returns:
-        int: either the parsed environment variable or defautl value
+        int: either the parsed environment variable, parameter, or default value
     """
     val = os.getenv(environment_variable, None)
     if val:
@@ -121,7 +123,10 @@ def parse_int(environment_variable: str,
             return int(val)
         except ValueError:
             _logger.warning(error_message)
-    return default_value
+    elif isinstance(param, int):
+        return param
+    else:
+        return default_value
 
 
 def _append_traces_path(protocol: str, endpoint: str):
@@ -296,10 +301,9 @@ class HoneycombOptions:
 
         self.sample_rate = parse_int(
             SAMPLE_RATE,
-            (sample_rate or DEFAULT_SAMPLE_RATE),
+            sample_rate,
+            DEFAULT_SAMPLE_RATE,
             INVALID_SAMPLE_RATE_ERROR
-            # TODO: add check and language for negative number,
-            # default to 1 or 0 if negative?
         )
 
         endpoint_insecure = parse_bool(
