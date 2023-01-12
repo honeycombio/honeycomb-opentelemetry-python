@@ -17,7 +17,7 @@ class LocalTraceLinkSpanExporter(SpanExporter):
         options: HoneycombOptions,
     ):
         if not options.service_name or not options.traces_apikey:
-            print("disabling local visualisations - must have both" +
+            print("disabling local visualizations - must have both " +
                   "service name and API key configured.")
             return
 
