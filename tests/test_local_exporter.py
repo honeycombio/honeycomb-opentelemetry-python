@@ -13,7 +13,7 @@ def test_exporter_formats_correct_url(requests_mock):
     assert url == "https://ui.honeycomb.io/my-team/environments/my-env/datasets/my-service/trace?trace_id=a59c68a6de76d5e642bdc9a7641ae5f0"
 
 
-def test_exporter_formats_correct_url_clasic(requests_mock):
+def test_exporter_formats_correct_url_classic(requests_mock):
     requests_mock.get("https://api.honeycomb.io/1/auth", json = { "team": { "slug": "my-team"} })
     options = HoneycombOptions(apikey=CLASSIC_APIKEY, service_name="my-service")
     exporter = LocalTraceLinkSpanExporter(options)
