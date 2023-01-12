@@ -33,7 +33,6 @@ class DeterministicSampler(Sampler):
     def __init__(self, rate: int):
         self.rate = rate
 
-        # Can't use match/case statement until minimum Python 3.10
         if self.rate <= 0:
             # Sampler that respects its parent span's sampling decision,
             # but otherwise never samples. If it's negative, we assume
