@@ -39,20 +39,17 @@ class DeterministicSampler(Sampler):
             # but otherwise never samples. If it's negative, we assume
             # a sample rate of 0
             self._sampler = DEFAULT_OFF
-            print("[DeterministicSampler] default off")
 
         elif self.rate == 1:
             # Sampler that respects its parent span's sampling decision,
             # but otherwise always samples.
             self._sampler = DEFAULT_ON
-            print("[DeterministicSampler] default on")
 
         else:
             # Sampler that respects its parent span's sampling decision,
             # but otherwise samples probabalistically based on `rate`.
             ratio = 1.0 / self.rate
             self._sampler = ParentBasedTraceIdRatio(ratio)
-            print(f"[DeterministicSampler] traceId ratio: {ratio}")
 
     # pylint: disable=too-many-arguments
     def should_sample(
