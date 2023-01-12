@@ -29,13 +29,14 @@ def test_sampler_with_rate_of_1_defaults_to_DEFAULT_ON():
     # TODO: get result decision, assert RECORD_AND_SAMPLED
     # assert sample rate attribute
 
-# SEE: failing options tests for setting 0 as a rate.
-# def test_sampler_with_rate_of_0_defaults_to_DEFAULT_OFF():
-#     options = HoneycombOptions(sample_rate=0)
-#     deterministic_sampler = configure_sampler(options)
-#     assert isinstance(deterministic_sampler, DeterministicSampler)
-#     assert deterministic_sampler.rate == 0
-#     assert deterministic_sampler._sampler == DEFAULT_OFF
+def test_sampler_with_rate_of_0_defaults_to_DEFAULT_OFF():
+    options = HoneycombOptions(sample_rate=0)
+    deterministic_sampler = configure_sampler(options)
+    assert isinstance(deterministic_sampler, DeterministicSampler)
+    assert deterministic_sampler.rate == 0
+    assert deterministic_sampler._sampler == DEFAULT_OFF
+
+    # TODO: test result decisions
 
 
 def test_sampler_with_rate_of_10_configures_ParentBasedTraceIdRatio():
