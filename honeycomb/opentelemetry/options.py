@@ -115,7 +115,7 @@ def parse_int(environment_variable: str,
         error_message (str): the error message to log if unable to parse
 
     Returns:
-        int: either the parsed environment variable, parameter, or default value
+        int: either the parsed environment variable, param, or default value
     """
     val = os.getenv(environment_variable, None)
     if val:
