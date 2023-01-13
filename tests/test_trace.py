@@ -1,7 +1,3 @@
-from honeycomb.opentelemetry.local_exporter import LocalTraceLinkSpanExporter
-from honeycomb.opentelemetry.options import HoneycombOptions
-from honeycomb.opentelemetry.resource import create_resource
-from honeycomb.opentelemetry.trace import create_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
@@ -10,6 +6,10 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
     OTLPSpanExporter as HTTPSpanExporter
 )
+from honeycomb.opentelemetry.local_exporter import LocalTraceLinkSpanExporter
+from honeycomb.opentelemetry.options import HoneycombOptions
+from honeycomb.opentelemetry.resource import create_resource
+from honeycomb.opentelemetry.trace import create_tracer_provider
 
 
 def test_returns_tracer_provider():
