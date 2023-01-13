@@ -37,15 +37,13 @@ def create_meter_provider(options: HoneycombOptions, resource: Resource):
         )
     readers = [
         PeriodicExportingMetricReader(
-            exporter,
-            export_timeout_millis=10000  # TODO set via OTEL env var
+            exporter
         )
     ]
     if options.debug:
         readers.append(
             PeriodicExportingMetricReader(
                 ConsoleMetricExporter(),
-                export_timeout_millis=10000  # TODO set via OTEL env var
             )
         )
     return MeterProvider(
