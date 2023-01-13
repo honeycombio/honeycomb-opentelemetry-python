@@ -52,7 +52,10 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
     if options.enable_local_visualizations:
         trace_provider.add_span_processor(
             SimpleSpanProcessor(
-                LocalTraceLinkSpanExporter(options)
+                LocalTraceLinkSpanExporter(
+                    options.service_name,
+                    options.traces_apikey
+                )
             )
         )
     return trace_provider

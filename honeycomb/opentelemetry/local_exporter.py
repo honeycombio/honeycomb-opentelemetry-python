@@ -2,7 +2,7 @@ import typing
 import requests
 from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
-from honeycomb.opentelemetry.options import HoneycombOptions, is_classic
+from honeycomb.opentelemetry.options import is_classic
 
 
 class LocalTraceLinkSpanExporter(SpanExporter):
@@ -11,19 +11,21 @@ class LocalTraceLinkSpanExporter(SpanExporter):
     This class can be used for diagnostic purposes. It prints the exported
     spans to the console STDOUT.
     """
+    trace_link_url = None
 
     def __init__(
         self,
-        options: HoneycombOptions,
+        service_name: str,
+        apikey: str
     ):
-        if not options.service_name or not options.traces_apikey:
+        if not service_name or not apikey:
             print("disabling local visualizations - must have both " +
                   "service name and API key configured.")
             return
 
         self.trace_link_url = self._build_trace_link_url(
-            options.traces_apikey,
-            options.service_name
+            apikey,
+            service_name
         )
 
     def export(self, spans: typing.Sequence[ReadableSpan]) -> SpanExportResult:
@@ -66,4 +68,6 @@ class LocalTraceLinkSpanExporter(SpanExporter):
         return url
 
     def _build_url(self, trace_id: int):
-        return f"{self.trace_link_url}={trace_id:x}"
+        if self.trace_link_url:
+            return f"{self.trace_link_url}={trace_id:x}"
+        return None
