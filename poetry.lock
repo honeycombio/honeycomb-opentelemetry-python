@@ -263,7 +263,7 @@ test = ["responses (==0.22.0)"]
 
 [[package]]
 name = "opentelemetry-instrumentation"
-version = "0.35b0"
+version = "0.36b0"
 description = "Instrumentation Tools & Auto Instrumentation for OpenTelemetry Python"
 category = "main"
 optional = false
@@ -501,7 +501,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, >= 3.7.2"
-content-hash = "07930bce6b297e61331ed86c74b638f0c9471dcbac43784cd860bea6249b1262"
+content-hash = "5c3a311602b1d7e645d164c2066e013ab53f58a6659ddf92b2adc1d1162db528"
 
 [metadata.files]
 astroid = [
@@ -701,8 +701,8 @@ opentelemetry-exporter-otlp-proto-http = [
     {file = "opentelemetry_exporter_otlp_proto_http-1.15.0.tar.gz", hash = "sha256:11b2c814249a49b22f6cca7a06b05701f561d577b747f3660dfd67b6eb9daf9c"},
 ]
 opentelemetry-instrumentation = [
-    {file = "opentelemetry_instrumentation-0.35b0-py3-none-any.whl", hash = "sha256:0ca91ef51c6748e91892cd1322b1fceede77d1300dc718a5ec4c3deee5649beb"},
-    {file = "opentelemetry_instrumentation-0.35b0.tar.gz", hash = "sha256:a7cb996b37920911db7534dc739ab3fe18e4f769431481bec01d6538a11cadd9"},
+    {file = "opentelemetry_instrumentation-0.36b0-py3-none-any.whl", hash = "sha256:83ba4ae7d5292b5b33e0f851cc5c76d8f91196b9b3527800fc13855c33383ac2"},
+    {file = "opentelemetry_instrumentation-0.36b0.tar.gz", hash = "sha256:e3ddac9b3b93408ef26c8ecbf38f717042977e16381bb4cd329a5b4cf16998cf"},
 ]
 opentelemetry-proto = [
     {file = "opentelemetry_proto-1.15.0-py3-none-any.whl", hash = "sha256:044b6d044b4d10530f250856f933442b8753a17f94ae37c207607f733fb9a844"},
