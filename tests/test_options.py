@@ -177,6 +177,14 @@ def test_can_set_sample_rate_with_param():
     options = HoneycombOptions(sample_rate=123)
     assert options.sample_rate == 123
 
+def test_can_set_sample_rate_of_zero_param():
+    options = HoneycombOptions(sample_rate=0)
+    assert options.sample_rate == 0
+
+def test_can_set_sample_rate_of_zero_envar(monkeypatch):
+    monkeypatch.setenv(SAMPLE_RATE, "0")
+    options = HoneycombOptions()
+    assert options.sample_rate == 0
 
 def test_can_set_sample_rate_with_envvar(monkeypatch):
     monkeypatch.setenv(SAMPLE_RATE, "321")
