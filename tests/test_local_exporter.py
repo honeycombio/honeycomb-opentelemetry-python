@@ -2,11 +2,11 @@ from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.trace.span import SpanContext
 from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
 from honeycomb.opentelemetry.local_exporter import LocalTraceLinkSpanExporter
+from tests.utils import APIKEY, CLASSIC_APIKEY
 
-APIKEY = "0000000000000000000000" # 22 chars
-CLASSIC_APIKEY = "00000000000000000000000000000000" # 32 chars
 TRACE_ID = 220134740205765644819457394801066567152
 SPAN_ID = 7394801066567152
+
 
 def _check_exporter_can_export_spans_successfully(exporter: SpanExporter):
     result = exporter.export([

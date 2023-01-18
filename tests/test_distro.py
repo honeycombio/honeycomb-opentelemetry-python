@@ -8,12 +8,6 @@ from opentelemetry.trace import get_tracer_provider
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
 
-# classic keys are 32 chars long
-CLASSIC_APIKEY = "this is a string that is 32 char"
-# non-classic keys are 22 chars log
-APIKEY = "an api key for 22 char"
-
-
 def test_distro_configure_defaults():
     configure_opentelemetry()
     tracer_provider = get_tracer_provider()
