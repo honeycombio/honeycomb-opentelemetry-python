@@ -5,7 +5,7 @@ from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
 from honeycomb.opentelemetry.options import HoneycombOptions, is_classic
 
 
-def configre_local_exporter(options: HoneycombOptions):
+def configure_local_exporter(options: HoneycombOptions):
     """
     Configures and returns an OpenTelemetry Span Exporter that prints
     direct web links for completed traces in Honeycomb on stdout.

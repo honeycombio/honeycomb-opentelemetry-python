@@ -11,7 +11,7 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
     OTLPSpanExporter as HTTPSpanExporter
 )
-from honeycomb.opentelemetry.local_exporter import configre_local_exporter
+from honeycomb.opentelemetry.local_exporter import configure_local_exporter
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.sampler import configure_sampler
 
@@ -56,7 +56,7 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
     if options.enable_local_visualizations:
         trace_provider.add_span_processor(
             SimpleSpanProcessor(
-                configre_local_exporter(options)
+                configure_local_exporter(options)
             )
         )
     return trace_provider
