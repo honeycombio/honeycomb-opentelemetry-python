@@ -14,6 +14,14 @@ install_dev:
 build: install
 	poetry build
 
+#: clean all the caches and any dist
+clean:
+	rm -rf dist/*
+	rm -rf honeycomb/opentelemetry/__pycache__/
+	rm -rf src/honeycomb/opentelemetry/__pycache__/
+	rm -rf examples/hello-world-flask/__pycache__
+	rm -rf examples/hello-world-flask/dist/*
+
 #: run the unit tests with a clean environment
 test: build
 	mkdir -p test-results
