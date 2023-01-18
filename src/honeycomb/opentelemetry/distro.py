@@ -41,6 +41,6 @@ class HoneycombDistro(BaseDistro):
     This honey-flavored Distro configures OpenTelemetry for use with Honeycomb.
     """
 
-    def _configure(self):
+    def _configure(self, **kwargs):
         print("🐝 auto instrumented 🐝")
         configure_opentelemetry()

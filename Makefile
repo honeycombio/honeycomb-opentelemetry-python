@@ -21,11 +21,11 @@ test: build
 
 #: nitpick lint
 lint: install_dev
-	poetry run pylint honeycomb
+	poetry run pylint src
 
 #: nitpick style
 style: install_dev
-	poetry run pycodestyle honeycomb
+	poetry run pycodestyle src
 
 EXAMPLE_SERVICE_NAME ?= otel-python-example
 run_example: export OTEL_SERVICE_NAME := $(EXAMPLE_SERVICE_NAME)
