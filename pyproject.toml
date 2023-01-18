@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Honeycomb OpenTelemetry Distro for Python"
 authors = ["Honeycomb <support@honeycomb.io>"]
 readme = "README.md"
-packages = [{include = "honeycomb" }]
+packages = [{include = "honeycomb", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.7, >= 3.7.2"
