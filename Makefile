@@ -27,6 +27,43 @@ lint: install_dev
 style: install_dev
 	poetry run pycodestyle src
 
+#: not yet implemented; clear data from smoke tests
+smoke-tests/collector/data.json:
+	@echo ""
+	@echo "+++ Zhuzhing smoke test's Collector data.json"
+	@touch $@ && chmod o+w $@
+
+#: not yet implemented; smoke grpc
+smoke-sdk-grpc: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running gRPC smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
+
+#: not yet implemented; smoke http
+smoke-sdk-http: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running HTTP smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
+
+#: not yet implemented; smoke grpc and http
+smoke-sdk: smoke-sdk-grpc smoke-sdk-http
+
+#: placeholder for smoke tests, simply build the app
+smoke:
+	@echo ""
+	@echo "+++ Temporary Placeholder."
+	@echo ""
+	cd smoke-tests && docker-compose up --build app-sdk-grpc
+
+#: placeholder for smoke tests, tear down the app
+unsmoke:
+	@echo ""
+	@echo "+++ Spinning down the smokers."
+	@echo ""
+	cd smoke-tests && docker-compose down --volumes
+
 EXAMPLE_SERVICE_NAME ?= otel-python-example
 run_example: export OTEL_SERVICE_NAME := $(EXAMPLE_SERVICE_NAME)
 #: fire up an instrumented Python web service; set HONEYCOMB_API_KEY to send data for real
