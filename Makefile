@@ -14,6 +14,25 @@ install_dev:
 build: install
 	poetry build
 
+#: cleans up smoke test output
+clean-smoke-tests:
+	rm -rf ./smoke-tests/collector/data.json
+	rm -rf ./smoke-tests/collector/data-results/*.json
+	rm -rf ./smoke-tests/report.*
+
+#: clean all the caches and any dist
+clean-cache:
+	rm -rf dist/*
+	rm -rf honeycomb/opentelemetry/__pycache__/
+	rm -rf src/honeycomb/opentelemetry/__pycache__/
+	rm -rf examples/hello-world-flask/__pycache__
+	rm -rf examples/hello-world-flask/dist/*
+	rm -rf examples/hello-world/__pycache__
+	rm -rf examples/hello-world/dist/*
+
+#: clean smoke test output, caches, builds
+clean: clean-smoke-tests clean-cache
+
 #: run the unit tests with a clean environment
 test: build
 	mkdir -p test-results
