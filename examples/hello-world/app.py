@@ -10,7 +10,7 @@ configure_opentelemetry(
     )
 )
 
-# or use environment variables
+# or use environment variables instead of configure_opentelemetry
 # export DEBUG=true
 # export HONEYCOMB_API_KEY=abc123
 # export OTEL_SERVICE_NAME=otel-python-example
