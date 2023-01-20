@@ -65,7 +65,9 @@ class BaggageSpanProcessor(SimpleSpanProcessor):
         span: Span,
         parent_context: Context
     ) -> None:
-        span.set_attribute("tag", "em was here")
+        stuff = baggage.get_all(parent_context)
+        for key, value in stuff.items():
+            span.set_attribute(key, value)
 
     # https://opentelemetry.io/docs/instrumentation/python/cookbook/#capturing-baggage-at-different-contexts
     # TODO: propagate baggage from parent context

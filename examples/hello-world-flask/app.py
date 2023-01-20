@@ -11,9 +11,10 @@ tracer = trace.get_tracer(__name__)
 
 @app.route("/")
 def hello_world():
-    with tracer.start_as_current_span(name="foo"):
+    root_ctx = baggage.set_baggage("whatever", "friend")
+    with tracer.start_as_current_span(name="foo", context=root_ctx):
         parent_ctx = baggage.set_baggage("context", "parent")
         with tracer.start_as_current_span(name="bar", context=parent_ctx):
-            baggage.set_baggage("context", "child")
+            child_ctx = baggage.set_baggage("context", "child") # this goes nowhere?
             print("baz")
     return "Hello World"
