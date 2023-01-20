@@ -1,3 +1,4 @@
+from opentelemetry import baggage
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
     SimpleSpanProcessor,
@@ -59,10 +60,15 @@ class BaggageSpanProcessor(SimpleSpanProcessor):
     def __init__(self) -> None:
         pass
 
-    # TODO: on start 
-    #  span being started
-    #  parent context, the context in which span was started
+    def on_start(
+        self,
+        span: Span,
+        parent_context: Context
+    ) -> None:
+        span.set_attribute("tag", "em was here")
 
-    # propagate baggage from parent context
+    # https://opentelemetry.io/docs/instrumentation/python/cookbook/#capturing-baggage-at-different-contexts
+    # TODO: propagate baggage from parent context
     #  get all entries
+    # https://opentelemetry-python.readthedocs.io/en/latest/api/baggage.html#opentelemetry.baggage.get_all
     # for each entry, set them as span attributes
