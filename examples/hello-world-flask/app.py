@@ -8,8 +8,17 @@ tracer = trace.get_tracer(__name__)
 def hello_world():
     root_ctx = baggage.set_baggage("whatever", "friend")
     with tracer.start_as_current_span(name="foo", context=root_ctx):
-        parent_ctx = baggage.set_baggage("context", "parent")
-        with tracer.start_as_current_span(name="bar", context=parent_ctx):
+                
+        # compare current context to the root ctx that was passed in
+
+
+        parent_ctx = baggage.set_baggage("context", "parent", root_ctx)
+
+        # some more business logic here
+        parent_ctx2 = baggage.set_baggage("additional_context", "parent", parent_ctx)
+        
+        
+        with tracer.start_as_current_span(name="bar", context=parent_ctx2):
             child_ctx = baggage.set_baggage("context", "child") # this goes nowhere?
             print("baz")
     return "Hello World"
