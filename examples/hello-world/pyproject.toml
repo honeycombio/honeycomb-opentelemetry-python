@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "hello-world"
+version = "0.1.0"
+description = ""
+authors = ["Honeycomb <support@honeycomb.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+honeycomb-opentelemetry = {path = "../../", develop = true}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,5 +1,11 @@
+import os
 from flask import Flask
 from opentelemetry import trace
+from honeycomb.opentelemetry import configure_opentelemetry, HoneycombOptions
+
+# use environment variables
+# export HONEYCOMB_API_KEY=abc123
+# export OTEL_SERVICE_NAME=otel-python-example
 
 app = Flask(__name__)
 tracer = trace.get_tracer(__name__)

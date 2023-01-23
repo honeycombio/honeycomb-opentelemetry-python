@@ -14,6 +14,25 @@ install_dev:
 build: install
 	poetry build
 
+#: cleans up smoke test output
+clean-smoke-tests:
+	rm -rf ./smoke-tests/collector/data.json
+	rm -rf ./smoke-tests/collector/data-results/*.json
+	rm -rf ./smoke-tests/report.*
+
+#: clean all the caches and any dist
+clean-cache:
+	rm -rf dist/*
+	rm -rf honeycomb/opentelemetry/__pycache__/
+	rm -rf src/honeycomb/opentelemetry/__pycache__/
+	rm -rf examples/hello-world-flask/__pycache__
+	rm -rf examples/hello-world-flask/dist/*
+	rm -rf examples/hello-world/__pycache__
+	rm -rf examples/hello-world/dist/*
+
+#: clean smoke test output, caches, builds
+clean: clean-smoke-tests clean-cache
+
 #: run the unit tests with a clean environment
 test: build
 	mkdir -p test-results
@@ -26,6 +45,43 @@ lint: install_dev
 #: nitpick style
 style: install_dev
 	poetry run pycodestyle src
+
+#: not yet implemented; clear data from smoke tests
+smoke-tests/collector/data.json:
+	@echo ""
+	@echo "+++ Zhuzhing smoke test's Collector data.json"
+	@touch $@ && chmod o+w $@
+
+#: not yet implemented; smoke grpc
+smoke-sdk-grpc: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running gRPC smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
+
+#: not yet implemented; smoke http
+smoke-sdk-http: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running HTTP smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
+
+#: not yet implemented; smoke grpc and http
+smoke-sdk: smoke-sdk-grpc smoke-sdk-http
+
+#: placeholder for smoke tests, simply build the app
+smoke:
+	@echo ""
+	@echo "+++ Temporary Placeholder."
+	@echo ""
+	cd smoke-tests && docker-compose up --build app-sdk-grpc
+
+#: placeholder for smoke tests, tear down the app
+unsmoke:
+	@echo ""
+	@echo "+++ Spinning down the smokers."
+	@echo ""
+	cd smoke-tests && docker-compose down --volumes
 
 EXAMPLE_SERVICE_NAME ?= otel-python-example
 run_example: export OTEL_SERVICE_NAME := $(EXAMPLE_SERVICE_NAME)

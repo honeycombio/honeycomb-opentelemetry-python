@@ -1,0 +1,42 @@
+version: '3.0'
+
+x-env-base: &env_base
+  HONEYCOMB_API_ENDPOINT: http://collector:4317
+  HONEYCOMB_API_KEY: bogus_key
+  HONEYCOMB_DATASET: bogus_dataset
+  HONEYCOMB_METRICS_DATASET: bogus_dataset
+  OTEL_SERVICE_NAME: "otel-python-example"
+  DEBUG: "true"
+
+x-app-base: &app_base
+  build:
+    context: ../
+    dockerfile: ./examples/hello-world/Dockerfile
+  image: honeycomb/hello-world
+  # depends_on:
+  #   - collector
+
+services:
+  collector:
+    image: otel/opentelemetry-collector:0.52.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - "./collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml"
+      - "./collector:/var/lib"
+
+  app-sdk-grpc:
+    <<: *app_base
+    environment:
+      <<: *env_base
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    ports:
+      - "127.0.0.1:5000:5000"
+
+  app-sdk-http:
+    <<: *app_base
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+    ports:
+      - "127.0.0.1:5000:5000"
