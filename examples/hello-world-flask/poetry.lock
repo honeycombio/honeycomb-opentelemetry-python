@@ -113,7 +113,7 @@ develop = true
 [package.dependencies]
 opentelemetry-api = "^1.14.0"
 opentelemetry-exporter-otlp = "^1.14.0"
-opentelemetry-instrumentation = "^0.35b0"
+opentelemetry-instrumentation = "^0.36b0"
 opentelemetry-sdk = "^1.14.0"
 
 [package.source]
