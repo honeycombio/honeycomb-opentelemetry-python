@@ -5,7 +5,7 @@ from honeycomb.opentelemetry import configure_opentelemetry, HoneycombOptions
 configure_opentelemetry(
     HoneycombOptions(
         debug=True,
-        apikey=os.environ.get("HONEYCOMB_API_KEY"),
+        apikey=os.getenv("HONEYCOMB_API_KEY"),
         service_name="otel-python-example"
     )
 )
