@@ -44,13 +44,13 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
         sampler=configure_sampler(options)
     )
     trace_provider.add_span_processor(
-        BatchWithBaggageSpanProcessor( # try me
+        BatchWithBaggageSpanProcessor(  # try me
             exporter
         )
     )
     if options.debug:
         trace_provider.add_span_processor(
-            SimpleSpanProcessor(
+            SimpleSpanProcessor(  # BaggageSpanProcessor
                 ConsoleSpanExporter()
             )
         )

@@ -11,6 +11,7 @@ from opentelemetry.context import Context
 # spanexporter, trace.export
 # simplespanprocessor, trace.export
 
+
 class BatchWithBaggageSpanProcessor(BatchSpanProcessor):
     # https://opentelemetry-python.readthedocs.io/en/latest/sdk/trace.export.html#opentelemetry.sdk.trace.export.BatchSpanProcessor
     """
@@ -19,9 +20,9 @@ class BatchWithBaggageSpanProcessor(BatchSpanProcessor):
     """
 
     def __init__(
-        self, 
+        self,
         span_exporter: SpanExporter
-        ) -> None:
+            ) -> None:
         super().__init__(span_exporter)
         self.bsp = BaggageSpanProcessor()
 
