@@ -1,37 +1,7 @@
 from opentelemetry import baggage
-from opentelemetry.sdk.trace.export import (
-    BatchSpanProcessor,
-    SimpleSpanProcessor,
-    SpanExporter
-)
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.trace import Span
 from opentelemetry.context import Context
-
-# spanprocessor, trace.
-# spanexporter, trace.export
-# simplespanprocessor, trace.export
-
-
-class BatchWithBaggageSpanProcessor(BatchSpanProcessor):
-    # https://opentelemetry-python.readthedocs.io/en/latest/sdk/trace.export.html#opentelemetry.sdk.trace.export.BatchSpanProcessor
-    """
-    A span processor that behaves like a BatchSpanProcessor with the
-    addition of BaggageSpanProcessor behavior.
-    """
-
-    def __init__(
-        self,
-        span_exporter: SpanExporter
-            ) -> None:
-        super().__init__(span_exporter)
-        self.bsp = BaggageSpanProcessor()
-
-    def on_start(
-        self,
-        span: Span,
-        parent_context: Context
-    ) -> None:
-        self.bsp.on_start(span, parent_context)
 
 
 class BaggageSpanProcessor(SimpleSpanProcessor):
