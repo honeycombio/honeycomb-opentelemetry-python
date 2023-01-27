@@ -15,7 +15,7 @@ def test_distro_configure_defaults():
     assert tracer_provider._resource._attributes["honeycomb.distro.version"] == __version__
     assert tracer_provider._resource._attributes["honeycomb.distro.runtime_version"] == platform.python_version(
     )
-    spanExporter = tracer_provider._active_span_processor._span_processors[0].span_exporter
+    spanExporter = tracer_provider._active_span_processor._span_processors[1].span_exporter
     assert isinstance(spanExporter, OTLPSpanExporter)
 
     meter_provider = get_meter_provider()
