@@ -14,7 +14,7 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
 from honeycomb.opentelemetry.local_exporter import configure_local_exporter
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.sampler import configure_sampler
-from honeycomb.opentelemetry.baggage import BatchWithBaggageSpanProcessor
+from honeycomb.opentelemetry.baggage import BaggageSpanProcessor
 
 
 def create_tracer_provider(options: HoneycombOptions, resource: Resource):
@@ -45,9 +45,10 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
     )
 
     trace_provider.add_span_processor(
-        BatchWithBaggageSpanProcessor(
-            exporter
-        )
+        BaggageSpanProcessor()
+    )
+    trace_provider.add_span_processor(
+        BatchSpanProcessor(exporter)
     )
     if options.debug:
         trace_provider.add_span_processor(

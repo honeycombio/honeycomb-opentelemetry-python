@@ -1,6 +1,6 @@
 from opentelemetry import baggage
+from opentelemetry.sdk import trace
 from opentelemetry.sdk.trace.export import (
-    SimpleSpanProcessor,
     BatchSpanProcessor,
     SpanExporter
 )
@@ -30,7 +30,7 @@ class BatchWithBaggageSpanProcessor(BatchSpanProcessor):
         self.bsp.on_start(span, parent_context)
 
 
-class BaggageSpanProcessor(SimpleSpanProcessor):
+class BaggageSpanProcessor(trace.SpanProcessor):
     """
      The BaggageSpanProcessor reads entries stored in Baggage
      from the parent context and adds the baggage entries' keys and
