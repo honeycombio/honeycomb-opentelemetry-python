@@ -94,7 +94,7 @@ def test_setting_enable_local_visualizations_adds_local_trace_exporter_on_simple
     assert isinstance(visualization.span_exporter, LocalTraceLinkSpanExporter)
 
 
-def test_setting_both_flags_enables_all_available_exporters():
+def test_setting_both_flags_enables_all_available_span_processors():
     options = HoneycombOptions(enable_local_visualizations=True, debug=True)
     resource = create_resource(options)
     tracer_provider = create_tracer_provider(options, resource)
