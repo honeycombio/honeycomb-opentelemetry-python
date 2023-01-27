@@ -1,10 +1,10 @@
 from opentelemetry import baggage
-from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+from opentelemetry.sdk.trace.export import SpanProcessor
 from opentelemetry.trace import Span
 from opentelemetry.context import Context
 
 
-class BaggageSpanProcessor(SimpleSpanProcessor):
+class BaggageSpanProcessor(SpanProcessor):
     """
      The BaggageSpanProcessor reads entries stored in Baggage
      from the parent context and adds the baggage entries' keys and
