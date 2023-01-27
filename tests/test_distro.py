@@ -5,7 +5,11 @@ from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.version import __version__
 from opentelemetry.metrics import get_meter_provider
 from opentelemetry.trace import get_tracer_provider
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+    OTLPSpanExporter as GRPCSpanExporter
+)
 
 
 def test_distro_configure_defaults():
@@ -15,12 +19,17 @@ def test_distro_configure_defaults():
     assert tracer_provider._resource._attributes["honeycomb.distro.version"] == __version__
     assert tracer_provider._resource._attributes["honeycomb.distro.runtime_version"] == platform.python_version(
     )
-    spanExporter = tracer_provider._active_span_processor._span_processors[1].span_exporter
-    assert isinstance(spanExporter, OTLPSpanExporter)
+
+    active_span_processors = tracer_provider._active_span_processor._span_processors
+    assert len(active_span_processors) == 2
+    (baggage, batch) = active_span_processors
+    assert isinstance(batch, BatchSpanProcessor)
+    assert isinstance(batch.span_exporter, GRPCSpanExporter)
 
     meter_provider = get_meter_provider()
     # the noop meter provider does not have the _sdk_config property where meter readers are configured
     assert not hasattr(meter_provider, "_sdk_config")
+
 
 def test_can_enable_metrics():
     # metrics is enabled by providing a metrics dataset
