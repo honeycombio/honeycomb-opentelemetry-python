@@ -41,7 +41,7 @@ INVALID_TRACES_INSECURE_ERROR = "Unable to parse " + \
 INVALID_SAMPLE_RATE_ERROR = "Unable to parse SAMPLE_RATE. " + \
     "Using sample rate of 1."
 INVALID_EXPORTER_PROTOCOL_ERROR = "Invalid OTLP exporter protocol " + \
-    "detected. Must be one of ['grpc', 'http/protbuf']. Defaulting to grpc."
+    "detected. Must be one of ['grpc', 'http/protobuf']. Defaulting to grpc."
 MISSING_API_KEY_ERROR = "Missing API key. Specify either " + \
     "HONEYCOMB_API_KEY environment variable or apikey in the options" + \
     "parameter."
@@ -82,7 +82,7 @@ def is_classic(apikey: str):
     """
     Determines whether the passed in API key is a classic API key or not.
     Modern API keys have 22 or 23 characters.
-    Clasic API keys have 32 characters.
+    Classic API keys have 32 characters.
     """
     return apikey and len(apikey) == 32
 
@@ -100,7 +100,7 @@ def parse_bool(environment_variable: str,
         error_message (str): the error message to log if unable to parse
 
     Returns:
-        bool: either the parsed environment variable or defautl value
+        bool: either the parsed environment variable or default value
     """
     val = os.getenv(environment_variable, None)
     if val:
@@ -142,7 +142,7 @@ def parse_int(environment_variable: str,
 
 def _append_traces_path(protocol: str, endpoint: str):
     """
-    Appends the OTLP traces HTTP path '/v1/trces' to the endpoint if the
+    Appends the OTLP traces HTTP path '/v1/traces' to the endpoint if the
     protocol is http/protobuf.
 
     Returns:
@@ -272,11 +272,11 @@ class HoneycombOptions:
         self.metrics_exporter_protocol = os.environ.get(
             OTEL_EXPORTER_OTLP_METRICS_PROTOCOL,
             (metrics_exporter_protocol or exporter_protocol))
-        if traces_exporter_protocol not in exporter_protocols:
+        if metrics_exporter_protocol not in exporter_protocols:
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
-            self.traces_exporter_protocol = exporter_protocol
+            self.metrics_exporter_protocol = exporter_protocol
 
-        # if htt/protobuf protocol and using generic env or param
+        # if http/protobuf protocol and using generic env or param
         # append /v1/traces path
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
@@ -295,7 +295,7 @@ class HoneycombOptions:
                         endpoint or DEFAULT_API_ENDPOINT
                     )
 
-        # if htt/protobuf protocol and using generic env or param
+        # if http/protobuf protocol and using generic env or param
         # append /v1/metrics path
         self.metrics_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
