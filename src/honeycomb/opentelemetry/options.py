@@ -265,14 +265,16 @@ class HoneycombOptions:
         self.traces_exporter_protocol = os.environ.get(
             OTEL_EXPORTER_OTLP_TRACES_PROTOCOL,
             (traces_exporter_protocol or exporter_protocol))
-        if traces_exporter_protocol and traces_exporter_protocol not in exporter_protocols:
+        if traces_exporter_protocol and (
+                traces_exporter_protocol not in exporter_protocols):
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
             self.traces_exporter_protocol = exporter_protocol
 
         self.metrics_exporter_protocol = os.environ.get(
             OTEL_EXPORTER_OTLP_METRICS_PROTOCOL,
             (metrics_exporter_protocol or exporter_protocol))
-        if metrics_exporter_protocol and metrics_exporter_protocol not in exporter_protocols:
+        if metrics_exporter_protocol and (
+                metrics_exporter_protocol not in exporter_protocols):
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
             self.metrics_exporter_protocol = exporter_protocol
 
