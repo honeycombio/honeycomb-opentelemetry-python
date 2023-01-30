@@ -36,6 +36,8 @@ def test_defaults():
     assert options.dataset is None
     assert options.metrics_dataset is None
     assert options.enable_local_visualizations is False
+    assert options.traces_exporter_protocol is EXPORTER_PROTOCOL_GRPC
+    assert options.metrics_exporter_protocol is EXPORTER_PROTOCOL_GRPC
 
 
 def test_can_set_service_name_with_param():
