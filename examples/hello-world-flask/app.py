@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 from opentelemetry import trace
-from honeycomb.opentelemetry import configure_opentelemetry, HoneycombOptions
 
 # use environment variables
 # export HONEYCOMB_API_KEY=abc123
