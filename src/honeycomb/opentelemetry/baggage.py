@@ -1,4 +1,4 @@
-from opentelemetry import baggage
+from opentelemetry.baggage import get_all
 from opentelemetry.sdk.trace.export import SpanProcessor
 from opentelemetry.trace import Span
 from opentelemetry.context import Context
@@ -36,6 +36,6 @@ class BaggageSpanProcessor(SpanProcessor):
         span: Span,
         parent_context: Context
     ) -> None:
-        stuff = baggage.get_all(parent_context)
+        stuff = get_all(parent_context)
         for key, value in stuff.items():
             span.set_attribute(key, value)
