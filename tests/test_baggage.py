@@ -34,13 +34,13 @@ def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_context(
         # span should have baggage key-value pair in context
         assert get_all_baggage(ctx) == {"queen": "bee"}
         # span should have baggage key-value pair in attribute
-        assert bumble_span._attributes.__getitem__("queen") == "bee"
+        assert bumble_span._attributes["queen"] == "bee"
         with tracer.start_as_current_span(name="child_span", context=ctx) as child_span:
             assert isinstance(child_span, Span)
             # child span should have baggage key-value pair in context
             assert get_all_baggage(ctx) == {"queen": "bee"}
             # child span should have baggage key-value pair in attribute
-            assert child_span._attributes.__getitem__("queen") == "bee"
+            assert child_span._attributes["queen"] == "bee"
 
 
 def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_token():
@@ -58,15 +58,15 @@ def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_token():
     # in a new span, ensure the baggage is there
     with tracer.start_as_current_span("parent") as span:
         assert get_all_baggage() == {"bumble": "bee"}
-        assert span._attributes.__getitem__("bumble") == "bee"
+        assert span._attributes["bumble"] == "bee"
         # create a second context token and set more baggage
         moar_token = attach(set_baggage("moar", "bee"))
         assert get_all_baggage() == {"bumble": "bee", "moar": "bee"}
         # in a child span, ensure all baggage is there as attributes
         with tracer.start_as_current_span("child") as child_span:
             assert get_all_baggage() == {"bumble": "bee", "moar": "bee"}
-            assert child_span._attributes.__getitem__("bumble") == "bee"
-            assert child_span._attributes.__getitem__("moar") == "bee"
+            assert child_span._attributes["bumble"] == "bee"
+            assert child_span._attributes["moar"] == "bee"
         detach(moar_token)
     detach(honey_token)
     assert get_all_baggage() == {}
