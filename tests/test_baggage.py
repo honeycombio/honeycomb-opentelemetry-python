@@ -1,6 +1,5 @@
 from opentelemetry.sdk.trace.export import SpanProcessor
 from opentelemetry.trace import (
-    NoOpTracer,
     Span,
     Tracer
 )
@@ -13,6 +12,7 @@ from honeycomb.opentelemetry.baggage import BaggageSpanProcessor
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.resource import create_resource
 from honeycomb.opentelemetry.trace import create_tracer_provider
+
 
 def test_check_the_baggage():
     baggageProcessor = BaggageSpanProcessor()
@@ -28,7 +28,6 @@ def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_context(
     tracer = tracer_provider.get_tracer("my-tracer")
     assert isinstance(tracer, Tracer)
     assert get_all_baggage() == {}
-
     # set baggage in context
     ctx = set_baggage("queen", "bee")
     with tracer.start_as_current_span(name="bumble", context=ctx) as bumble_span:
@@ -45,7 +44,6 @@ def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_context(
 
 
 def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_token():
-    # TODO check attributes are added from baggage span processor
     options = HoneycombOptions()
     resource = create_resource(options)
     tracer_provider = create_tracer_provider(options, resource)
@@ -54,17 +52,17 @@ def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_token():
     tracer = tracer_provider.get_tracer("my-tracer")
     assert isinstance(tracer, Tracer)
     assert get_all_baggage() == {}
-
+    # create a context token and set baggage
     honey_token = attach(set_baggage("bumble", "bee"))
     assert get_all_baggage() == {"bumble": "bee"}
-
+    # in a new span, ensure the baggage is there
     with tracer.start_as_current_span("parent") as span:
         assert get_all_baggage() == {"bumble": "bee"}
         assert span._attributes.__getitem__("bumble") == "bee"
-       
+        # create a second context token and set more baggage
         moar_token = attach(set_baggage("moar", "bee"))
         assert get_all_baggage() == {"bumble": "bee", "moar": "bee"}
-        
+        # in a child span, ensure all baggage is there as attributes
         with tracer.start_as_current_span("child") as child_span:
             assert get_all_baggage() == {"bumble": "bee", "moar": "bee"}
             assert child_span._attributes.__getitem__("bumble") == "bee"
