@@ -1,3 +1,13 @@
+from opentelemetry.sdk.environment_variables import (
+    OTEL_EXPORTER_OTLP_ENDPOINT,
+    OTEL_EXPORTER_OTLP_INSECURE,
+    OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
+    OTEL_EXPORTER_OTLP_METRICS_INSECURE,
+    OTEL_EXPORTER_OTLP_TRACES_INSECURE,
+    OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
+    OTEL_SERVICE_NAME,
+)
+from tests.utils import APIKEY
 from honeycomb.opentelemetry.options import (
     DEBUG,
     DEFAULT_API_ENDPOINT,
@@ -12,16 +22,6 @@ from honeycomb.opentelemetry.options import (
     HONEYCOMB_TRACES_APIKEY,
     SAMPLE_RATE
 )
-from opentelemetry.sdk.environment_variables import (
-    OTEL_EXPORTER_OTLP_ENDPOINT,
-    OTEL_EXPORTER_OTLP_INSECURE,
-    OTEL_EXPORTER_OTLP_METRICS_ENDPOINT,
-    OTEL_EXPORTER_OTLP_METRICS_INSECURE,
-    OTEL_EXPORTER_OTLP_TRACES_INSECURE,
-    OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
-    OTEL_SERVICE_NAME,
-)
-from tests.utils import APIKEY
 
 EXPECTED_ENDPOINT = "expected endpoint"
 
