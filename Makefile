@@ -12,7 +12,7 @@ install_dev:
 
 #: build a release package
 build: install
-	poetry build
+	poetry build --no-cache -v
 
 #: cleans up smoke test output
 clean-smoke-tests:
