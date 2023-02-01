@@ -197,6 +197,17 @@ def test_sample_rate_from_env_beats_param(monkeypatch):
     assert options.sample_rate == 50
 
 
+def test_invalid_sample_rate_envvar_uses_default(monkeypatch):
+    monkeypatch.setenv(SAMPLE_RATE, "nonsense")
+    options = HoneycombOptions()
+    assert options.sample_rate == 1
+
+
+def test_invalid_sample_rate_param_uses_default():
+    options = HoneycombOptions(sample_rate="nonsense")
+    assert options.sample_rate == 1
+
+
 def test_default_debug_is_false():
     options = HoneycombOptions()
     assert options.debug is False

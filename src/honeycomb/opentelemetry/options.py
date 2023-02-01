@@ -134,6 +134,7 @@ def parse_int(environment_variable: str,
             return int(val)
         except ValueError:
             _logger.warning(error_message)
+            return default_value
     elif isinstance(param, int):
         return param
     else:
