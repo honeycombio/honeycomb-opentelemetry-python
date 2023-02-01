@@ -5,10 +5,10 @@ from opentelemetry.sdk.metrics.export import (
     ConsoleMetricExporter
 )
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
-    OTLPMetricExporter as GRPCSpanExporter
+    OTLPMetricExporter as GRPCMetricExporter
 )
 from opentelemetry.exporter.otlp.proto.http.metric_exporter import (
-    OTLPMetricExporter as HTTPSpanExporter
+    OTLPMetricExporter as HTTPMetricExporter
 )
 from honeycomb.opentelemetry.options import HoneycombOptions
 
@@ -25,13 +25,13 @@ def create_meter_provider(options: HoneycombOptions, resource: Resource):
         MeterProvider: the new meter provider
     """
     if options.metrics_exporter_protocol == "grpc":
-        exporter = GRPCSpanExporter(
+        exporter = GRPCMetricExporter(
             endpoint=options.get_metrics_endpoint(),
             credentials=options.get_metrics_endpoint_credentials(),
             headers=options.get_metrics_headers()
         )
     else:
-        exporter = HTTPSpanExporter(
+        exporter = HTTPMetricExporter(
             endpoint=options.get_metrics_endpoint(),
             headers=options.get_metrics_headers()
         )
