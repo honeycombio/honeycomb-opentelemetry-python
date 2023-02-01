@@ -57,14 +57,18 @@ def test_set_baggage_attaches_to_child_spans_and_detaches_properly_with_token():
 
     honey_token = attach(set_baggage("bumble", "bee"))
     assert get_all_baggage() == {"bumble": "bee"}
+
     with tracer.start_as_current_span("parent") as span:
-        assert isinstance(span, Span)
         assert get_all_baggage() == {"bumble": "bee"}
+        assert span._attributes.__getitem__("bumble") == "bee"
+       
         moar_token = attach(set_baggage("moar", "bee"))
         assert get_all_baggage() == {"bumble": "bee", "moar": "bee"}
+        
         with tracer.start_as_current_span("child") as child_span:
-            assert isinstance(child_span, Span)
             assert get_all_baggage() == {"bumble": "bee", "moar": "bee"}
+            assert child_span._attributes.__getitem__("bumble") == "bee"
+            assert child_span._attributes.__getitem__("moar") == "bee"
         detach(moar_token)
-        detach(honey_token)
-        assert get_all_baggage() == {}
+    detach(honey_token)
+    assert get_all_baggage() == {}
