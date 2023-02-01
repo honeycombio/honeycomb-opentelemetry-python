@@ -174,14 +174,17 @@ def test_can_set_sample_rate_with_param():
     options = HoneycombOptions(sample_rate=123)
     assert options.sample_rate == 123
 
+
 def test_can_set_sample_rate_of_zero_param():
     options = HoneycombOptions(sample_rate=0)
     assert options.sample_rate == 0
+
 
 def test_can_set_sample_rate_of_zero_envar(monkeypatch):
     monkeypatch.setenv(SAMPLE_RATE, "0")
     options = HoneycombOptions()
     assert options.sample_rate == 0
+
 
 def test_can_set_sample_rate_with_envvar(monkeypatch):
     monkeypatch.setenv(SAMPLE_RATE, "321")
@@ -402,7 +405,7 @@ def test_local_vis_from_env_beats_param(monkeypatch):
 
 
 def test_get_traces_endpoint_with_grpc_protocol_returns_correctly_formatted_endpoint(monkeypatch):
-    #grpc
+    # grpc
     protocol = EXPORTER_PROTOCOL_GRPC
 
     # default endpoint
@@ -410,11 +413,13 @@ def test_get_traces_endpoint_with_grpc_protocol_returns_correctly_formatted_endp
     assert options.get_traces_endpoint() == DEFAULT_API_ENDPOINT
 
     # generic endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
     assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
     # traces endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, traces_endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, traces_endpoint=EXPECTED_ENDPOINT)
     assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
     # generic endpoint env
@@ -429,7 +434,7 @@ def test_get_traces_endpoint_with_grpc_protocol_returns_correctly_formatted_endp
 
 
 def test_get_traces_endpoint_with_http_proto_protocol_returns_correctly_formatted_endpoint(monkeypatch):
-    #grpc
+    # grpc
     protocol = EXPORTER_PROTOCOL_HTTP_PROTO
 
     # default endpoint
@@ -437,11 +442,13 @@ def test_get_traces_endpoint_with_http_proto_protocol_returns_correctly_formatte
     assert options.get_traces_endpoint() == DEFAULT_API_ENDPOINT + "/v1/traces"
 
     # generic endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
     assert options.get_traces_endpoint() == EXPECTED_ENDPOINT + "/v1/traces"
 
     # traces endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, traces_endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, traces_endpoint=EXPECTED_ENDPOINT)
     assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
     # generic endpoint env
@@ -456,7 +463,7 @@ def test_get_traces_endpoint_with_http_proto_protocol_returns_correctly_formatte
 
 
 def test_get_metrics_endpoint_with_grpc_protocol_returns_correctly_formatted_endpoint(monkeypatch):
-    #grpc
+    # grpc
     protocol = EXPORTER_PROTOCOL_GRPC
 
     # default endpoint
@@ -464,11 +471,13 @@ def test_get_metrics_endpoint_with_grpc_protocol_returns_correctly_formatted_end
     assert options.get_metrics_endpoint() == DEFAULT_API_ENDPOINT
 
     # generic endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
     assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
     # metrics endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, metrics_endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, metrics_endpoint=EXPECTED_ENDPOINT)
     assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
     # generic endpoint env
@@ -483,7 +492,7 @@ def test_get_metrics_endpoint_with_grpc_protocol_returns_correctly_formatted_end
 
 
 def test_get_metrics_endpoint_with_http_proto_protocol_returns_correctly_formatted_endpoint(monkeypatch):
-    #grpc
+    # grpc
     protocol = EXPORTER_PROTOCOL_HTTP_PROTO
 
     # default endpoint
@@ -491,11 +500,13 @@ def test_get_metrics_endpoint_with_http_proto_protocol_returns_correctly_formatt
     assert options.get_metrics_endpoint() == DEFAULT_API_ENDPOINT + "/v1/metrics"
 
     # generic endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, endpoint=EXPECTED_ENDPOINT)
     assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT + "/v1/metrics"
 
     # metrics endpoint param
-    options = HoneycombOptions(exporter_protocol=protocol, metrics_endpoint=EXPECTED_ENDPOINT)
+    options = HoneycombOptions(
+        exporter_protocol=protocol, metrics_endpoint=EXPECTED_ENDPOINT)
     assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
     # generic endpoint env
