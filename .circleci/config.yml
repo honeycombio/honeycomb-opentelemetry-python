@@ -43,6 +43,26 @@ jobs:
       - run: make test
       - store_test_results:
           path: test-results
+  build:
+    executor:
+      name: python/default
+      tag: *default_python_version
+    steps:
+      - checkout
+      - run: mkdir -p ~/artifacts
+      - run:
+          name: "Build Package"
+          command: make build
+      - run:
+          name: "Copy Artifacts"
+          command: cp dist/* ~/artifacts
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - artifacts
+      - store_artifacts:
+          path: ~/artifacts      
+      
 
 workflows:
   build:
@@ -51,3 +71,10 @@ workflows:
       - codestyle
       - test:
           <<: *matrix_python_versions
+      - build:
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - codestyle
+            - test
