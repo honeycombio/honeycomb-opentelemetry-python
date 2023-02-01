@@ -68,7 +68,7 @@ def test_http_protocol_configures_http_span_exporter_on_batch_span_processor():
     assert isinstance(batch.span_exporter, HTTPSpanExporter)
 
 
-def test_setting_debug_addings_console_exporter_on_simple_span_processor():
+def test_setting_debug_adds_console_exporter_on_simple_span_processor():
     options = HoneycombOptions(debug=True)
     resource = create_resource(options)
     tracer_provider = create_tracer_provider(options, resource)
