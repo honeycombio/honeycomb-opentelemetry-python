@@ -1,5 +1,17 @@
 version: 2.1
 
+filters_always: &filters_always
+  filters:
+    tags:
+      only: /.*/
+
+filters_publish: &filters_publish
+  filters:
+    tags:
+      only: /^v[0-9].*/
+    branches:
+      ignore: /.*/
+
 orbs:
   python: circleci/python@2.1.1
 
@@ -64,19 +76,37 @@ jobs:
             - artifacts
       - store_artifacts:
           path: ~/artifacts      
-      
+
+  publish_github:
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: "Artifacts being published"
+          command: |
+            echo "about to publish to tag ${CIRCLE_TAG}"
+            ls -l ~/artifacts/*
+      - run:
+          name: "Create GitHub Release Draft"
+          command: ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/artifacts
+   
 
 workflows:
   build:
     jobs:
       # - lint # We need to get our rules in order.
-      - codestyle
+      - codestyle:
+          <<: *filters_always
       - test:
           <<: *matrix_python_versions
+          <<: *filters_always
       - build:
-          filters:
-            tags:
-              only: /.*/
+          <<: *filters_always
           requires:
             - codestyle
             - test
+      - publish_github:
+          <<: *filters_publish
+          context: Honeycomb Secrets for Public Repos
+          requires:
+            - build
