@@ -21,6 +21,11 @@ matrix_python_versions: &matrix_python_versions
     parameters:
       python_version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
+executors:
+  github:
+    docker:
+      - image: cibuilds/github:0.13.0
+
 jobs:
   # lint:
   #   executor:
@@ -78,6 +83,7 @@ jobs:
           path: ~/artifacts      
 
   publish_github:
+    executor: github
     steps:
       - attach_workspace:
           at: ~/
