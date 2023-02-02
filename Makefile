@@ -14,6 +14,10 @@ install_dev:
 build: install
 	poetry build --no-cache -v
 
+#: build and publish a package
+publish: install
+	poetry publish --build
+
 #: cleans up smoke test output
 clean-smoke-tests:
 	rm -rf ./smoke-tests/collector/data.json

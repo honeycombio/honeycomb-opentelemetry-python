@@ -49,6 +49,8 @@ jobs:
       tag: *default_python_version
     steps:
       - checkout
+      - python/install-packages:
+          pkg-manager: poetry
       - run: mkdir -p ~/artifacts
       - run:
           name: "Build Package"
