@@ -109,8 +109,11 @@ jobs:
       - run:
           name: "Artifacts being published"
           command: |
+            echo "copying artifacts to /dist"
+            mkdir dist
+            cp ~/artifacts/* dist
             echo "about to publish to tag ${CIRCLE_TAG}"
-            ls -l ~/artifacts/*
+            ls -l dist/*
       - run:
           name: "Publish to PyPI"
           command: make publish
