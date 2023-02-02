@@ -104,6 +104,13 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: poetry
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: "Artifacts being published"
+          command: |
+            echo "about to publish to tag ${CIRCLE_TAG}"
+            ls -l ~/artifacts/*
       - run:
           name: "Publish to PyPI"
           command: make publish
