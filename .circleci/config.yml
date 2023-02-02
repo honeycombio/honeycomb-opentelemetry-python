@@ -95,7 +95,18 @@ jobs:
       - run:
           name: "Create GitHub Release Draft"
           command: ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG}
-   
+  
+  publish_pypi:
+    executor:
+      name: python/default
+      tag: *default_python_version
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          name: "Publish to PyPI"
+          command: make publish
 
 workflows:
   build:
@@ -112,6 +123,11 @@ workflows:
             - codestyle
             - test
       - publish_github:
+          <<: *filters_publish
+          context: Honeycomb Secrets for Public Repos
+          requires:
+            - build
+      - publish_pypi:
           <<: *filters_publish
           context: Honeycomb Secrets for Public Repos
           requires:
