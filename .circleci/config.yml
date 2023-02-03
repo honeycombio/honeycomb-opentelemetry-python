@@ -1,5 +1,17 @@
 version: 2.1
 
+filters_always: &filters_always
+  filters:
+    tags:
+      only: /.*/
+
+filters_publish: &filters_publish
+  filters:
+    tags:
+      only: /^v[0-9].*/
+    branches:
+      ignore: /.*/
+
 orbs:
   python: circleci/python@2.1.1
 
@@ -8,6 +20,11 @@ matrix_python_versions: &matrix_python_versions
   matrix:
     parameters:
       python_version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+executors:
+  github:
+    docker:
+      - image: cibuilds/github:0.13.0
 
 jobs:
   # lint:
@@ -43,11 +60,85 @@ jobs:
       - run: make test
       - store_test_results:
           path: test-results
+  build:
+    executor:
+      name: python/default
+      tag: *default_python_version
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run: mkdir -p ~/artifacts
+      - run:
+          name: "Build Package"
+          command: make build
+      - run:
+          name: "Copy Artifacts"
+          command: cp dist/* ~/artifacts
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - artifacts
+      - store_artifacts:
+          path: ~/artifacts      
+
+  publish_github:
+    executor: github
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: "Artifacts being published"
+          command: |
+            echo "about to publish to tag ${CIRCLE_TAG}"
+            ls -l ~/artifacts/*
+      - run:
+          name: "Create GitHub Release Draft"
+          command: ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/artifacts
+  
+  publish_pypi:
+    executor:
+      name: python/default
+      tag: *default_python_version
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: "Artifacts being published"
+          command: |
+            echo "copying artifacts to /dist"
+            mkdir dist
+            cp ~/artifacts/* dist
+            echo "about to publish to tag ${CIRCLE_TAG}"
+            ls -l dist/*
+      - run:
+          name: "Publish to PyPI"
+          command: make publish
 
 workflows:
   build:
     jobs:
       # - lint # We need to get our rules in order.
-      - codestyle
+      - codestyle:
+          <<: *filters_always
       - test:
           <<: *matrix_python_versions
+          <<: *filters_always
+      - build:
+          <<: *filters_always
+          requires:
+            - codestyle
+            - test
+      - publish_github:
+          <<: *filters_publish
+          context: Honeycomb Secrets for Public Repos
+          requires:
+            - build
+      - publish_pypi:
+          <<: *filters_publish
+          context: Honeycomb Secrets for Public Repos
+          requires:
+            - build
