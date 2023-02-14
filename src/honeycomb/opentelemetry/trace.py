@@ -17,7 +17,7 @@ from honeycomb.opentelemetry.sampler import configure_sampler
 from honeycomb.opentelemetry.baggage import BaggageSpanProcessor
 
 
-def create_tracer_provider(options: HoneycombOptions, resource: Resource):
+def create_tracer_provider(options: HoneycombOptions, resource: Resource) -> TracerProvider:
     """
     Configures and returns a new TracerProvider to send traces telemetry.
 
@@ -26,7 +26,7 @@ def create_tracer_provider(options: HoneycombOptions, resource: Resource):
         resource (Resource): the resource to use with the new tracer provider
 
     Returns:
-        MeterProvider: the new tracer provider
+        TracerProvider: the new tracer provider
     """
     if options.traces_exporter_protocol == "grpc":
         exporter = GRPCSpanExporter(
