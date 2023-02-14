@@ -1,5 +1,14 @@
-"""
-Add module doc string
+"""This honey-flavored Distro configures OpenTelemetry for use with Honeycomb.
+
+TODO:  The rest of this docstring should contain an
+overall description of the module or program.  Optionally, it may also
+contain a brief description of exported classes and functions and/or usage
+examples.
+
+Typical usage example:
+
+  foo = ClassFoo()
+  bar = foo.FunctionBar()
 """
 from logging import getLogger
 from opentelemetry.instrumentation.distro import BaseDistro
@@ -21,7 +30,8 @@ def configure_opentelemetry(
 
     Args:
         options (HoneycombOptions, optional): the HoneycombOptions used to
-        configure the the SDK
+        configure the the SDK. API key is a required option. These options 
+        can be set either with this function or through environment variables
     """
     _logger.debug("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
     _logger.debug(vars(options))
@@ -38,7 +48,7 @@ def configure_opentelemetry(
 # pylint: disable=too-few-public-methods
 class HoneycombDistro(BaseDistro):
     """
-    This honey-flavored Distro configures OpenTelemetry for use with Honeycomb.
+    #TODO: explain this magic
     """
 
     def _configure(self, **kwargs):
