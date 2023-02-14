@@ -1,14 +1,20 @@
 """This honey-flavored Distro configures OpenTelemetry for use with Honeycomb.
 
-TODO:  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
-
 Typical usage example:
 
-  foo = ClassFoo()
-  bar = foo.FunctionBar()
+    using the opentelemetry-instrument command with 
+    requisite env variables set:
+    
+    $bash> opentelemetry-instrument python program.py
+
+    or configured by code within your service:
+    configure_opentelemetry(
+        HoneycombOptions(
+            debug=True,
+            apikey=os.getenv("HONEYCOMB_API_KEY"),
+            service_name="otel-python-example"
+        )
+    )
 """
 from logging import getLogger
 from opentelemetry.instrumentation.distro import BaseDistro
@@ -29,11 +35,13 @@ def configure_opentelemetry(
     Configures the OpenTelemetry SDK to send telemetry to Honeycomb.
 
     Args:
-        options (HoneycombOptions, optional): the HoneycombOptions used to
-        configure the the SDK. API key is a required option. These options 
-        can be set either with this function or through environment variables
+        options (HoneycombOptions, optional*): the HoneycombOptions used to
+        configure the the SDK. These options can be set either as parameters 
+        to this function or through environment variables
+
+        *API key is a required option.
     """
-    _logger.debug("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
+    _logger.info("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
     _logger.debug(vars(options))
     resource = create_resource(options)
     set_tracer_provider(
@@ -48,9 +56,22 @@ def configure_opentelemetry(
 # pylint: disable=too-few-public-methods
 class HoneycombDistro(BaseDistro):
     """
-    #TODO: explain this magic
+    An extension of the base python OpenTelemetry distro, which provides
+    a mechanism to automatically configure some of the more common options
+    for users. This class is auto-detected by the `opentelemetry-instrument`
+    command.
+
+    This class doesn't need to be touched directly when using the distro. If
+    you'd like to explicitly set configuration in code, use the 
+    configure_opentelemetry() function above instead of the 
+    `opentelemetry-instrument` command.
+
+    If you're wondering about the under-the-hood magic - we add the following
+    declaration to package metadata in our pyproject.toml, like so:
+
+    [tool.poetry.plugins."opentelemetry_distro"]
+    distro = "honeycomb.opentelemetry.distro:HoneycombDistro"
     """
 
     def _configure(self, **kwargs):
-        print("🐝 auto instrumented 🐝")
         configure_opentelemetry()
