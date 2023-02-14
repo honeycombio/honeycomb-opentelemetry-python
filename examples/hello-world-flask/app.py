@@ -20,17 +20,18 @@ bee_counter = meter.create_counter('bee_counter')
 
 # Recommended: use attach and detach tokens for Context management with Baggage
 
-
 @app.route("/")
 def hello_world():
     token = attach(baggage.set_baggage("queen", "bee"))
- 
+
     with tracer.start_as_current_span(name="honey"):
         token_honey = attach(baggage.set_baggage("honey", "bee"))
 
         with tracer.start_as_current_span(name="child"):
             # this goes nowhere if it is the final span in a trace
-            child_token = attach(baggage.set_baggage("bee", "that_maybe_doesnt_propagate"))
+            child_token = attach(
+                baggage.set_baggage("bee", "that_maybe_doesnt_propagate")
+            )
             detach(child_token)
         detach(token_honey)
     detach(token)
@@ -38,6 +39,7 @@ def hello_world():
     return "Hello World"
 
 # For manually passing around the Context for baggage
+
 @app.route("/ctx")
 def hello_ctx_world():
     ctx = baggage.set_baggage("worker", "bees")
@@ -47,6 +49,9 @@ def hello_ctx_world():
         ctx = baggage.set_baggage("additional", "bees", ctx)
         with tracer.start_as_current_span(name="last", context=ctx):
             # this goes nowhere if it is the final span in a trace
-            ctx = baggage.set_baggage("last", "bee", ctx) 
+            ctx = baggage.set_baggage("last", "bee", ctx)
     bee_counter.add(1, {'app.route': '/ctx'})
     return "Hello Context World"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

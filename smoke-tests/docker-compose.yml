@@ -11,8 +11,11 @@ x-env-base: &env_base
 x-app-base: &app_base
   build:
     context: ../
-    dockerfile: ./examples/hello-world/Dockerfile
-  image: honeycomb/hello-world
+    dockerfile: ./examples/hello-world-flask/Dockerfile
+  image: honeycomb/hello-world-flask
+  stop_signal: SIGINT
+  ports:
+    - "127.0.0.1:5000:5000"
   # depends_on:
   #   - collector
 
@@ -29,8 +32,6 @@ services:
     environment:
       <<: *env_base
       OTEL_EXPORTER_OTLP_PROTOCOL: grpc
-    ports:
-      - "127.0.0.1:5000:5000"
 
   app-sdk-http:
     <<: *app_base
@@ -38,5 +39,3 @@ services:
       <<: *env_base
       HONEYCOMB_API_ENDPOINT: http://collector:4318
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
-    ports:
-      - "127.0.0.1:5000:5000"
