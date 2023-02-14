@@ -31,7 +31,7 @@ def test_exporter_formats_correct_url_and_in_stdout(requests_mock, capsys):
     _check_exporter_can_export_spans_successfully(exporter)
     # ensure the link is in stdout
     captured = capsys.readouterr()
-    assert captured.out == 'Honeycomb link: https://ui.honeycomb.io/my-team/environments/my-env/datasets/my-service/trace?trace_id=a59c68a6de76d5e642bdc9a7641ae5f0\n'
+    assert captured.out == f'Honeycomb link: {url}\n'
 
 
 def test_exporter_formats_correct_url_classic_and_in_stdout(requests_mock, capsys):
@@ -44,7 +44,7 @@ def test_exporter_formats_correct_url_classic_and_in_stdout(requests_mock, capsy
     _check_exporter_can_export_spans_successfully(exporter)
     # ensure the link is in stdout
     captured = capsys.readouterr()
-    assert captured.out == 'Honeycomb link: https://ui.honeycomb.io/my-team/datasets/my-service/trace?trace_id=a59c68a6de76d5e642bdc9a7641ae5f0\n'
+    assert captured.out == f'Honeycomb link: {url}\n'
 
 
 def test_exporter_without_apikey_does_not_build_url():
