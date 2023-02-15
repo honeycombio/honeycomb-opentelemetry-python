@@ -6,7 +6,8 @@ configure_opentelemetry(
     HoneycombOptions(
         debug=True,
         apikey=os.getenv("HONEYCOMB_API_KEY"),
-        service_name="otel-python-example"
+        service_name="otel-python-example",
+        enable_local_visualizations=True
     )
 )
 

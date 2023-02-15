@@ -6,6 +6,8 @@ from opentelemetry.context import attach, detach
 # use environment variables
 # export HONEYCOMB_API_KEY=abc123
 # export OTEL_SERVICE_NAME=otel-python-example
+# export DEBUG=true
+# HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS=true
 
 app = Flask(__name__)
 tracer = trace.get_tracer(__name__)
