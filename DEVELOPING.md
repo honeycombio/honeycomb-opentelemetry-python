@@ -3,30 +3,30 @@
 Requires [poetry](https://python-poetry.org/docs/) for dependency management and packaging.
 Run `poetry --version` to verify it is installed. A minimum of Poetry 1.2 is required.
 
+Our development workflow leverages the venerable tool Make.
+Many of the routine development tasks like running tests or producing a build are automated as make targets.
+For an improved Make experience, we recommend, but do not require, [remake](https://remake.readthedocs.io/en/latest/).
+`remake --tasks` will output a list of the commonly-used make targets.
+`remake` may be substituted for `make` in any of the commands below.
+
 ## Package setup and build
 
 ```bash
-poetry install
-poetry build
+make install
+make build
 ```
 
 ## Testing
 
 ```bash
-poetry run pytest tests
-```
-
-or
-
-```bash
-poetry run coverage run -m pytest tests
+make test
 ```
 
 ## Linting & Code Style
 
 ```bash
-poetry run pylint src
-poetry run pycodestyle src tests
+make lint
+make style
 ```
 
 ## Examples
