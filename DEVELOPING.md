@@ -29,16 +29,6 @@ poetry run pylint src
 poetry run pycodestyle src tests
 ```
 
-## Examples
-
-### Example Flask Application
-
-Readme can be found [here](examples/hello-world-flask/README.md) for setting this up.
-
-### Example Python Application
-
-Readme can be found [here](examples/hello-world/README.md) for setting this up.
-
 ## Troubleshooting
 
 Sometimes cache can cause unexpected behavior.
