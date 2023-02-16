@@ -18,7 +18,9 @@ tracer = trace.get_tracer(__name__)
 meter = metrics.get_meter(__name__)
 bee_counter = meter.create_counter('bee_counter')
 
-#Recommended: use attach and detach tokens for Context management with Baggage
+# Recommended: use attach and detach tokens for Context management with Baggage
+
+
 @app.route("/")
 def hello_world():
     token = attach(baggage.set_baggage("queen", "bee"))
