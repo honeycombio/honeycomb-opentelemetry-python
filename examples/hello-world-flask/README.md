@@ -32,8 +32,9 @@ Hello World
 To send traces to local console:
 
 For local export right now
+
 ```bash
-$ DEBUG=TRUE poetry run opentelemetry-instrument flask run
+DEBUG=TRUE poetry run opentelemetry-instrument flask run
 ```
 
 To send to Honeycomb:
