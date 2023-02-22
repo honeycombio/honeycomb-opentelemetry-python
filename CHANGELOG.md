@@ -1,4 +1,4 @@
-# honeycomb-opentelemetry-js changelog
+# honeycomb-opentelemetry-python changelog
 
 ## [0.1.1a2] - 2023-02-22
 
