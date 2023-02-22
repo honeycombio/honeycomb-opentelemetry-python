@@ -1,8 +1,8 @@
 # Honeycomb OpenTelemetry Distro for Python
 
 <!-- Uncomment once repo is public -->
-<!-- [![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/honeycomb-opentelemetry-python)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md) -->
-<!-- [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python) -->
+[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/honeycomb-opentelemetry-python)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
+[![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python)
 
 This is Honeycomb's Distribution of OpenTelemetry for python.
 It makes getting started with OpenTelemetry and Honeycomb easier!
