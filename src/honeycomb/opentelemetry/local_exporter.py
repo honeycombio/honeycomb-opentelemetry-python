@@ -7,6 +7,9 @@ from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
 from honeycomb.opentelemetry.options import HoneycombOptions, is_classic
 
+MISSING_API_OR_SERVICE_NAME_ERROR = "disabling local visualizations - " + \
+    "must have both service name and API key configured."
+
 _logger = getLogger(__name__)
 
 
@@ -42,9 +45,7 @@ class LocalTraceLinkSpanExporter(SpanExporter):
         apikey: str
     ):
         if not service_name or not apikey:
-            _logger.warning(
-                "disabling local visualizations - service name and API key must be configured."
-            )
+            _logger.warning(MISSING_API_OR_SERVICE_NAME_ERROR)
             return
 
         self.trace_link_url = self._build_trace_link_url(
