@@ -184,8 +184,9 @@ class HoneycombOptions:
     Setting the debug flag TRUE enables verbose logging and sets the
     OTEL_LOG_LEVEL to DEBUG.
 
-    TODO: Something about fallback order between Parameter,
-    Environment, and Default values
+    An option set as an environment variable will override any existing
+    options declared as parameter variables, if neither are present it
+    will fall back to the default value.
 
     Defaults are declared at the top of this file, i.e. DEFAULT_SAMPLE_RATE = 1
     """
