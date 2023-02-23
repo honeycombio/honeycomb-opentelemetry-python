@@ -10,15 +10,22 @@ ENV PYTHONFAULTHANDLER=1 \
   PIP_NO_CACHE_DIR=off \
   PIP_DISABLE_PIP_VERSION_CHECK=on \
   PIP_DEFAULT_TIMEOUT=100 \
-  POETRY_VERSION=1.2.0
+  POETRY_VERSION=1.3.2
 
+# This project is poetic.
 RUN pip install "poetry==$POETRY_VERSION"
-RUN pip install "flask==2.2.2"
+# This image is single purpose, so we won't need to compartmentalize Py deps in virtualenvs.
+RUN poetry config virtualenvs.create false
 
-COPY . .
+# Copy the distro into the image and install deps.
+COPY README.md pyproject.toml poetry.lock ./
+COPY src/ ./src/
 RUN poetry install
-RUN cd ./examples/hello-world-flask && poetry install
-COPY ./examples/hello-world-flask ./
 
-ENTRYPOINT ["poetry", "run"]
-CMD ["flask", "--app", "hello-world-flask/app.py", "run"]
+# Copy the examples into the image and install deps.
+COPY examples/ ./examples/
+RUN cd ./examples/hello-world-flask && poetry install
+
+# From this point forward, we're operating on the flask example.
+WORKDIR /app/examples/hello-world-flask
+CMD ["flask", "run"]
