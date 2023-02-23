@@ -1,6 +1,7 @@
 import typing
-import requests
 from logging import getLogger
+import requests
+
 
 from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
@@ -41,8 +42,9 @@ class LocalTraceLinkSpanExporter(SpanExporter):
         apikey: str
     ):
         if not service_name or not apikey:
-            _logger.warning("disabling local visualizations - must have both " +
-                            "service name and API key configured.")
+            _logger.warning(
+                "disabling local visualizations - service name and API key must be configured."
+            )
             return
 
         self.trace_link_url = self._build_trace_link_url(

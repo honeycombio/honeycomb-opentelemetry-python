@@ -21,13 +21,15 @@ _logger = getLogger(__name__)
 def configure_sampler(
     options: HoneycombOptions = HoneycombOptions(),
 ):
+    """
+    TODO: What does a deterministic sampler do?
+    """
     return DeterministicSampler(options.sample_rate)
 
 
 class DeterministicSampler(Sampler):
     """
-    Custom samplers can be created by subclassing Sampler and implementing
-    Sampler.should_sample as well as Sampler.get_description.
+    TODO: What does a deterministic sampler do?
     """
 
     def __init__(self, rate: int):

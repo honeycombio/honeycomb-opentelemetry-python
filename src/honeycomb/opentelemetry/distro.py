@@ -2,9 +2,9 @@
 
 Typical usage example:
 
-    using the opentelemetry-instrument command with 
+    using the opentelemetry-instrument command with
     requisite env variables set:
-    
+
     $bash> opentelemetry-instrument python program.py
 
     or configured by code within your service:
@@ -36,7 +36,7 @@ def configure_opentelemetry(
 
     Args:
         options (HoneycombOptions, optional*): the HoneycombOptions used to
-        configure the the SDK. These options can be set either as parameters 
+        configure the the SDK. These options can be set either as parameters
         to this function or through environment variables
 
         *API key is a required option.
@@ -62,8 +62,8 @@ class HoneycombDistro(BaseDistro):
     command.
 
     This class doesn't need to be touched directly when using the distro. If
-    you'd like to explicitly set configuration in code, use the 
-    configure_opentelemetry() function above instead of the 
+    you'd like to explicitly set configuration in code, use the
+    configure_opentelemetry() function above instead of the
     `opentelemetry-instrument` command.
 
     If you're wondering about the under-the-hood magic - we add the following

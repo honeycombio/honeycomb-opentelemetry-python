@@ -17,7 +17,10 @@ from honeycomb.opentelemetry.sampler import configure_sampler
 from honeycomb.opentelemetry.baggage import BaggageSpanProcessor
 
 
-def create_tracer_provider(options: HoneycombOptions, resource: Resource) -> TracerProvider:
+def create_tracer_provider(
+    options: HoneycombOptions,
+    resource: Resource
+) -> TracerProvider:
     """
     Configures and returns a new TracerProvider to send traces telemetry.
 

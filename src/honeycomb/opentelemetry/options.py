@@ -181,10 +181,11 @@ class HoneycombOptions:
     """
     Honeycomb Options used to configure the OpenTelemetry SDK.
 
-    Setting the debug flag TRUE enables verbose logging and sets the OTEL_LOG_LEVEL
-    to DEBUG.
+    Setting the debug flag TRUE enables verbose logging and sets the
+    OTEL_LOG_LEVEL to DEBUG.
 
-    TODO: Something about fallback order between Parameter, Environment, and Default values
+    TODO: Something about fallback order between Parameter,
+    Environment, and Default values
 
     Defaults are declared at the top of this file, i.e. DEFAULT_SAMPLE_RATE = 1
     """
