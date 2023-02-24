@@ -17,7 +17,7 @@ build: install
 #: build and publish a package
 publish: install
 	poetry publish -u honeycomb -p ${PYPI_PASSWORD}
- 
+
 #: cleans up smoke test output
 clean-smoke-tests:
 	rm -rf ./smoke-tests/collector/data.json
