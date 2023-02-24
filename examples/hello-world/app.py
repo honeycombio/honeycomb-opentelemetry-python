@@ -33,10 +33,10 @@ configure_opentelemetry(
 # export HONEYCOMB_API_KEY=abc123
 # export OTEL_SERVICE_NAME=otel-python-example
 
-meter = metrics.get_meter("hello_world")
+meter = metrics.get_meter("hello_world_meter")
 sheep = meter.create_counter('sheep')
 
-tracer = trace.get_tracer("hello_world")
+tracer = trace.get_tracer("hello_world_tracer")
 
 def hello_world():
     token = attach(baggage.set_baggage(
