@@ -14,6 +14,7 @@ filters_publish: &filters_publish
 
 orbs:
   python: circleci/python@2.1.1
+  bats: circleci/bats@1.0.0
 
 default_python_version: &default_python_version "3.10"
 matrix_python_versions: &matrix_python_versions
@@ -82,8 +83,33 @@ jobs:
           paths:
             - artifacts
       - store_artifacts:
-          path: ~/artifacts      
+          path: ~/artifacts
 
+  smoke_test:
+    machine:
+      image: ubuntu-2004:202107-02
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - bats/install
+      - run:
+          name: What's the BATS?
+          command: |
+            which bats
+            bats --version
+      - run:
+          name: Smoke Test
+          command: make smoke-sdk-grpc
+      - store_test_results:
+          path: ./smoke-tests/
+      - store_artifacts:
+          path: ./smoke-tests/report.xml
+      - store_artifacts:
+          path: ./smoke-tests/collector/data-results
+      - run:
+          name: Extinguish the flames
+          command: make unsmoke
   publish_github:
     executor: github
     steps:
@@ -97,7 +123,7 @@ jobs:
       - run:
           name: "Create GitHub Release Draft"
           command: ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/artifacts
-  
+
   publish_pypi:
     executor:
       name: python/default
@@ -133,6 +159,10 @@ workflows:
           <<: *filters_always
           requires:
             - codestyle
+            - test
+      - smoke_test:
+          <<: *filters_always
+          requires:
             - test
       - publish_github:
           <<: *filters_publish
