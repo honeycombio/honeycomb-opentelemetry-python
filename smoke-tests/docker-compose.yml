@@ -14,8 +14,8 @@ x-app-base: &app_base
     context: ../
     dockerfile: ./examples/hello-world/Dockerfile
   image: honeycomb/hello-world
-  # depends_on:
-  #   - collector
+  depends_on:
+    - collector
 
 services:
   collector:
