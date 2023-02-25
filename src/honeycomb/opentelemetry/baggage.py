@@ -1,3 +1,4 @@
+from typing import Optional
 from opentelemetry.baggage import get_all as get_all_baggage
 from opentelemetry.sdk.trace.export import SpanProcessor
 from opentelemetry.trace import Span
@@ -33,8 +34,8 @@ class BaggageSpanProcessor(SpanProcessor):
 
     def on_start(
         self,
-        span: Span,
-        parent_context: Context
+        span: "Span",
+        parent_context: Optional[Context] = None
     ) -> None:
         baggage = get_all_baggage(parent_context)
         for key, value in baggage.items():
