@@ -60,8 +60,10 @@ jobs:
       - run: make test
       - store_test_results:
           path: test-results
+          destination: junit.xml
       - store_artifacts:
-          path: test-reports
+          path: test-results
+          destination: coverage.xml
   build:
     executor:
       name: python/default
