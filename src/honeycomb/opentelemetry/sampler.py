@@ -21,15 +21,34 @@ _logger = getLogger(__name__)
 def configure_sampler(
     options: HoneycombOptions = HoneycombOptions(),
 ):
-    """
-    TODO: What does a deterministic sampler do?
+    """Configures and returns an OpenTelemetry Sampler that is
+    configured based on the sample_rate determined in HoneycombOptions.
+    The configuration initializes a DeterministicSampler with
+    an inner sampler of either DefaultOn (1), Default Off (0),
+    or a TraceIdRatio as 1/N.
+
+    Each of these samplers is ParentBased, meaning it respects
+    its parent span's sampling decision.
+
+    Args:
+        options (HoneycombOptions): the HoneycombOptins containing
+        sample_rate used to configure the deterministic sampler.
+
+    Returns:
+        DeterministicSampler: the configured Sampler based on sample_rate
     """
     return DeterministicSampler(options.sample_rate)
 
 
 class DeterministicSampler(Sampler):
-    """
-    TODO: What does a deterministic sampler do?
+    """Implementation of :class:`Sampler` that uses an inner sampler
+    of either DefaultOn (1), Default Off (0), or a TraceIdRatio as 1/N
+    to determine a SamplingResult and SamplingDecision for a given span
+    in a trace. We append a SampleRate attribute to the span with the
+    given sample rate.
+
+    Note: Each of these samplers is ParentBased, meaning it respects
+    its parent span's sampling decision.
     """
 
     def __init__(self, rate: int):
