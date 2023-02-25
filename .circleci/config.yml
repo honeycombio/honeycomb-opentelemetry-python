@@ -27,15 +27,15 @@ executors:
       - image: cibuilds/github:0.13.0
 
 jobs:
-  # lint:
-  #   executor:
-  #     name: python/default
-  #     tag: *default_python_version
-  #   steps:
-  #     - checkout
-  #     - python/install-packages:
-  #         pkg-manager: poetry
-  #     - run: make lint
+  lint:
+    executor:
+      name: python/default
+      tag: *default_python_version
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run: make lint
   codestyle:
     executor:
       name: python/default
@@ -121,7 +121,7 @@ jobs:
 workflows:
   build:
     jobs:
-      # - lint # We need to get our rules in order.
+      - lint
       - codestyle:
           <<: *filters_always
       - test:
