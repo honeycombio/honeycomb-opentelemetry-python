@@ -66,7 +66,7 @@ class LocalTraceLinkSpanExporter(SpanExporter):
                     )
         return SpanExportResult.SUCCESS
 
-    def force_flush(self) -> bool:
+    def force_flush(self, timeout_millis: int = 30000) -> bool:
         """Ensures all telemetry waiting to be dispatched is processed.
         """
         return True
