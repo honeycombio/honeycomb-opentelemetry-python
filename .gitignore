@@ -12,6 +12,6 @@ bin
 
 .vscode
 .coverage
+htmlcov
 .env
 test-results/
-test-reports/
