@@ -40,9 +40,9 @@ clean: clean-smoke-tests clean-cache
 #: run the unit tests with a clean environment, create coverage report html
 test: build
 	mkdir -p test-results
-	unset ${OUR_CONFIG_ENV_VARS} && poetry run pytest tests --junitxml=test-results/junit.xml
-	poetry run coverage html
-
+	unset ${OUR_CONFIG_ENV_VARS} && poetry run pytest tests --junitxml=test-results/junit.xml 
+	mkdir -p test-reports
+	poetry run coverage report && poetry run coverage xml -o test-reports/coverage.xml
 
 #: nitpick lint
 lint: install_dev
