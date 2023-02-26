@@ -28,4 +28,4 @@ RUN cd ./examples/hello-world-flask && poetry install
 
 # From this point forward, we're operating on the flask example.
 WORKDIR /app/examples/hello-world-flask
-CMD ["flask", "run"]
+CMD ["poetry", "run", "opentelemetry-instrument", "flask", "run"]
