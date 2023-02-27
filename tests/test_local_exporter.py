@@ -21,7 +21,7 @@ def _check_exporter_can_export_spans_successfully(exporter: SpanExporter):
     assert result == SpanExportResult.SUCCESS
 
 
-def test_exporter_formats_correct_url(requests_mock):
+def test_exporter_formats_correct_url_and_in_stdout(requests_mock, capsys):
     requests_mock.get("https://api.honeycomb.io/1/auth",
                       json={"environment": {"slug": "my-env"}, "team": {"slug": "my-team"}})
     exporter = LocalTraceLinkSpanExporter(
@@ -29,9 +29,12 @@ def test_exporter_formats_correct_url(requests_mock):
     url = exporter._build_url(TRACE_ID)
     assert url == "https://ui.honeycomb.io/my-team/environments/my-env/datasets/my-service/trace?trace_id=a59c68a6de76d5e642bdc9a7641ae5f0"
     _check_exporter_can_export_spans_successfully(exporter)
+    # ensure the link is in stdout
+    captured = capsys.readouterr()
+    assert captured.out == f'Honeycomb link: {url}\n'
 
 
-def test_exporter_formats_correct_url_classic(requests_mock):
+def test_exporter_formats_correct_url_classic_and_in_stdout(requests_mock, capsys):
     requests_mock.get("https://api.honeycomb.io/1/auth",
                       json={"team": {"slug": "my-team"}})
     exporter = LocalTraceLinkSpanExporter(
@@ -39,6 +42,9 @@ def test_exporter_formats_correct_url_classic(requests_mock):
     url = exporter._build_url(TRACE_ID)
     assert url == "https://ui.honeycomb.io/my-team/datasets/my-service/trace?trace_id=a59c68a6de76d5e642bdc9a7641ae5f0"
     _check_exporter_can_export_spans_successfully(exporter)
+    # ensure the link is in stdout
+    captured = capsys.readouterr()
+    assert captured.out == f'Honeycomb link: {url}\n'
 
 
 def test_exporter_without_apikey_does_not_build_url():

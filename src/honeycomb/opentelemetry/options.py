@@ -15,18 +15,27 @@ from opentelemetry.sdk.environment_variables import (
 )
 from grpc import ssl_channel_credentials
 
+# Environment Variable Names
+OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 DEBUG = "DEBUG"
+HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS"
+SAMPLE_RATE = "SAMPLE_RATE"
+
+# HNY Credential Names
+HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
+HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
+HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
+HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
+HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
+
+# Default values
 DEFAULT_API_ENDPOINT = "https://api.honeycomb.io:443"
 DEFAULT_EXPORTER_PROTOCOL = "grpc"
 DEFAULT_SERVICE_NAME = "unknown_service:python"
 DEFAULT_LOG_LEVEL = "ERROR"
 DEFAULT_SAMPLE_RATE = 1
-HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
-HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
-HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS"
-HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
-HONEYCOMB_METRICS_DATASET = "HONEYCOMB_METRICS_DATASET"
-HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
+
+# Errors and Warnings
 INVALID_DEBUG_ERROR = "Unable to parse DEBUG environment variable. " + \
     "Defaulting to False."
 INVALID_INSECURE_ERROR = "Unable to parse " + \
@@ -55,8 +64,6 @@ MISSING_DATASET_ERROR = "Missing dataset. Specify either " + \
 IGNORED_DATASET_ERROR = "Dataset is ignored in favor of service name."
 # not currently supported in OTel SDK, open PR:
 # https://github.com/open-telemetry/opentelemetry-specification/issues/1901
-OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
-SAMPLE_RATE = "SAMPLE_RATE"
 
 log_levels = {
     "NOTSET": logging.NOTSET,
@@ -78,18 +85,21 @@ exporter_protocols = {
 _logger = logging.getLogger(__name__)
 
 
-def is_classic(apikey: str):
+def is_classic(apikey: str) -> bool:
     """
     Determines whether the passed in API key is a classic API key or not.
     Modern API keys have 22 or 23 characters.
     Classic API keys have 32 characters.
+
+    Returns:
+        bool: true if the api key is a classic key, false if not
     """
     return apikey and len(apikey) == 32
 
 
 def parse_bool(environment_variable: str,
                default_value: bool,
-               error_message: str):
+               error_message: str) -> bool:
     """
     Attempts to parse the provided environment variable into a bool. If it
     does not exist or fails parse, the default value is returned instead.
@@ -114,7 +124,7 @@ def parse_bool(environment_variable: str,
 def parse_int(environment_variable: str,
               param: int,
               default_value: int,
-              error_message: str):
+              error_message: str) -> int:
     """
     Attempts to parse the provided environment variable into an int. If it
     does not exist or fails parse, the default value is returned instead.
@@ -141,7 +151,7 @@ def parse_int(environment_variable: str,
         return default_value
 
 
-def _append_traces_path(protocol: str, endpoint: str):
+def _append_traces_path(protocol: str, endpoint: str) -> str:
     """
     Appends the OTLP traces HTTP path '/v1/traces' to the endpoint if the
     protocol is http/protobuf.
@@ -154,7 +164,7 @@ def _append_traces_path(protocol: str, endpoint: str):
     return endpoint
 
 
-def _append_metrics_path(protocol: str, endpoint: str):
+def _append_metrics_path(protocol: str, endpoint: str) -> str:
     """
     Appends the OTLP metrics HTTP path '/v1/metrics' to the endpoint if the
     protocol is http/protobuf.
@@ -172,8 +182,14 @@ class HoneycombOptions:
     """
     Honeycomb Options used to configure the OpenTelemetry SDK.
 
-    Setting the debug flag enables verbose logging and sets the OTEL_LOG_LEVEL
-    to DEBUG.
+    Setting the debug flag TRUE enables verbose logging and sets the
+    OTEL_LOG_LEVEL to DEBUG.
+
+    An option set as an environment variable will override any existing
+    options declared as parameter variables, if neither are present it
+    will fall back to the default value.
+
+    Defaults are declared at the top of this file, i.e. DEFAULT_SAMPLE_RATE = 1
     """
     traces_apikey = None
     metrics_apikey = None
@@ -356,13 +372,13 @@ class HoneycombOptions:
             INVALID_LOCAL_VIS_ERROR
         )
 
-    def get_traces_endpoint(self):
+    def get_traces_endpoint(self) -> str:
         """
         Returns the OTLP traces endpoint to send spans to.
         """
         return self.traces_endpoint
 
-    def get_metrics_endpoint(self):
+    def get_metrics_endpoint(self) -> str:
         """
         Returns the OTLP metrics endpoint to send metrics to.
         """

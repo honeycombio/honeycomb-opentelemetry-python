@@ -1,13 +1,20 @@
 import typing
+from logging import getLogger
 import requests
+
+
 from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
 from honeycomb.opentelemetry.options import HoneycombOptions, is_classic
 
+MISSING_API_OR_SERVICE_NAME_ERROR = "disabling local visualizations - " + \
+    "must have both service name and API key configured."
+
+_logger = getLogger(__name__)
+
 
 def configure_local_exporter(options: HoneycombOptions):
-    """
-    Configures and returns an OpenTelemetry Span Exporter that prints
+    """Configures and returns an OpenTelemetry Span Exporter that prints
     direct web links for completed traces in Honeycomb on stdout.
 
     Args:
@@ -26,6 +33,7 @@ def configure_local_exporter(options: HoneycombOptions):
 class LocalTraceLinkSpanExporter(SpanExporter):
     """Implementation of :class:`SpanExporter` that prints direct trace links
     to Honeycomb to the console.
+
     This class can be used for diagnostic purposes. It prints the exported
     spans to the console STDOUT.
     """
@@ -37,8 +45,7 @@ class LocalTraceLinkSpanExporter(SpanExporter):
         apikey: str
     ):
         if not service_name or not apikey:
-            print("disabling local visualizations - must have both " +
-                  "service name and API key configured.")
+            _logger.warning(MISSING_API_OR_SERVICE_NAME_ERROR)
             return
 
         self.trace_link_url = self._build_trace_link_url(
@@ -71,7 +78,7 @@ class LocalTraceLinkSpanExporter(SpanExporter):
             timeout=30000  # 30 seconds
         )
         if not resp.ok:
-            print("failed to get auth data from Honeycomb API")
+            _logger.warning("failed to get auth data from Honeycomb API")
             return None
 
         resp_data = resp.json()
