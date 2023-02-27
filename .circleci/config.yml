@@ -60,6 +60,8 @@ jobs:
       - run: make test
       - store_test_results:
           path: test-results
+      - store_artifacts:
+          path: htmlcov
   build:
     executor:
       name: python/default
