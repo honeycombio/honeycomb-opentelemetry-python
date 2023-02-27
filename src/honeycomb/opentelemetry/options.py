@@ -14,6 +14,7 @@ from opentelemetry.sdk.environment_variables import (
     OTEL_SERVICE_NAME
 )
 from grpc import ssl_channel_credentials
+OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 
 # Environment Variable Names
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
