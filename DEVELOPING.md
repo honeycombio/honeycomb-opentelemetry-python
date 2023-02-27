@@ -3,41 +3,32 @@
 Requires [poetry](https://python-poetry.org/docs/) for dependency management and packaging.
 Run `poetry --version` to verify it is installed. A minimum of Poetry 1.2 is required.
 
+Our development workflow leverages a `Makefile` to define "targets" for most of the routine development tasks for this project, like running tests or producing a build.
+These targets can be run with the venerable build tool [GNU Make](https://www.gnu.org/software/make/) or one of its variants, like [remake](https://remake.readthedocs.io/en/latest/).
+
+While the `make` command is possibly already installed on your computer, we recommend `remake` which extends GNU Make to add profiling, debugging, improved error messages, and usage help text for targets.
+`remake --tasks` will output a list of the commonly-used make targets.
+`remake` may be substituted for `make` in any of the commands below.
+
 ## Package setup and build
 
 ```bash
-poetry install
-poetry build
+make install
+make build
 ```
 
 ## Testing
 
 ```bash
-poetry run pytest tests
-```
-
-or
-
-```bash
-poetry run coverage run -m pytest tests
+make test
 ```
 
 ## Linting & Code Style
 
 ```bash
-poetry run pylint src
-poetry run pycodestyle src tests
+make lint
+make style
 ```
-
-## Examples
-
-### Example Flask Application
-
-Readme can be found [here](examples/hello-world-flask/README.md) for setting this up.
-
-### Example Python Application
-
-Readme can be found [here](examples/hello-world/README.md) for setting this up.
 
 ## Troubleshooting
 

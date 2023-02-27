@@ -1,6 +1,6 @@
 # hello-world-flask
 
-This simple Flask app that returns "Hello World".
+This simple Flask app that returns "Hello World". This app configures OpenTelemetry to send data to Honeycomb through environment variables. It also contains an example of sending metrics with OpenTelemetry.
 
 ## Prerequisites
 
@@ -32,8 +32,9 @@ Hello World
 To send traces to local console:
 
 For local export right now
+
 ```bash
-$ DEBUG=TRUE poetry run opentelemetry-instrument flask run
+DEBUG=TRUE poetry run opentelemetry-instrument flask run
 ```
 
 To send to Honeycomb:
