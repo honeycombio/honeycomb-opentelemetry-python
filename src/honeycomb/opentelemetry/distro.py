@@ -39,7 +39,7 @@ def configure_opentelemetry(
         configure the the SDK. These options can be set either as parameters
         to this function or through environment variables
 
-        *API key is a required option.
+        Note: API key is a required option.
     """
     _logger.info("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
     _logger.debug(vars(options))
