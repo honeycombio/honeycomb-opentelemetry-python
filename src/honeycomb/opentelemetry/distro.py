@@ -35,11 +35,11 @@ def configure_opentelemetry(
     Configures the OpenTelemetry SDK to send telemetry to Honeycomb.
 
     Args:
-        options (HoneycombOptions, optional*): the HoneycombOptions used to
+        options (HoneycombOptions, optional): the HoneycombOptions used to
         configure the the SDK. These options can be set either as parameters
         to this function or through environment variables
 
-        *API key is a required option.
+        Note: API key is a required option.
     """
     _logger.info("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
     _logger.debug(vars(options))
