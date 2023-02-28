@@ -71,6 +71,19 @@ smoke-sdk-http: smoke-tests/collector/data.json
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
 
+#: not yet implemented; smoke grpc
+smoke-sdk-grpc-flask: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running gRPC Flask smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-grpc-flask.bats --report-formatter junit --output ./
+
+smoke-sdk-http-flask: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running HTTP Flask smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-http-flask.bats --report-formatter junit --output ./
+
 #: smoke test the app using grpc and then http/protobuf protocols
 smoke-sdk: smoke-sdk-grpc smoke-sdk-http
 
