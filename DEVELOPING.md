@@ -17,10 +17,47 @@ make install
 make build
 ```
 
+## Examples
+
+### Example Flask Application
+
+Readme can be found [here](examples/hello-world-flask/README.md) for setting this up.
+
+### Example Python Application
+
+Readme can be found [here](examples/hello-world/README.md) for setting this up.
+
+### Running with Docker-Compose
+
+In the smoke-tests directory there exists a `docker-compose.yml` to run in Docker.
+
+Because each example uses the same port, either comment out the other apps in the docker-compose file, or specify the app to run:
+
+```bash
+cd smoke-tests && docker-compose up --build app-sdk-grpc
+```
+
 ## Testing
+
+### Unit Tests
 
 ```bash
 make test
+```
+
+### Smoke Tests
+
+Install `bats-core` and `jq` for local testing:
+
+```bash
+brew install bats-core
+brew install jq
+```
+
+```bash
+make smoke-sdk
+# or specify a single protocol like with http or grpc:
+make smoke-sdk-grpc
 ```
 
 ## Linting & Code Style
