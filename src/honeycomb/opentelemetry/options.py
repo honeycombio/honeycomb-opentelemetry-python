@@ -297,10 +297,13 @@ class HoneycombOptions:
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
             self.metrics_exporter_protocol = exporter_protocol
 
-        endpoint = os.environ.get(
+        self.endpoint = os.environ.get(
             HONEYCOMB_API_ENDPOINT,
-            DEFAULT_API_ENDPOINT
+            None
         )
+
+        if not self.endpoint:
+            self.endpoint = endpoint or DEFAULT_API_ENDPOINT
 
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
@@ -316,7 +319,7 @@ class HoneycombOptions:
                 if not self.traces_endpoint:
                     self.traces_endpoint = _append_traces_path(
                         self.traces_exporter_protocol,
-                        endpoint or DEFAULT_API_ENDPOINT
+                        self.endpoint or DEFAULT_API_ENDPOINT
                     )
 
         # if http/protobuf protocol and using generic env or param
@@ -335,7 +338,7 @@ class HoneycombOptions:
                 if not self.metrics_endpoint:
                     self.metrics_endpoint = _append_metrics_path(
                         self.metrics_exporter_protocol,
-                        endpoint or DEFAULT_API_ENDPOINT
+                        self.endpoint or DEFAULT_API_ENDPOINT
                     )
 
         self.sample_rate = parse_int(
