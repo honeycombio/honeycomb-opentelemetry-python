@@ -15,3 +15,7 @@ bin
 htmlcov
 .env
 test-results/
+
+smoke-tests/collector/data.json
+smoke-tests/collector/data-results/data*
+smoke-tests/report.xml
