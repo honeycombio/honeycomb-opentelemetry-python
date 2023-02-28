@@ -6,6 +6,7 @@ x-env-base: &env_base
   HONEYCOMB_DATASET: bogus_dataset
   HONEYCOMB_METRICS_DATASET: bogus_dataset
   OTEL_SERVICE_NAME: "otel-python-example"
+  OTEL_EXPORTER_OTLP_INSECURE: "true"
   DEBUG: "true"
 
 x-app-base: &app_base
@@ -13,8 +14,8 @@ x-app-base: &app_base
     context: ../
     dockerfile: ./examples/hello-world/Dockerfile
   image: honeycomb/hello-world
-  # depends_on:
-  #   - collector
+  depends_on:
+    - collector
 
 services:
   collector:
