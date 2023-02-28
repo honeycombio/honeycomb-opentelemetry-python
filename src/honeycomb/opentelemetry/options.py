@@ -319,7 +319,7 @@ class HoneycombOptions:
                 if not self.traces_endpoint:
                     self.traces_endpoint = _append_traces_path(
                         self.traces_exporter_protocol,
-                        self.endpoint or DEFAULT_API_ENDPOINT
+                        self.endpoint
                     )
 
         # if http/protobuf protocol and using generic env or param
@@ -338,7 +338,7 @@ class HoneycombOptions:
                 if not self.metrics_endpoint:
                     self.metrics_endpoint = _append_metrics_path(
                         self.metrics_exporter_protocol,
-                        self.endpoint or DEFAULT_API_ENDPOINT
+                        self.endpoint
                     )
 
         self.sample_rate = parse_int(
