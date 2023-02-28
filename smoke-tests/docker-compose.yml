@@ -19,6 +19,14 @@ x-app-base:
   depends_on:
     - collector
 
+x-flask-app-base:
+  &flask_app_base
+  build:
+    context: ../
+    dockerfile: ./examples/hello-world-flask/Dockerfile
+  image: honeycomb/hello-world-flask
+  depends_on:
+    - collector
 
 services:
   collector:
@@ -39,7 +47,24 @@ services:
   app-sdk-http:
     <<: *app_base
     ports:
-      - "127.0.0.1:5001:5001"
+      - "127.0.0.1:5000:5000"
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+
+  app-sdk-grpc-flask:
+    <<: *flask_app_base
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      <<: *env_base
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+
+  app-sdk-http-flask:
+    <<: *flask_app_base
+    ports:
+      - "127.0.0.1:5000:5000"
     environment:
       <<: *env_base
       HONEYCOMB_API_ENDPOINT: http://collector:4318

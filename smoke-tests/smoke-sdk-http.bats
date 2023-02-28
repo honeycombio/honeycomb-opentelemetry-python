@@ -18,7 +18,7 @@ setup_file() {
 }
 
 teardown_file() {
-  cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
+	cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
 	docker-compose stop ${CONTAINER_NAME}
 	docker-compose restart collector
 	wait_for_flush
