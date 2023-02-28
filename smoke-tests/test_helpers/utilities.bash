@@ -91,6 +91,24 @@ wait_for_flush() {
 	[ $NEXT_WAIT_TIME -lt 5 ]
 }
 
+# Wait loop for our collector to be started and ready to receive traffic.
+#
+# Arguments:
+#   $1 - the name of the container/service in which the app is running
+wait_for_ready_collector() {
+	COLLECTOR=${1:?collector name is a required parameter}
+	MAX_RETRIES=10
+	echo -n "# 🍿 Setting up ${COLLECTOR}" >&3
+	NEXT_WAIT_TIME=0
+	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [[ $(docker-compose logs ${COLLECTOR} | grep "Everything is ready. Begin running and processing data.") ]]
+	do
+		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
+		sleep $NEXT_WAIT_TIME
+	done
+	echo "" >&3
+	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
+}
+
 # Wait loop for one of our example apps to be started and ready to receive traffic.
 #
 # Arguments:

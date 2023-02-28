@@ -1,8 +1,5 @@
 import platform
 
-from honeycomb.opentelemetry.distro import configure_opentelemetry
-from honeycomb.opentelemetry.options import HoneycombOptions
-from honeycomb.opentelemetry.version import __version__
 from opentelemetry.metrics import get_meter_provider
 from opentelemetry.trace import get_tracer_provider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
@@ -10,6 +7,10 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
     OTLPSpanExporter as GRPCSpanExporter
 )
+
+from honeycomb.opentelemetry.distro import configure_opentelemetry
+from honeycomb.opentelemetry.options import HoneycombOptions
+from honeycomb.opentelemetry.version import __version__
 
 
 def test_distro_configure_defaults():

@@ -17,7 +17,7 @@ build: install
 #: build and publish a package
 publish: install
 	poetry publish -u honeycomb -p ${PYPI_PASSWORD}
- 
+
 #: cleans up smoke test output
 clean-smoke-tests:
 	rm -rf ./smoke-tests/collector/data.json
@@ -37,10 +37,11 @@ clean-cache:
 #: clean smoke test output, caches, builds
 clean: clean-smoke-tests clean-cache
 
-#: run the unit tests with a clean environment
+#: run the unit tests with a clean environment, create coverage report html
 test: build
 	mkdir -p test-results
-	unset ${OUR_CONFIG_ENV_VARS} && poetry run pytest tests --junitxml=test-results/junit.xml
+	unset ${OUR_CONFIG_ENV_VARS} && poetry run coverage run -m pytest tests --junitxml=test-results/junit.xml
+	poetry run coverage html
 
 #: nitpick lint
 lint: install_dev
@@ -50,27 +51,27 @@ lint: install_dev
 style: install_dev
 	poetry run pycodestyle src
 
-#: not yet implemented; clear data from smoke tests
+#: clear data from smoke tests
 smoke-tests/collector/data.json:
 	@echo ""
 	@echo "+++ Zhuzhing smoke test's Collector data.json"
 	@touch $@ && chmod o+w $@
 
-#: not yet implemented; smoke grpc
+#: smoke test the app using grpc protocol
 smoke-sdk-grpc: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Running gRPC smoke tests."
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
 
-#: not yet implemented; smoke http
+#: smoke test the app using http/protobuf protocol
 smoke-sdk-http: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Running HTTP smoke tests."
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
 
-#: not yet implemented; smoke grpc and http
+#: smoke test the app using grpc and then http/protobuf protocols
 smoke-sdk: smoke-sdk-grpc smoke-sdk-http
 
 #: placeholder for smoke tests, simply build the app
