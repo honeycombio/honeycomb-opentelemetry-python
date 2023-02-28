@@ -59,6 +59,7 @@ services:
       - "127.0.0.1:5000:5000"
     environment:
       <<: *env_base
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://collector:4317
       OTEL_EXPORTER_OTLP_PROTOCOL: grpc
 
   app-sdk-http-flask:
@@ -67,5 +68,5 @@ services:
       - "127.0.0.1:5000:5000"
     environment:
       <<: *env_base
-      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://collector:4318
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
