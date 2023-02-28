@@ -14,7 +14,6 @@ from opentelemetry.sdk.environment_variables import (
     OTEL_SERVICE_NAME
 )
 from grpc import ssl_channel_credentials
-OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
 
 # Environment Variable Names
 OTEL_SERVICE_VERSION = "OTEL_SERVICE_VERSION"
@@ -24,6 +23,7 @@ SAMPLE_RATE = "SAMPLE_RATE"
 
 # HNY Credential Names
 HONEYCOMB_API_KEY = "HONEYCOMB_API_KEY"
+HONEYCOMB_API_ENDPOINT = "HONEYCOMB_API_ENDPOINT"
 HONEYCOMB_TRACES_APIKEY = "HONEYCOMB_TRACES_APIKEY"
 HONEYCOMB_DATASET = "HONEYCOMB_DATASET"
 HONEYCOMB_METRICS_APIKEY = "HONEYCOMB_METRICS_APIKEY"
@@ -196,6 +196,7 @@ class HoneycombOptions:
     metrics_apikey = None
     service_name = DEFAULT_SERVICE_NAME
     service_version = None
+    endpoint = DEFAULT_API_ENDPOINT
     traces_endpoint = None
     metrics_endpoint = None
     traces_endpoint_insecure = False
@@ -296,8 +297,11 @@ class HoneycombOptions:
             _logger.warning(INVALID_EXPORTER_PROTOCOL_ERROR)
             self.metrics_exporter_protocol = exporter_protocol
 
-        # if http/protobuf protocol and using generic env or param
-        # append /v1/traces path
+        endpoint = os.environ.get(
+            HONEYCOMB_API_ENDPOINT,
+            DEFAULT_API_ENDPOINT
+        )
+
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
             None
