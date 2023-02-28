@@ -1,8 +1,9 @@
-FROM python:alpine
+# to be run with docker-compose in smoke-tests directory
+FROM python:3.10-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache gcc musl-dev python3-dev libffi-dev openssl-dev cargo
+RUN apk add --no-cache gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++
 
 ENV PYTHONFAULTHANDLER=1 \
   PYTHONUNBUFFERED=1 \
