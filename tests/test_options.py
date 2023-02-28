@@ -14,6 +14,7 @@ from honeycomb.opentelemetry.options import (
     EXPORTER_PROTOCOL_GRPC,
     EXPORTER_PROTOCOL_HTTP_PROTO,
     HoneycombOptions,
+    HONEYCOMB_API_ENDPOINT,
     HONEYCOMB_API_KEY,
     HONEYCOMB_DATASET,
     HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS,
@@ -50,6 +51,11 @@ def test_can_set_service_name_with_envvar(monkeypatch):
     options = HoneycombOptions()
     assert options.service_name == "my-service"
 
+def test_can_set_generic_api_endpoint_with_envvar(monkeypatch):
+    monkeypatch.setenv(HONEYCOMB_API_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions()
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 def test_can_set_traces_endpoint_with_param():
     options = HoneycombOptions(traces_endpoint=EXPECTED_ENDPOINT)
