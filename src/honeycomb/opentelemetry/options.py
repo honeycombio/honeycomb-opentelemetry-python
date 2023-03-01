@@ -299,11 +299,11 @@ class HoneycombOptions:
 
         self.endpoint = os.environ.get(
             HONEYCOMB_API_ENDPOINT,
-            None
+            endpoint
         )
 
         if not self.endpoint:
-            self.endpoint = endpoint or DEFAULT_API_ENDPOINT
+            self.endpoint = DEFAULT_API_ENDPOINT
 
         self.traces_endpoint = os.environ.get(
             OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
