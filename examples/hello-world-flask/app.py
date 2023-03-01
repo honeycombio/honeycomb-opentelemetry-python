@@ -18,7 +18,6 @@ tracer = trace.get_tracer("hello_world_flask_tracer")
 meter = metrics.get_meter("hello_world_flask_meter")
 bee_counter = meter.create_counter("bee_counter")
 
-
 @app.route("/")
 # Recommended: use attach and detach tokens for Context management with Baggage
 def hello_world():

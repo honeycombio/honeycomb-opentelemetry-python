@@ -14,6 +14,7 @@ from honeycomb.opentelemetry.options import (
     EXPORTER_PROTOCOL_GRPC,
     EXPORTER_PROTOCOL_HTTP_PROTO,
     HoneycombOptions,
+    HONEYCOMB_API_ENDPOINT,
     HONEYCOMB_API_KEY,
     HONEYCOMB_DATASET,
     HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS,
@@ -49,6 +50,19 @@ def test_can_set_service_name_with_envvar(monkeypatch):
     monkeypatch.setenv(OTEL_SERVICE_NAME, "my-service")
     options = HoneycombOptions()
     assert options.service_name == "my-service"
+
+
+def test_can_set_generic_api_endpoint_with_envvar(monkeypatch):
+    monkeypatch.setenv(HONEYCOMB_API_ENDPOINT, EXPECTED_ENDPOINT)
+    options = HoneycombOptions()
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
+
+
+def test_can_set_generic_api_endpoint_with_param():
+    options = HoneycombOptions(endpoint=EXPECTED_ENDPOINT)
+    assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
+    assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
 
 def test_can_set_traces_endpoint_with_param():
@@ -447,7 +461,7 @@ def test_get_traces_endpoint_with_grpc_protocol_returns_correctly_formatted_endp
 
 
 def test_get_traces_endpoint_with_http_proto_protocol_returns_correctly_formatted_endpoint(monkeypatch):
-    #http
+    # http
     protocol = EXPORTER_PROTOCOL_HTTP_PROTO
 
     # default endpoint
@@ -505,7 +519,7 @@ def test_get_metrics_endpoint_with_grpc_protocol_returns_correctly_formatted_end
 
 
 def test_get_metrics_endpoint_with_http_proto_protocol_returns_correctly_formatted_endpoint(monkeypatch):
-    #http
+    # http
     protocol = EXPORTER_PROTOCOL_HTTP_PROTO
 
     # default endpoint
