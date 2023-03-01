@@ -20,6 +20,9 @@ meter = metrics.get_meter("hello_world_flask_meter")
 bee_counter = meter.create_counter("bee_counter")
 
 
+meter = metrics.get_meter("hello_world_flask_meter")
+bee_counter = meter.create_counter("bee_counter")
+
 @app.route("/")
 # Recommended: use attach and detach tokens for Context management with Baggage
 def hello_world():
@@ -27,6 +30,7 @@ def hello_world():
     token = attach(baggage.set_baggage("queen", "bee"))
 
     with tracer.start_as_current_span(name="honey") as span:
+
         # adding baggage attributes (key, value)
         token_honey = attach(baggage.set_baggage("honey", "bee"))
         # setting a span attribute directly (key, value)
