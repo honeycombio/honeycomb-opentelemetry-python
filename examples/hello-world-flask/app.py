@@ -13,8 +13,9 @@ from opentelemetry.context import attach, detach
 # export HONEYCOMB_METRICS_DATASET=otel-python-example-metrics
 
 app = Flask(__name__)
+# tracing
 tracer = trace.get_tracer("hello_world_flask_tracer")
-
+# metrics
 meter = metrics.get_meter("hello_world_flask_meter")
 bee_counter = meter.create_counter("bee_counter")
 
@@ -22,10 +23,13 @@ bee_counter = meter.create_counter("bee_counter")
 @app.route("/")
 # Recommended: use attach and detach tokens for Context management with Baggage
 def hello_world():
+    # adding baggage attributes (key, value)
     token = attach(baggage.set_baggage("queen", "bee"))
 
     with tracer.start_as_current_span(name="honey") as span:
+        # adding baggage attributes (key, value)
         token_honey = attach(baggage.set_baggage("honey", "bee"))
+        # setting a span attribute directly (key, value)
         span.set_attribute("message", "hello world!")
 
         with tracer.start_as_current_span(name="child"):
@@ -36,6 +40,7 @@ def hello_world():
             detach(child_token)
         detach(token_honey)
     detach(token)
+    # counter incremented by 1, attributes (route) associated with the increment
     bee_counter.add(1, {'app.route': '/'})
     return "Hello World"
 
