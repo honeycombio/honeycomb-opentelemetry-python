@@ -10,22 +10,22 @@ from opentelemetry.context import attach, detach
 # HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS=true
 
 # To enable metrics, set a metrics dataset
-# export METRICS_DATASET=otel-python-example-metrics
+# export HONEYCOMB_METRICS_DATASET=otel-python-example-metrics
 
 app = Flask(__name__)
-tracer = trace.get_tracer(__name__)
+tracer = trace.get_tracer("hello_world_flask_tracer")
 
-meter = metrics.get_meter(__name__)
-bee_counter = meter.create_counter('bee_counter')
-
-# Recommended: use attach and detach tokens for Context management with Baggage
+meter = metrics.get_meter("hello_world_flask_meter")
+bee_counter = meter.create_counter("bee_counter")
 
 @app.route("/")
+# Recommended: use attach and detach tokens for Context management with Baggage
 def hello_world():
     token = attach(baggage.set_baggage("queen", "bee"))
 
-    with tracer.start_as_current_span(name="honey"):
+    with tracer.start_as_current_span(name="honey") as span:
         token_honey = attach(baggage.set_baggage("honey", "bee"))
+        span.set_attribute("message", "hello world!")
 
         with tracer.start_as_current_span(name="child"):
             # this goes nowhere if it is the final span in a trace
@@ -38,9 +38,9 @@ def hello_world():
     bee_counter.add(1, {'app.route': '/'})
     return "Hello World"
 
-# For manually passing around the Context for baggage
 
 @app.route("/ctx")
+# For manually passing around the Context for baggage
 def hello_ctx_world():
     ctx = baggage.set_baggage("worker", "bees")
     with tracer.start_as_current_span(name="bumble", context=ctx):
@@ -52,6 +52,7 @@ def hello_ctx_world():
             ctx = baggage.set_baggage("last", "bee", ctx)
     bee_counter.add(1, {'app.route': '/ctx'})
     return "Hello Context World"
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
