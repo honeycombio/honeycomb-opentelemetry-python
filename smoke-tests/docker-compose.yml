@@ -1,6 +1,7 @@
 version: '3.0'
 
-x-env-base: &env_base
+x-env-base:
+  &env_base
   HONEYCOMB_API_ENDPOINT: http://collector:4317
   HONEYCOMB_API_KEY: bogus_key
   HONEYCOMB_DATASET: bogus_dataset
@@ -9,7 +10,8 @@ x-env-base: &env_base
   OTEL_EXPORTER_OTLP_INSECURE: "true"
   DEBUG: "true"
 
-x-app-base: &app_base
+x-app-base:
+  &app_base
   build:
     context: ../
     dockerfile: ./examples/hello-world/Dockerfile
@@ -17,27 +19,53 @@ x-app-base: &app_base
   depends_on:
     - collector
 
+x-flask-app-base:
+  &flask_app_base
+  build:
+    context: ../
+    dockerfile: ./examples/hello-world-flask/Dockerfile
+  image: honeycomb/hello-world-flask
+  depends_on:
+    - collector
+
 services:
   collector:
     image: otel/opentelemetry-collector:0.52.0
-    command: ["--config=/etc/otel-collector-config.yaml"]
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
     volumes:
       - "./collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml"
       - "./collector:/var/lib"
 
   app-sdk-grpc:
     <<: *app_base
+    ports:
+      - "127.0.0.1:5000:5000"
     environment:
       <<: *env_base
       OTEL_EXPORTER_OTLP_PROTOCOL: grpc
-    ports:
-      - "127.0.0.1:5000:5000"
 
   app-sdk-http:
     <<: *app_base
+    ports:
+      - "127.0.0.1:5000:5000"
     environment:
       <<: *env_base
       HONEYCOMB_API_ENDPOINT: http://collector:4318
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+
+  app-sdk-grpc-flask:
+    <<: *flask_app_base
     ports:
       - "127.0.0.1:5000:5000"
+    environment:
+      <<: *env_base
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+
+  app-sdk-http-flask:
+    <<: *flask_app_base
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
