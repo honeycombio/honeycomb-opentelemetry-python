@@ -5,24 +5,19 @@ load test_helpers/utilities
 CONTAINER_NAME="app-sdk-http-flask"
 COLLECTOR_NAME="collector"
 OTEL_SERVICE_NAME="otel-python-example"
-TRACER_NAME="hello_world_tracer"
-METER_NAME="hello_world_meter"
+TRACER_NAME="hello_world_flask_tracer"
+METER_NAME="hello_world_flask_meter"
 
 setup_file() {
-    docker-compose up --build --detach collector 
-	
-    wait_for_ready_collector ${COLLECTOR_NAME}
-    docker-compose up --build --detach ${CONTAINER_NAME}
-    wait_for_ready_app ${CONTAINER_NAME}
-	# TODO: prod the app into sending a trace
-    # docker exec ${CONTAINER_NAME} curl http://localhost:5000
-	# curl --silent "http://localhost:5000"
-	# wait_for_traces
-	# wait_for_metrics
+    docker-compose up --build --detach collector ${CONTAINER_NAME}
+	wait_for_ready_app ${CONTAINER_NAME}
+	curl --silent localhost:5000
+	wait_for_traces
+	wait_for_metrics 15
 }
 
 teardown_file() {
-  cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
+ 	cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
 	docker-compose stop ${CONTAINER_NAME}
 	docker-compose restart collector
 	wait_for_flush
@@ -32,8 +27,8 @@ teardown_file() {
 
 @test "Manual instrumentation produces parent and child spans with names of spans" {
 	result=$(span_names_for ${TRACER_NAME})
-	assert_equal "$result" '"world"
-"hello"'
+	assert_equal "$result" '"child"
+"honey"'
 }
 
 @test "Manual instrumentation adds custom attribute" {
@@ -42,11 +37,11 @@ teardown_file() {
 }
 
 @test "BaggageSpanProcessor: key-values added to baggage appear on child spans" {
-	result=$(span_attributes_for ${TRACER_NAME} | jq "select(.key == \"for_the_children\").value.stringValue")
-	assert_equal "$result" '"another_important_value"'
+	result=$(span_attributes_for ${TRACER_NAME} | jq "select(.key == \"honey\").value.stringValue")
+	assert_equal "$result" '"bee"'
 }
 
 @test "Manual instrumentation produces metrics" {
     result=$(metric_names_for ${METER_NAME})
-    assert_equal "$result" '"sheep"'
+    assert_equal "$result" '"bee_counter"'
 }
