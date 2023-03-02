@@ -48,8 +48,3 @@ HONEYCOMB_API_KEY="your-api-key" poetry run python3 app.py
 You can configure exporter protocol with this flag:
 `OTEL_EXPORTER_OTLP_PROTOCOL=grpc` or `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`
 
-## Development Notes
-
-If you make changes in the package's pyproject.toml you may need to run `poetry build` for the changes to take effect.
-
-If you make changes in python files in src/honeycomb/opentelemetry, with this setup the changes should propagate to this example app upon save.
