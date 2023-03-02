@@ -16,7 +16,7 @@ It makes getting started with OpenTelemetry and Honeycomb easier!
 Honeycomb's Distribution of OpenTelemetry for python allows you to streamline configuration and to instrument as quickly and easily as possible.
 
 - [Documentation](https://docs.honeycomb.io/getting-data-in/opentelemetry/python/)
-- [Examples](/examples/)
+- [Examples](/examples/README.md)
 - See [DEVELOPING.md](/DEVELOPING.md) for additional instructions for building and testing this project in development.
 
 ## Why would I want to use this?
@@ -31,12 +31,3 @@ Honeycomb's Distribution of OpenTelemetry for python allows you to streamline co
 
 [Apache 2.0 License](./LICENSE).
 
-## Examples
-
-### Example Flask Application
-
-Readme can be found [here](examples/hello-world-flask/README.md) for setting this up.
-
-### Example Python Application
-
-Readme can be found [here](examples/hello-world/README.md) for setting this up.
