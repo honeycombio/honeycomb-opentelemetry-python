@@ -1,3 +1,4 @@
+# to be run with docker-compose in smoke-tests directory
 FROM python:3.10-alpine
 
 WORKDIR /app
@@ -28,4 +29,4 @@ RUN cd ./examples/hello-world-flask && poetry install
 
 # From this point forward, we're operating on the flask example.
 WORKDIR /app/examples/hello-world-flask
-CMD ["poetry", "run", "opentelemetry-instrument", "flask", "run", "--host", "0.0.0.0"]
+CMD ["opentelemetry-instrument", "flask", "run", "--host", "0.0.0.0"]

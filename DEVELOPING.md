@@ -58,6 +58,9 @@ brew install jq
 make smoke-sdk
 # or specify a single protocol like with http or grpc:
 make smoke-sdk-grpc
+
+# To tidy up afer a test run, use:
+make unsmoke
 ```
 
 ## Linting & Code Style
