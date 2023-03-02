@@ -18,7 +18,7 @@ make build
 ```
 
 ## Examples
-Check out the [Example Application overview](/examples/README.md). 
+Check out the [Example Application overview](/examples/). 
 
 Note: Changes to python files in `src/honeycomb/opentelemetry` should propagate to the example applications upon save. Changes in the honeycomb.opentelemetry's pyproject.toml may need a `poetry build` to take effect in the example applications.
 

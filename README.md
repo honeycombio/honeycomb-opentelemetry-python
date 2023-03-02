@@ -16,7 +16,7 @@ It makes getting started with OpenTelemetry and Honeycomb easier!
 Honeycomb's Distribution of OpenTelemetry for python allows you to streamline configuration and to instrument as quickly and easily as possible.
 
 - [Documentation](https://docs.honeycomb.io/getting-data-in/opentelemetry/python/)
-- [Examples](/examples/README.md)
+- [Examples](/examples/)
 - See [DEVELOPING.md](/DEVELOPING.md) for additional instructions for building and testing this project in development.
 
 ## Why would I want to use this?
