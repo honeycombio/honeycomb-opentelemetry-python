@@ -1,6 +1,6 @@
 ## Examples
 
-### Hello World Flask
+### [Hello World Flask](hello-world-flask/)
 
 This example configures the distro using the `opentelemetry_instrument` command, and contains examples of:
 - configuring the distro with environment variables
@@ -11,7 +11,7 @@ This example configures the distro using the `opentelemetry_instrument` command,
   
 Check out the [Hello-World-Flask Readme](hello-world-flask/README.md) for setting this up!
 
-### Hello World Python
+### [Hello World Python](hello-world/)
 
 This example configures the distro using the `configure_opentelemetry()` function, and contains examples of:
  - configuring the distro with a combination of parameters and set environment variables
