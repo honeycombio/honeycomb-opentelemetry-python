@@ -86,7 +86,7 @@ smoke-sdk-http-flask: smoke-tests/collector/data.json
 	cd smoke-tests && bats ./smoke-sdk-http-flask.bats --report-formatter junit --output ./
 
 #: smoke test both example apps using grpc and then http/protobuf protocols
-smoke-sdk: smoke-sdk-grpc smoke-sdk-http smoke-sdk-grpc-flask smoke-sdk-http-flask 
+smoke-sdk: smoke-sdk-grpc smoke-sdk-http smoke-sdk-grpc-flask smoke-sdk-http-flask
 
 #: placeholder for smoke tests, simply build the app
 smoke:
