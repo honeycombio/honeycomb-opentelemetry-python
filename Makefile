@@ -57,31 +57,31 @@ smoke-tests/collector/data.json:
 	@echo "+++ Zhuzhing smoke test's Collector data.json"
 	@touch $@ && chmod o+w $@
 
-#: smoke test the app using grpc protocol
+#: smoke test the hello-world app using grpc protocol and configure_opentelemetry()
 smoke-sdk-grpc: smoke-tests/collector/data.json
 	@echo ""
-	@echo "+++ Running gRPC smoke tests."
+	@echo "+++ Running gRPC smoke tests on configure_opentelemetry()"
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
 
-#: smoke test the app using http/protobuf protocol
+#: smoke test the hello-world app using http/protobuf protocol and configure_opentelemetry()
 smoke-sdk-http: smoke-tests/collector/data.json
 	@echo ""
-	@echo "+++ Running HTTP smoke tests."
+	@echo "+++ Running HTTP smoke tests on configure_opentelemetry()"
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
 
-#: smoke test the flask app using grpc protocol
+#: smoke test the flask app using grpc protocol and opentelemetry_instrument
 smoke-sdk-grpc-flask: smoke-tests/collector/data.json
 	@echo ""
-	@echo "+++ Running GRPC Flask smoke tests."
+	@echo "+++ Running GRPC Flask smoke tests on opentelemetry_instrument"
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-grpc-flask.bats --report-formatter junit --output ./
 
-#: smoke test the flask app using http protocol
+#: smoke test the flask app using http protocol and opentelemetry_instrument
 smoke-sdk-http-flask: smoke-tests/collector/data.json
 	@echo ""
-	@echo "+++ Running HTTP Flask smoke tests."
+	@echo "+++ Running HTTP Flask smoke tests on opentelemetry_instrument"
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-http-flask.bats --report-formatter junit --output ./
 

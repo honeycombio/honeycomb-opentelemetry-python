@@ -5,9 +5,11 @@ from honeycomb.opentelemetry import configure_opentelemetry, HoneycombOptions
 
 configure_opentelemetry(
     HoneycombOptions(
-        debug=True, # prints exported traces & metrics to the console, useful for debugging and setting up
-        apikey=os.getenv("HONEYCOMB_API_KEY"), # Honeycomb API Key, required to send data to Honeycomb
-        service_name="otel-python-example", # Dataset that will be populated with data from this service in Honeycomb
+        debug=True,  # prints exported traces & metrics to the console, useful for debugging and setting up
+        # Honeycomb API Key, required to send data to Honeycomb
+        apikey=os.getenv("HONEYCOMB_API_KEY"),
+        # Dataset that will be populated with data from this service in Honeycomb
+        service_name="otel-python-example",
         # enable_local_visualizations=True, # Will print a link to a trace produced in Honeycomb to the console, useful for debugging
         # traces_apikey = None, Set a specific Honeycomb API key just for traces
         # metrics_apikey = None, Set a specific Honeycomb API key just for metrics
@@ -28,15 +30,11 @@ configure_opentelemetry(
     )
 )
 
-# or use environment variables instead of configure_opentelemetry
-# export DEBUG=true
-# export HONEYCOMB_API_KEY=abc123
-# export OTEL_SERVICE_NAME=otel-python-example
-
 meter = metrics.get_meter("hello_world_meter")
 sheep = meter.create_counter('sheep')
 
 tracer = trace.get_tracer("hello_world_tracer")
+
 
 def hello_world():
     token = attach(baggage.set_baggage(
@@ -51,5 +49,6 @@ def hello_world():
     detach(token)
     sheep.add(1, {'app.route': '/'})
     return "Hello World"
+
 
 hello_world()

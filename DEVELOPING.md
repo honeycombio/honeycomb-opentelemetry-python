@@ -18,14 +18,9 @@ make build
 ```
 
 ## Examples
+Check out the [Example Application overview](/examples/). 
 
-### Example Flask Application
-
-Readme can be found [here](examples/hello-world-flask/README.md) for setting this up.
-
-### Example Python Application
-
-Readme can be found [here](examples/hello-world/README.md) for setting this up.
+Note: Changes to python files in `src/honeycomb/opentelemetry` should propagate to the example applications upon save. Changes in the honeycomb.opentelemetry's pyproject.toml may need a `poetry build` to take effect in the example applications.
 
 ### Running with Docker-Compose
 

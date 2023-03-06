@@ -31,12 +31,3 @@ Honeycomb's Distribution of OpenTelemetry for python allows you to streamline co
 
 [Apache 2.0 License](./LICENSE).
 
-## Examples
-
-### Example Flask Application
-
-Readme can be found [here](examples/hello-world-flask/README.md) for setting this up.
-
-### Example Python Application
-
-Readme can be found [here](examples/hello-world/README.md) for setting this up.
