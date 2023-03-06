@@ -1,9 +1,9 @@
 from logging import getLogger
 
 from opentelemetry.sdk.trace.sampling import (
-    DEFAULT_OFF,
-    DEFAULT_ON,
-    ParentBasedTraceIdRatio,
+    ALWAYS_OFF,
+    ALWAYS_ON,
+    TraceIdRatioBased,
     Sampler,
     SamplingResult
 )
@@ -24,11 +24,11 @@ def configure_sampler(
     """Configures and returns an OpenTelemetry Sampler that is
     configured based on the sample_rate determined in HoneycombOptions.
     The configuration initializes a DeterministicSampler with
-    an inner sampler of either DefaultOn (1), Default Off (0),
+    an inner sampler of either AlwaysOn (1), AlwaysOff (0),
     or a TraceIdRatio as 1/N.
 
-    Each of these samplers is ParentBased, meaning it respects
-    its parent span's sampling decision.
+    These samplers do not take into account the parent span's
+    sampling decision.
 
     Args:
         options (HoneycombOptions): the HoneycombOptins containing
@@ -42,34 +42,32 @@ def configure_sampler(
 
 class DeterministicSampler(Sampler):
     """Implementation of :class:`Sampler` that uses an inner sampler
-    of either DefaultOn (1), Default Off (0), or a TraceIdRatio as 1/N
+    of either AlwaysOn (1), AlwaysOff (0), or a TraceIdRatio as 1/N
     to determine a SamplingResult and SamplingDecision for a given span
     in a trace. We append a SampleRate attribute to the span with the
     given sample rate.
 
-    Note: Each of these samplers is ParentBased, meaning it respects
-    its parent span's sampling decision.
+    Note: These samplers do not take into account the parent span's
+    sampling decision.
     """
 
     def __init__(self, rate: int):
         self.rate = rate
 
         if self.rate <= 0:
-            # Sampler that respects its parent span's sampling decision,
-            # but otherwise never samples. If it's negative, we assume
-            # a sample rate of 0
-            self._sampler = DEFAULT_OFF
+            # Sampler that never samples spans, regardless of the
+            # parent span's sampling decision
+            self._sampler = ALWAYS_OFF
 
         elif self.rate == 1:
-            # Sampler that respects its parent span's sampling decision,
-            # but otherwise always samples.
-            self._sampler = DEFAULT_ON
+            # Sampler that always samples spans, regardless of the
+            # parent span's sampling decision
+            self._sampler = ALWAYS_ON
 
         else:
-            # Sampler that respects its parent span's sampling decision,
-            # but otherwise samples probabalistically based on `rate`.
+            # Sampler that samples probabalistically based on rate..
             ratio = 1.0 / self.rate
-            self._sampler = ParentBasedTraceIdRatio(ratio)
+            self._sampler = TraceIdRatioBased(ratio)
 
     # pylint: disable=too-many-arguments
     def should_sample(
