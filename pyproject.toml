@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "honeycomb-opentelemetry"
-version = "0.1.1a2"
+version = "0.1.1a3"
 description = "Honeycomb OpenTelemetry Distro for Python"
 authors = ["Honeycomb <support@honeycomb.io>"]
 readme = "README.md"
