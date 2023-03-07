@@ -13,8 +13,6 @@
 - maint: grpc smoke tests for hello-world-flask application (#102) | [@emilyashley](https://github.com/emilyashley)
 - maint: Flask smoke tests for http and collector. (#101) | [@emilyashley](https://github.com/emilyashley)
 - maint: dockerizing flask app (#83) | [@JamieDanielson](https://github.com/JamieDanielson)
-- maint: Revert "maint(deps-dev): bump pylint from 2.15.10 to 2.16.0" (#103) | [@JamieDanielson](https://github.com/JamieDanielson)
-- maint(deps-dev): bump pylint from 2.15.10 to 2.16.0 (#70) | [@dependabot](https://github.com/dependabot)
 - maint: smoke test python app (#91) | [@JamieDanielson](https://github.com/JamieDanielson)
 - maint: add coverage report html to circleci artifacts (#93) | [@emilyashley](https://github.com/emilyashley)
 - maint: enable linting step in CI  (#92) | [@emilyashley](https://github.com/emilyashley)
