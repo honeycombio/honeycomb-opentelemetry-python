@@ -168,9 +168,11 @@ workflows:
           <<: *filters_publish
           context: Honeycomb Secrets for Public Repos
           requires:
+            - smoke_test
             - build
       - publish_pypi:
           <<: *filters_publish
           context: Honeycomb Secrets for Public Repos
           requires:
+            - smoke_test
             - build
