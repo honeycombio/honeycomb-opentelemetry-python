@@ -9,7 +9,7 @@ TRACER_NAME="hello_world_flask_tracer"
 METER_NAME="hello_world_flask_meter"
 
 setup_file() {
-    docker-compose up --build --detach collector ${CONTAINER_NAME}
+	docker-compose up --build --detach collector ${CONTAINER_NAME}
 	wait_for_ready_app ${CONTAINER_NAME}
 	curl --silent localhost:5000
 	wait_for_traces
@@ -24,6 +24,11 @@ teardown_file() {
 }
 
 # TESTS
+
+@test "Auto instrumentation produces a flask span" {
+  result=$(span_names_for "opentelemetry.instrumentation.flask")
+  assert_equal "$result" '"/"'
+}
 
 @test "Manual instrumentation produces parent and child spans with names of spans" {
 	result=$(span_names_for ${TRACER_NAME})
