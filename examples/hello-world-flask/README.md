@@ -1,12 +1,13 @@
 # hello-world-flask
 
-This simple Flask app that returns "Hello World". This app configures OpenTelemetry to send data to Honeycomb using the `opentelemetry_instrument` command and environment variables. 
+This simple Flask app that returns "Hello World". This app configures OpenTelemetry to send data to Honeycomb using the `opentelemetry_instrument` command and environment variables.
 
 It also contains examples of:
- - sending metrics with OpenTelemetry using a counter
- - using baggage with context tokens
- - manually passing baggage with context
- - setting a span attribute
+
+- sending metrics with OpenTelemetry using a counter
+- using baggage with context tokens
+- manually passing baggage with context
+- setting a span attribute
 
 If you are looking for an example using the `configure_opentelemetry()` function and parameters, check out [hello-world app](../hello-world/README.md).
 

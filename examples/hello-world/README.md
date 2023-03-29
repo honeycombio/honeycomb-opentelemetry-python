@@ -24,7 +24,7 @@ The app will output `Hello World` and then exit.
 
 ## Distro Instrumentation Example
 
-This app uses configuration in code parameters rather than stricly commandline and environment variables. 
+This app uses configuration in code parameters rather than strictly command-line and environment variables.
 You can also use environment variables as parameters like below:
 
 ```python
@@ -47,4 +47,3 @@ HONEYCOMB_API_KEY="your-api-key" poetry run python3 app.py
 
 You can configure exporter protocol with this flag:
 `OTEL_EXPORTER_OTLP_PROTOCOL=grpc` or `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`
-

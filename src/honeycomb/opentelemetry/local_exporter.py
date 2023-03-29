@@ -18,7 +18,7 @@ def configure_local_exporter(options: HoneycombOptions):
     direct web links for completed traces in Honeycomb on stdout.
 
     Args:
-        options (HoneycombOptions): the HoneycombOptins used to configure
+        options (HoneycombOptions): the HoneycombOptions used to configure
         the exporter
 
     Returns:

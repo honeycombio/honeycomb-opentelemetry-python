@@ -31,7 +31,7 @@ def configure_sampler(
     sampling decision.
 
     Args:
-        options (HoneycombOptions): the HoneycombOptins containing
+        options (HoneycombOptions): the HoneycombOptions containing
         sample_rate used to configure the deterministic sampler.
 
     Returns:
@@ -65,7 +65,7 @@ class DeterministicSampler(Sampler):
             self._sampler = ALWAYS_ON
 
         else:
-            # Sampler that samples probabalistically based on rate..
+            # Sampler that samples probabilistically based on rate..
             ratio = 1.0 / self.rate
             self._sampler = TraceIdRatioBased(ratio)
 
