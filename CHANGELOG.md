@@ -1,6 +1,6 @@
 # honeycomb-opentelemetry-python changelog
 
-## [0.1.0b0] - 2023-03-29
+## [0.1.2b0] - 2023-03-29
 
 Initial beta release of Honeycomb's OpenTelemetry distribution for Python!
 
