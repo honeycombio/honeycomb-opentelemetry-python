@@ -1,19 +1,22 @@
 # Honeycomb OpenTelemetry Distro for Python
 
-<!-- Uncomment once repo is public -->
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/honeycomb-opentelemetry-python)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python)
 
-This is Honeycomb's Distribution of OpenTelemetry for python.
+This is Honeycomb's Distribution of OpenTelemetry for Python.
 It makes getting started with OpenTelemetry and Honeycomb easier!
+
+Latest release built with:
+
+- [OpenTelemetry version 1.16.0/0.37b0](https://github.com/open-telemetry/opentelemetry-python/releases/tag/v1.16.0)
 
 ## Requirements
 
-* Python 3.7 or higher
+- Python 3.7 or higher
 
 ## Getting Started
 
-Honeycomb's Distribution of OpenTelemetry for python allows you to streamline configuration and to instrument as quickly and easily as possible.
+Honeycomb's Distribution of OpenTelemetry for Python allows you to streamline configuration and to instrument as quickly and easily as possible.
 
 - [Documentation](https://docs.honeycomb.io/getting-data-in/opentelemetry/python/)
 - [Examples](/examples/)
@@ -30,4 +33,3 @@ Honeycomb's Distribution of OpenTelemetry for python allows you to streamline co
 ## License
 
 [Apache 2.0 License](./LICENSE).
-

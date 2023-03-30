@@ -1,5 +1,16 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.1.2b0] - 2023-03-29
+
+Initial beta release of Honeycomb's OpenTelemetry distribution for Python!
+
+### Maintenance
+
+- ci: require smoke tests for publish steps (#107) | [@pkanal](https://github.com/pkanal)
+- maint: drop poetry locks from example apps (#111) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint: add tests for auto instrumentation (#110) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint(deps-dev): bump coverage from 6.5.0 to 7.2.1 (#104)
+
 ## [0.1.1a3] - 2023-03-07
 
 ### Enhancements

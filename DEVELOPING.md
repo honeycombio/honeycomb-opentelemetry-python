@@ -18,7 +18,8 @@ make build
 ```
 
 ## Examples
-Check out the [Example Application overview](/examples/). 
+
+Check out the [Example Application overview](/examples/).
 
 Note: Changes to python files in `src/honeycomb/opentelemetry` should propagate to the example applications upon save. Changes in the honeycomb.opentelemetry's pyproject.toml may need a `poetry build` to take effect in the example applications.
 
@@ -54,7 +55,7 @@ make smoke-sdk
 # or specify a single protocol like with http or grpc:
 make smoke-sdk-grpc
 
-# To tidy up afer a test run, use:
+# To tidy up after a test run, use:
 make unsmoke
 ```
 

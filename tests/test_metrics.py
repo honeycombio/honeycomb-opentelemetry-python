@@ -13,7 +13,7 @@ def test_returns_meter_provider():
     assert len(meter_provider._sdk_config.metric_readers) == 1
 
 
-def test_setting_debug_addings_console_exporter():
+def test_setting_debug_adds_console_exporter():
     options = HoneycombOptions(debug=True)
     resource = create_resource(options)
     meter_provider = create_meter_provider(options, resource)
