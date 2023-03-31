@@ -1,5 +1,9 @@
 # to be run with docker-compose in smoke-tests directory
-FROM python:3.10-slim
+FROM python:3.10-slim-bullseye
+
+RUN apt-get -qq update \
+    && apt-get install -y --no-install-recommends g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
