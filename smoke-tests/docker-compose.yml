@@ -6,6 +6,7 @@ x-env-base:
   HONEYCOMB_API_KEY: bogus_key
   HONEYCOMB_DATASET: bogus_dataset
   HONEYCOMB_METRICS_DATASET: bogus_dataset
+  OTEL_METRIC_EXPORT_INTERVAL: 5000
   OTEL_SERVICE_NAME: "otel-python-example"
   OTEL_EXPORTER_OTLP_INSECURE: "true"
   DEBUG: "true"
