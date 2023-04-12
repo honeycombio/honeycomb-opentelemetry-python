@@ -1,5 +1,21 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.2.0b0] - 2023-04-11
+
+### Maintenance
+
+- maint: Update OTel packages to 1.17.0/0.38b0 (#127) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- maint: Set opentelemetry to version 1.16.0 (#125) | [@guillemtrebol](https://github.com/guillemtrebol)
+- maint: Use squash merge for dependabot auto-merge (#122) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint: Update readme status (#121) | [@vreynolds](https://github.com/vreynolds)
+- maint: Change experimental badge to active (#120) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint: Improve ci time (#114) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint: Add auto-merge dependabot workflow (#113) | [@JamieDanielson](https://github.com/JamieDanielson)
+- maint(deps-dev): bump pylint from 2.16.2 to 2.17.1 (#115)
+- maint(deps-dev): bump pytest from 7.2.1 to 7.2.2 (#117)
+- maint(deps-dev): bump coverage from 7.2.1 to 7.2.3 (#126)
+- maint(deps-dev): bump importlib-metadata from 6.0.0 to 6.1.0 (#119)
+
 ## [0.1.2b0] - 2023-03-29
 
 Initial beta release of Honeycomb's OpenTelemetry distribution for Python!

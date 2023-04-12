@@ -12,7 +12,7 @@ It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
 
-- [OpenTelemetry version 1.16.0/0.37b0](https://github.com/open-telemetry/opentelemetry-python/releases/tag/v1.16.0)
+- [OpenTelemetry version 1.17.0/0.38b0](https://github.com/open-telemetry/opentelemetry-python/releases/tag/v1.17.0)
 
 ## Requirements
 
