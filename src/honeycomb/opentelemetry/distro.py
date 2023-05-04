@@ -42,7 +42,7 @@ def configure_opentelemetry(
 
         Note: API key is a required option.
     """
-    if not options:
+    if options is None:
         options = HoneycombOptions()
     _logger.info("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
     _logger.debug(vars(options))
