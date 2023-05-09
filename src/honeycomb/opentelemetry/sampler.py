@@ -1,4 +1,5 @@
 from logging import getLogger
+from typing import Optional
 
 from opentelemetry.sdk.trace.sampling import (
     ALWAYS_OFF,
@@ -13,13 +14,16 @@ from opentelemetry.trace.span import TraceState
 from opentelemetry.util.types import Attributes
 from opentelemetry.context import Context
 
-from honeycomb.opentelemetry.options import HoneycombOptions
+from honeycomb.opentelemetry.options import (
+    DEFAULT_SAMPLE_RATE,
+    HoneycombOptions
+)
 
 _logger = getLogger(__name__)
 
 
 def configure_sampler(
-    options: HoneycombOptions = HoneycombOptions(),
+    options: Optional[HoneycombOptions] = None,
 ):
     """Configures and returns an OpenTelemetry Sampler that is
     configured based on the sample_rate determined in HoneycombOptions.
@@ -37,6 +41,9 @@ def configure_sampler(
     Returns:
         DeterministicSampler: the configured Sampler based on sample_rate
     """
+    if options is None:
+        return DeterministicSampler(DEFAULT_SAMPLE_RATE)
+
     return DeterministicSampler(options.sample_rate)
 
 

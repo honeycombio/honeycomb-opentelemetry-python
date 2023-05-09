@@ -17,6 +17,7 @@ Typical usage example:
     )
 """
 from logging import getLogger
+from typing import Optional
 from opentelemetry.instrumentation.distro import BaseDistro
 from opentelemetry.metrics import set_meter_provider
 from opentelemetry.trace import set_tracer_provider
@@ -29,7 +30,7 @@ _logger = getLogger(__name__)
 
 
 def configure_opentelemetry(
-    options: HoneycombOptions = HoneycombOptions(),
+    options: Optional[HoneycombOptions] = None,
 ):
     """
     Configures the OpenTelemetry SDK to send telemetry to Honeycomb.
@@ -41,6 +42,8 @@ def configure_opentelemetry(
 
         Note: API key is a required option.
     """
+    if options is None:
+        options = HoneycombOptions()
     _logger.info("🐝 Configuring OpenTelemetry using Honeycomb distro 🐝")
     _logger.debug(vars(options))
     resource = create_resource(options)
