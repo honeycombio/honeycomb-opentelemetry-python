@@ -1,5 +1,17 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.2.1b0] - 2023-05-16
+
+### Fixes
+
+- Don't init HoneycombOptions on import (#134) | [@gaganpreet](https://github.com/gaganpreet)
+
+### Maintenance
+
+- maint(deps-dev): bump pylint from 2.17.2 to 2.17.3 (#132)
+- maint(deps-dev): bump coverage from 7.2.3 to 7.2.5 (#133)
+- maint(deps-dev): bump pytest from 7.3.0 to 7.3.1 (#130)
+
 ## [0.2.0b0] - 2023-04-11
 
 ### Maintenance
