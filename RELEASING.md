@@ -9,6 +9,7 @@
 
 - Confirm the version number update appears in `src/pyproject.toml`.
 - Update `CHANGELOG.md` with the changes since the last release.
+- If this release bumps OTel versions, update `README.md`.
 - Commit changes, push, and open a release preparation pull request for review.
 - Once the pull request is merged, fetch the updated `main` branch.
 - Apply a tag for the new version on the merged commit (e.g. `git tag -a v2.3.1 -m "v2.3.1"`)
