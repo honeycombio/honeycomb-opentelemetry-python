@@ -147,6 +147,21 @@ jobs:
           command: make publish
 
 workflows:
+  nightly:
+    # triggers:
+    #   - schedule:
+    #       cron: "0 0 * * *"
+    #       filters:
+    #         branches:
+    #           only:
+    #             - main
+    jobs:
+      - test:
+          <<: *matrix_python_versions
+      - smoke_test:
+          requires:
+            - test
+
   build:
     jobs:
       - lint
