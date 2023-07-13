@@ -87,7 +87,7 @@ jobs:
 
   smoke_test:
     machine:
-      image: ubuntu-2004:202107-02
+      image: ubuntu-2004:2023.04.2
     steps:
       - checkout
       - attach_workspace:
@@ -147,6 +147,21 @@ jobs:
           command: make publish
 
 workflows:
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - test:
+          <<: *matrix_python_versions
+      - smoke_test:
+          requires:
+            - test
+
   build:
     jobs:
       - lint
