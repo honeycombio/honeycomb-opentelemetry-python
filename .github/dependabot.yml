@@ -16,3 +16,13 @@ updates:
     commit-message:
       prefix: "maint"
       include: "scope"
+    groups:
+      testing-dependencies:
+        patterns:
+          - "coverage"
+          - "pytest"
+          - "importlib-metadata"
+          - "requests-mock"
+      otel:
+        patterns:
+          - "opentelemetry*"
