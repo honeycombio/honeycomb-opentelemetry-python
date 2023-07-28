@@ -26,3 +26,25 @@ updates:
       otel:
         patterns:
           - "opentelemetry*"
+  - package-ecosystem: "pip"
+    directory: "/examples/hello-world"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "type: dependencies"
+    reviewers:
+      - "honeycombio/telemetry-team"
+    commit-message:
+      prefix: "maint"
+      include: "scope"
+  - package-ecosystem: "pip"
+    directory: "/examples/hello-world-flask"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "type: dependencies"
+    reviewers:
+      - "honeycombio/telemetry-team"
+    commit-message:
+      prefix: "maint"
+      include: "scope"
