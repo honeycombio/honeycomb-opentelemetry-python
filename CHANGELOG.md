@@ -1,5 +1,20 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.2.2b0] - 2023-08-16
+
+### Maintenance
+
+- maint: update example deps with dependabot (#150) | @vreynolds
+- maint: try using dependabot groups (#147) | @vreynolds
+- maint: Add nightly tests job (#146) | @pkanal
+- docs: add releasing step (#137) | @vreynolds
+- maint(deps-dev): bump pylint from 2.17.4 to 2.17.5 (#151) | @dependabot
+- maint(deps): bump otel to 1.19.0/0.40b0 (#149) | @dependabot
+- maint(deps-dev): bump the testing-dependencies group with 1 update (#148) | @dependabot
+- maint(deps-dev): bump pylint from 2.17.3 to 2.17.4 (#142) | @dependabot
+- maint(deps-dev): bump requests-mock from 1.10.0 to 1.11.0 (#143) | @dependabot
+- maint(deps-dev): bump coverage from 7.2.5 to 7.2.7 (#141) | @dependabot
+
 ## [0.2.1b0] - 2023-05-16
 
 ### Fixes
