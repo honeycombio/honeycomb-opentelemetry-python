@@ -1,3 +1,6 @@
+#: set shell to bash to make shell builtin behaviour consistent
+SHELL := /usr/bin/env bash
+
 #: install dependencies; set dev_only for only development dependencies or use the install_dev target
 install:
 ifeq ($(dev_only),) # dev_only not set
