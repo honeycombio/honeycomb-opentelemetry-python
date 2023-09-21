@@ -163,7 +163,8 @@ def _append_traces_path(protocol: str, endpoint: str) -> str:
     Returns:
         string: the endpoint, optionally appended with traces path
     """
-    if endpoint and protocol == "http/protobuf" and not endpoint.strip("/").endswith(TRACES_HTTP_PATH):
+    if endpoint and protocol == "http/protobuf" \
+       and not endpoint.strip("/").endswith(TRACES_HTTP_PATH):
         return "/".join([endpoint.strip("/"), TRACES_HTTP_PATH])
     return endpoint
 
@@ -176,7 +177,8 @@ def _append_metrics_path(protocol: str, endpoint: str) -> str:
     Returns:
         string: the endpoint, optionally appended with metrics path
     """
-    if endpoint and protocol == "http/protobuf" and not endpoint.strip("/").endswith(METRICS_HTTP_PATH):
+    if endpoint and protocol == "http/protobuf" \
+       and not endpoint.strip("/").endswith(METRICS_HTTP_PATH):
         return "/".join([endpoint.strip("/"), METRICS_HTTP_PATH])
     return endpoint
 
