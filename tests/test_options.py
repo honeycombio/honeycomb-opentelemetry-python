@@ -488,6 +488,16 @@ def test_get_traces_endpoint_with_http_proto_protocol_returns_correctly_formatte
     options = HoneycombOptions(exporter_protocol=protocol)
     assert options.get_traces_endpoint() == EXPECTED_ENDPOINT
 
+def test_get_traces_endpoint_with_traces_path_and_http_proto_returns_corretly_formatted_endpoint(monkeypatch):
+    # http
+    protocol = EXPORTER_PROTOCOL_HTTP_PROTO
+    
+    # endpoint already has /v1/traces
+    endpoint = EXPECTED_ENDPOINT + "/v1/traces"
+    
+    # set endpoint in options
+    options = HoneycombOptions(exporter_protocol=protocol, endpoint=endpoint)
+    assert options.get_traces_endpoint() == endpoint
 
 def test_get_metrics_endpoint_with_grpc_protocol_returns_correctly_formatted_endpoint(monkeypatch):
     # grpc
@@ -546,6 +556,16 @@ def test_get_metrics_endpoint_with_http_proto_protocol_returns_correctly_formatt
     options = HoneycombOptions(exporter_protocol=protocol)
     assert options.get_metrics_endpoint() == EXPECTED_ENDPOINT
 
+def test_get_metrics_endpoint_with_metrics_path_and_http_proto_returns_corretly_formatted_endpoint(monkeypatch):
+    # http
+    protocol = EXPORTER_PROTOCOL_HTTP_PROTO
+    
+    # endpoint already has /v1/metrics
+    endpoint = EXPECTED_ENDPOINT + "/v1/metrics"
+    
+    # set endpoint in options
+    options = HoneycombOptions(exporter_protocol=protocol, endpoint=endpoint)
+    assert options.get_metrics_endpoint() == endpoint
 
 def test_debug_sets_log_level_to_debug():
     options = HoneycombOptions(debug=True)
