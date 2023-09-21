@@ -78,8 +78,8 @@ log_levels = {
 EXPORTER_PROTOCOL_GRPC = "grpc"
 EXPORTER_PROTOCOL_HTTP_PROTO = "http/protobuf"
 
-TRACES_HTTP_PATH = "/v1/traces"
-METRICS_HTTP_PATH = "/v1/metrics"
+TRACES_HTTP_PATH = "v1/traces"
+METRICS_HTTP_PATH = "v1/metrics"
 
 exporter_protocols = {
     EXPORTER_PROTOCOL_GRPC,

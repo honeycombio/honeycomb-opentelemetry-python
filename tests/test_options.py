@@ -493,7 +493,7 @@ def test_get_traces_endpoint_with_traces_path_and_http_proto_returns_corretly_fo
     protocol = EXPORTER_PROTOCOL_HTTP_PROTO
     
     # endpoint already has /v1/traces
-    endpoint = EXPECTED_ENDPOINT + "/v1/traces"
+    endpoint = DEFAULT_API_ENDPOINT + "/v1/traces"
     
     # set endpoint in options
     options = HoneycombOptions(exporter_protocol=protocol, endpoint=endpoint)
@@ -561,7 +561,7 @@ def test_get_metrics_endpoint_with_metrics_path_and_http_proto_returns_corretly_
     protocol = EXPORTER_PROTOCOL_HTTP_PROTO
     
     # endpoint already has /v1/metrics
-    endpoint = EXPECTED_ENDPOINT + "/v1/metrics"
+    endpoint = DEFAULT_API_ENDPOINT + "/v1/metrics"
     
     # set endpoint in options
     options = HoneycombOptions(exporter_protocol=protocol, endpoint=endpoint)
