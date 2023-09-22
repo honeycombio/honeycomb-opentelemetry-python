@@ -78,6 +78,9 @@ log_levels = {
 EXPORTER_PROTOCOL_GRPC = "grpc"
 EXPORTER_PROTOCOL_HTTP_PROTO = "http/protobuf"
 
+TRACES_HTTP_PATH = "v1/traces"
+METRICS_HTTP_PATH = "v1/metrics"
+
 exporter_protocols = {
     EXPORTER_PROTOCOL_GRPC,
     EXPORTER_PROTOCOL_HTTP_PROTO
@@ -155,26 +158,28 @@ def parse_int(environment_variable: str,
 def _append_traces_path(protocol: str, endpoint: str) -> str:
     """
     Appends the OTLP traces HTTP path '/v1/traces' to the endpoint if the
-    protocol is http/protobuf.
+    protocol is http/protobuf and it doesn't already exist.
 
     Returns:
         string: the endpoint, optionally appended with traces path
     """
-    if endpoint and protocol == "http/protobuf":
-        return "/".join([endpoint.strip("/"), "v1/traces"])
+    if endpoint and protocol == "http/protobuf" \
+       and not endpoint.strip("/").endswith(TRACES_HTTP_PATH):
+        return "/".join([endpoint.strip("/"), TRACES_HTTP_PATH])
     return endpoint
 
 
 def _append_metrics_path(protocol: str, endpoint: str) -> str:
     """
     Appends the OTLP metrics HTTP path '/v1/metrics' to the endpoint if the
-    protocol is http/protobuf.
+    protocol is http/protobuf and it doesn't already exist.
 
     Returns:
         string: the endpoint, optionally appended with metrics path
     """
-    if endpoint and protocol == "http/protobuf":
-        return "/".join([endpoint.strip("/"), "v1/metrics"])
+    if endpoint and protocol == "http/protobuf" \
+       and not endpoint.strip("/").endswith(METRICS_HTTP_PATH):
+        return "/".join([endpoint.strip("/"), METRICS_HTTP_PATH])
     return endpoint
 
 
