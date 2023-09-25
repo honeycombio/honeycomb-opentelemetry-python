@@ -11,7 +11,7 @@ python = "^3.7, >= 3.7.2"
 opentelemetry-api = "1.19.0"
 opentelemetry-sdk = "1.19.0"
 opentelemetry-exporter-otlp = "1.19.0"
-opentelemetry-instrumentation = "0.40b0"
+opentelemetry-instrumentation = "0.41b0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = ">=6.5,<8.0"
