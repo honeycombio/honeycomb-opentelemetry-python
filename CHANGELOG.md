@@ -1,5 +1,18 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.2.3b0] - 2023-09-25
+
+### Fixes
+
+- maint: Don’t append OTLP signal paths if already present (#156) | @MikeGoldsmith
+- fix: set shell to `bash` in `Makefile` to enable `unset` (#154) | @to-json
+
+### Maintenance
+
+- maint(deps-dev): bump pylint from 2.17.5 to 2.17.6 (#159) | @dependabot
+- maint(deps): bump the otel versions to 1.20.0/0.41b0 (#158) | @dependabot
+- maint(deps-dev): bump the testing-dependencies group with 1 update (#157) | @dependabot
+
 ## [0.2.2b0] - 2023-08-16
 
 ### Maintenance
