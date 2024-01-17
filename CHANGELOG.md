@@ -1,5 +1,15 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.2.4b0] - 2024-01-18
+
+### Maintenance
+
+- maint(deps-dev): bump pylint from 2.17.6 to 2.17.7 (#162) | dependabot[bot]
+- maint(deps-dev): bump the testing-dependencies group with 1 update (#163) | dependabot[bot]
+- maint(deps): update otel to 1.22 and 0.43b0 (#168) | @JamieDanielson
+- maint: update codeowners to pipeline-team (#166) | @JamieDanielson
+- maint: update codeowners to pipeline (#165) | @JamieDanielson
+
 ## [0.2.3b0] - 2023-09-25
 
 ### Fixes
