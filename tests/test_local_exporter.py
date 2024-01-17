@@ -11,6 +11,7 @@ SPAN_ID = 7394801066567152
 def _check_exporter_can_export_spans_successfully(exporter: SpanExporter):
     result = exporter.export([
         ReadableSpan(
+            name='test',
             context=SpanContext(
                 trace_id=TRACE_ID,
                 span_id=SPAN_ID,
