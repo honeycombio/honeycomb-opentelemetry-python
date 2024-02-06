@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-flask = "2.2.2"
+flask = "2.2.5"
 Werkzeug = "2.2.2"
 honeycomb-opentelemetry = {path = "../../", develop = true}
 opentelemetry-api = "1.22.0"
