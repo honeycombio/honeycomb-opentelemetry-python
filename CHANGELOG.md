@@ -1,5 +1,13 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.3.0a0] - 2024-02-08
+
+### Maintenance
+
+- maint: Add project metadata for license and classifiers (#175) | @MikeGoldsmith
+- maint(deps-dev): bump the testing-dependencies group with 1 update (#173) | @Dependabot
+- maint(deps): update flask requirement from 2.2.2 to 2.2.5 in /examples/hello-world-flask (#171) | @Dependabot
+
 ## [0.2.4b0] - 2024-01-18
 
 ### Maintenance
