@@ -4,6 +4,7 @@
 
 ### Maintenance
 
+- docs: Add Django example | @MikeGoldsmith
 - maint: Add project metadata for license and classifiers (#175) | @MikeGoldsmith
 - maint(deps-dev): bump the testing-dependencies group with 1 update (#173) | @Dependabot
 - maint(deps): update flask requirement from 2.2.2 to 2.2.5 in /examples/hello-world-flask (#171) | @Dependabot
