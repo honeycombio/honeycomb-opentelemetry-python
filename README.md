@@ -24,6 +24,8 @@ Honeycomb's Distribution of OpenTelemetry for Python allows you to streamline co
 
 - [Documentation](https://docs.honeycomb.io/getting-data-in/opentelemetry/python/)
 - [Examples](/examples/)
+  - [Flask](/examples/hello-world-flask/)
+  - [Django](/examples/hello-world-django/)
 - See [DEVELOPING.md](/DEVELOPING.md) for additional instructions for building and testing this project in development.
 
 ## Why would I want to use this?
