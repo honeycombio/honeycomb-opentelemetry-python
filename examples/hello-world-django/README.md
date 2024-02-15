@@ -25,7 +25,7 @@ Then navigate to http://127.0.0.1:8000 as shown in the command output and you sh
 ## Distro Instrumentation Example
 
 This app uses configuration configures the OpenTelemetry SDK programmatically in [manage.py](./manage.py).
-Alternitively, you can use environment variables as parameters like below:
+Alternatively, you can use environment variables as parameters like below:
 
 ```python
 configure_opentelemetry(
@@ -42,7 +42,7 @@ This app will send traces to local console with the configured `debug=True`.
 To send to Honeycomb, set your API Key:
 
 ```bash
-HONEYCOMB_API_KEY="your-api-key" poetry run python3 app.py
+HONEYCOMB_API_KEY="your-api-key" poetry run python manage.py runserver
 ```
 
 You can configure exporter protocol with this flag:
