@@ -37,7 +37,7 @@ configure_opentelemetry(
 )
 ```
 
-This app will send traces to local console with the configured `debug=True`.
+Note: With `debug` set to `True`, spans will also be printed to stdout.
 
 To send to Honeycomb, set your API Key:
 
