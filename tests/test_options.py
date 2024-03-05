@@ -582,6 +582,9 @@ def test_debug_with_custom_log_level_sets_log_level_to_debug():
     options = HoneycombOptions(debug=True, log_level="INFO")
     assert options.log_level == "DEBUG"
 
+def test_empty_key():
+    assert is_classic("") == False
+
 def test_configuration_key():
     assert is_classic(APIKEY) == False
 
