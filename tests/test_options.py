@@ -7,7 +7,12 @@ from opentelemetry.sdk.environment_variables import (
     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
     OTEL_SERVICE_NAME,
 )
-from tests.utils import APIKEY
+from tests.utils import (
+    APIKEY,
+    CLASSIC_APIKEY,
+    INGEST_APIKEY,
+    CLASSIC_INGEST_APIKEY,
+)
 from honeycomb.opentelemetry.options import (
     DEBUG,
     DEFAULT_API_ENDPOINT,
@@ -21,6 +26,7 @@ from honeycomb.opentelemetry.options import (
     HONEYCOMB_METRICS_APIKEY,
     HONEYCOMB_METRICS_DATASET,
     HONEYCOMB_TRACES_APIKEY,
+    is_classic,
     SAMPLE_RATE
 )
 
@@ -575,3 +581,15 @@ def test_debug_sets_log_level_to_debug():
 def test_debug_with_custom_log_level_sets_log_level_to_debug():
     options = HoneycombOptions(debug=True, log_level="INFO")
     assert options.log_level == "DEBUG"
+
+def test_configuration_key():
+    assert is_classic(APIKEY) == False
+
+def test_ingest_key():
+    assert is_classic(INGEST_APIKEY) == False
+
+def test_classic_configuration_key():
+    assert is_classic(CLASSIC_APIKEY) == True
+
+def test_classic_ingest_key():
+    assert is_classic(CLASSIC_INGEST_APIKEY) == True
