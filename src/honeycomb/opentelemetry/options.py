@@ -107,6 +107,7 @@ def is_classic(apikey: str) -> bool:
         return True
     return False
 
+
 def parse_bool(environment_variable: str,
                default_value: bool,
                error_message: str) -> bool:
