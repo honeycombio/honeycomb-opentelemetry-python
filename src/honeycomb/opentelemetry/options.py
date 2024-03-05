@@ -101,9 +101,11 @@ def is_classic(apikey: str) -> bool:
     """
     if not apikey:
         return False
-    return (re.match(r'^[a-f0-9]{32}$', apikey)
-            or re.match(r'^hc[a-z]ic_[a-z0-9]{58}$', apikey))
-
+    if re.match(r'^[a-f0-9]{32}$', apikey):
+        return True
+    if re.match(r'^hc[a-z]ic_[a-z0-9]{58}$', apikey):
+        return True
+    return False
 
 def parse_bool(environment_variable: str,
                default_value: bool,
