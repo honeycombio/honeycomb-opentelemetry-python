@@ -10,8 +10,6 @@ from opentelemetry.sdk.environment_variables import (
 from tests.utils import (
     APIKEY,
     CLASSIC_APIKEY,
-    INGEST_APIKEY,
-    CLASSIC_INGEST_APIKEY,
 )
 from honeycomb.opentelemetry.options import (
     DEBUG,
@@ -589,10 +587,12 @@ def test_configuration_key():
     assert is_classic(APIKEY) == False
 
 def test_ingest_key():
-    assert is_classic(INGEST_APIKEY) == False
+    key = "hcxik_123456789012345678901234567890123456789012345678901234567"
+    assert is_classic(key) == False
 
 def test_classic_configuration_key():
     assert is_classic(CLASSIC_APIKEY) == True
 
 def test_classic_ingest_key():
-    assert is_classic(CLASSIC_INGEST_APIKEY) == True
+    key = "hcxic_1234567890123456789012345678901234567890123456789012345678"
+    assert is_classic(key) == True
