@@ -93,8 +93,10 @@ _logger = logging.getLogger(__name__)
 def is_classic(apikey: str) -> bool:
     """
     Determines whether the passed in API key is a classic API key or not.
-    Modern API keys have 22 or 23 characters.
-    Classic API keys have 32 characters.
+    v1 Configuration API keys have 22 or 23 characters.
+    v1 Classic Configuration API keys have 32 characters.
+    v2 Ingest keys have 64 characters and a prefix of hcxik.
+    v2 Classic Ingest keys have 64 characters and a prefix of hcxic.
 
     Returns:
         bool: true if the api key is a classic key, false if not
