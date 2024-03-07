@@ -1,6 +1,6 @@
 # honeycomb-opentelemetry-python changelog
 
-## [0.4.0a0] - 2024-03-06
+## [0.4.0b0] - 2024-03-06
 
 ### Enhancements
 
