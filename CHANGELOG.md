@@ -1,5 +1,15 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.4.0b0] - 2024-03-06
+
+### Enhancements
+
+- feat: support classic ingest keys (#180) | @brookesargent
+
+### Maintenance
+
+- docs: Fix django example typos (#178) | @MikeGoldsmith
+
 ## [0.3.0a0] - 2024-02-08
 
 ### Maintenance
