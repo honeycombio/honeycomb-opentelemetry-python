@@ -1,5 +1,5 @@
 # to be run with docker-compose in smoke-tests directory
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN pip install "poetry==$POETRY_VERSION"
 # This image is single purpose, so we won't need to compartmentalize Py deps in virtualenvs.
 RUN poetry config virtualenvs.create false
 
-COPY README.md pyproject.toml poetry.lock ./
+COPY README.md pyproject.toml ./
 COPY src/ ./src/
 RUN poetry install
 
