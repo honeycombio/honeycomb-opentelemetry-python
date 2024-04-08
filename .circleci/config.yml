@@ -20,7 +20,7 @@ default_python_version: &default_python_version "3.11"
 matrix_python_versions: &matrix_python_versions
   matrix:
     parameters:
-      python_version: ["3.11", "3.12"]
+      python_version: ["3.11"]
 
 executors:
   github:
