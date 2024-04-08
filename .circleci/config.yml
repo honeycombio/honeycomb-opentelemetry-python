@@ -16,11 +16,11 @@ orbs:
   python: circleci/python@2.1.1
   bats: circleci/bats@1.0.0
 
-default_python_version: &default_python_version "3.10"
+default_python_version: &default_python_version "3.11"
 matrix_python_versions: &matrix_python_versions
   matrix:
     parameters:
-      python_version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+      python_version: ["3.11", "3.12"]
 
 executors:
   github:
@@ -100,7 +100,7 @@ jobs:
             bats --version
       - run:
           name: Smoke Test
-          command: make smoke-sdk
+          command: make smoke-sdk-http
       - store_test_results:
           path: ./smoke-tests/
       - store_artifacts:
