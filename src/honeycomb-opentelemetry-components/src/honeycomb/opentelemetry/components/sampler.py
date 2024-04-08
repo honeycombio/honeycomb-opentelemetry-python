@@ -14,7 +14,7 @@ from opentelemetry.trace.span import TraceState
 from opentelemetry.util.types import Attributes
 from opentelemetry.context import Context
 
-from honeycomb.opentelemetry.options import (
+from honeycomb.opentelemetry.components.options import (
     DEFAULT_SAMPLE_RATE,
     HoneycombOptions
 )

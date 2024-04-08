@@ -1,0 +1,1 @@
+from honeycomb.opentelemetry.components.options import HoneycombOptions

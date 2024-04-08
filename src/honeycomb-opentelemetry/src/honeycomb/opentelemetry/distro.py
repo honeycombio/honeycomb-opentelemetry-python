@@ -21,10 +21,10 @@ from typing import Optional
 from opentelemetry.instrumentation.distro import BaseDistro
 from opentelemetry.metrics import set_meter_provider
 from opentelemetry.trace import set_tracer_provider
-from honeycomb.opentelemetry.metrics import create_meter_provider
-from honeycomb.opentelemetry.options import HoneycombOptions
-from honeycomb.opentelemetry.resource import create_resource
-from honeycomb.opentelemetry.trace import create_tracer_provider
+from honeycomb.opentelemetry.components.metrics import create_meter_provider
+from honeycomb.opentelemetry.components.options import HoneycombOptions
+from honeycomb.opentelemetry.components.resource import create_resource
+from honeycomb.opentelemetry.components.trace import create_tracer_provider
 
 _logger = getLogger(__name__)
 

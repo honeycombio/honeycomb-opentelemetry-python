@@ -1,7 +1,7 @@
 import platform
 from opentelemetry.sdk.resources import Resource
-from honeycomb.opentelemetry.options import HoneycombOptions
-from honeycomb.opentelemetry.version import __version__
+from honeycomb.opentelemetry.components.options import HoneycombOptions
+from honeycomb.opentelemetry.components.version import __version__
 
 
 def create_resource(options: HoneycombOptions):

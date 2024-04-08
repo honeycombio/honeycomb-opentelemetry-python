@@ -5,7 +5,7 @@ import requests
 
 from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
-from honeycomb.opentelemetry.options import HoneycombOptions, is_classic
+from honeycomb.opentelemetry.components.options import HoneycombOptions, is_classic
 
 MISSING_API_OR_SERVICE_NAME_ERROR = "disabling local visualizations - " + \
     "must have both service name and API key configured."
