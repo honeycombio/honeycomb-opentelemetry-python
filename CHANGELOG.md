@@ -1,5 +1,16 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.4.1b0] - 2024-04-09
+
+### Fixes
+
+- maint: Permit updates of indirect dependencies (#184) | @BatmanAoD
+
+### Maintenance
+
+- maint: Update ubuntu image in workflows to latest (#183) | @MikeGoldsmith
+- maint: add labels to release.yml for auto-generated grouping (#182) | @JamieDanielson
+
 ## [0.4.0b0] - 2024-03-06
 
 ### Enhancements

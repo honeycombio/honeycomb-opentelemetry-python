@@ -1,13 +1,6 @@
 # Releasing
 
-- Use `poetry version patch` to update the version number using `major`, `minor`, `patch`, or the prerelease variants `prepatch` or `prerelease`.
-  For example, to bump from v1.1.1 to the next patch version:
-
-```shell
-> poetry version patch # 1.1.1 -> 1.1.2
-```
-
-- Confirm the version number update appears in `src/pyproject.toml`.
+- Update the version number in `pyproject.toml`. Our current versioning uses the `b` for `beta`, so a patch bump for `0.4.0b0` would go to `0.4.1b0` and a minor bump from `0.4.1b0` would go to `0.5.0b0`.
 - Update `CHANGELOG.md` with the changes since the last release. Consider automating with a command such as these two:
   - `git log $(git describe --tags --abbrev=0)..HEAD --no-merges --oneline > new-in-this-release.log`
   - `git log --pretty='%C(green)%d%Creset- %s | %an'`
