@@ -17,7 +17,7 @@ RUN pip install "poetry==$POETRY_VERSION"
 RUN poetry config virtualenvs.create false
 
 # Copy the distro into the image and install deps.
-COPY README.md pyproject.toml poetry.lock ./
+COPY README.md pyproject.toml ./
 COPY src/ ./src/
 RUN poetry install
 
