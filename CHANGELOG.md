@@ -1,5 +1,9 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.4.2b0] - 2024-04-10
+
+The previous tag did not have the latest commit from main, so this is just a release to ensure the published release is using the commit from main. There are no actual functionality changes in this release.
+
 ## [0.4.1b0] - 2024-04-09
 
 ### Fixes
