@@ -4,6 +4,8 @@
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python)
 [![PyPi](https://img.shields.io/pypi/v/honeycomb-opentelemetry)](https://pypi.org/project/honeycomb-opentelemetry/)
 
+STATUS: this project is being Sunset. See #193.
+
 **STATUS: this library is BETA.**
 You're welcome to try it, and let us know your feedback in the issues!
 
