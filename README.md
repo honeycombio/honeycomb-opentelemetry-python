@@ -4,8 +4,7 @@
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-python)
 [![PyPi](https://img.shields.io/pypi/v/honeycomb-opentelemetry)](https://pypi.org/project/honeycomb-opentelemetry/)
 
-**STATUS: this library is BETA.**
-You're welcome to try it, and let us know your feedback in the issues!
+**STATUS**: This project is being Sunset. See [this issue](https://github.com/honeycombio/honeycomb-opentelemetry-python/issues/193) for more details.
 
 This is Honeycomb's Distribution of OpenTelemetry for Python.
 It makes getting started with OpenTelemetry and Honeycomb easier!
