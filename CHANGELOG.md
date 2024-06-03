@@ -1,5 +1,37 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.5.0b0] - 2024-05-23
+
+### Maintenance
+
+- main: Use less restrictive package version for instrumentation dependency (#196) | @MikeGoldsmith
+- maint: Update project status and add status link in README (#194) | @MikeGoldsmith
+
+## [0.4.2b0] - 2024-04-10
+
+The previous tag did not have the latest commit from main, so this is just a release to ensure the published release is using the commit from main. There are no actual functionality changes in this release.
+
+## [0.4.1b0] - 2024-04-09
+
+### Fixes
+
+- maint: Permit updates of indirect dependencies (#184) | @BatmanAoD
+
+### Maintenance
+
+- maint: Update ubuntu image in workflows to latest (#183) | @MikeGoldsmith
+- maint: add labels to release.yml for auto-generated grouping (#182) | @JamieDanielson
+
+## [0.4.0b0] - 2024-03-06
+
+### Enhancements
+
+- feat: support classic ingest keys (#180) | @brookesargent
+
+### Maintenance
+
+- docs: Fix django example typos (#178) | @MikeGoldsmith
+
 ## [0.3.0a0] - 2024-02-08
 
 ### Maintenance
