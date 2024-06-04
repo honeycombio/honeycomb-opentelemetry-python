@@ -11,7 +11,10 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
     OTLPSpanExporter as HTTPSpanExporter
 )
-from opentelemetry.processor.baggage import ALLOW_ALL_BAGGAGE_KEYS, BaggageSpanProcessor
+from opentelemetry.processor.baggage import (
+    ALLOW_ALL_BAGGAGE_KEYS,
+    BaggageSpanProcessor
+)
 from honeycomb.opentelemetry.local_exporter import configure_local_exporter
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.sampler import configure_sampler
