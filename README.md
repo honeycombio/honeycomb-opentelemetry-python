@@ -15,7 +15,7 @@ Latest release built with:
 
 ## Requirements
 
-- Python 3.7 or higher
+- Python 3.8 or higher
 
 ## Getting Started
 

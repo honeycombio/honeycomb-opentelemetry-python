@@ -10,7 +10,7 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
     OTLPSpanExporter as HTTPSpanExporter
 )
-from honeycomb.opentelemetry.baggage import BaggageSpanProcessor
+from opentelemetry.processor.baggage import BaggageSpanProcessor
 from honeycomb.opentelemetry.local_exporter import LocalTraceLinkSpanExporter
 from honeycomb.opentelemetry.options import HoneycombOptions
 from honeycomb.opentelemetry.resource import create_resource
@@ -19,7 +19,6 @@ from honeycomb.opentelemetry.trace import create_tracer_provider
 """
 Our Tracer Provider expects a series of span processors.
 
-BaggageSpanProcessor (no export)
 BatchSpanProcessor (Honeycomb Exporter)
 SimpleSpanProcessor (Console Exporter)
 SimpleSpanProcessor (Local Vis Exporter)
