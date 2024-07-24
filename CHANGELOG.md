@@ -1,5 +1,14 @@
 # honeycomb-opentelemetry-python changelog
 
+## [0.6.0b0] - 2024-07-24
+
+### Maintenance
+
+- docs: update vulnerability reporting process (#205) | @robbkidd
+- main: use published BaggageSpanProcessor and remove internal one (#192) | @codeboten
+- maint: update minimum version requirement (#200) | @codeboten
+- maint: update team to notify (#199) | @codeboten
+
 ## [0.5.0b0] - 2024-05-23
 
 ### Maintenance
